@@ -1,0 +1,1977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Dashboard Hub — StuServe</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0f1c2e;
+            --steel: #3a5068;
+            --blush: #c8a4a5;
+            --lavender: #b8b4c0;
+            --pink: #e8cdd0;
+            --pink-light: #f4e4e6;
+            --white: #ffffff;
+            --text-dark: #0f1c2e;
+            --text-mid: #3a5068;
+            --text-light: #7a8fa6;
+            --accent: #c44269;
+            --accent-glow: rgba(196, 66, 105, 0.15);
+            --radius: 12px;
+            --radius-lg: 24px;
+            --transition: .28s cubic-bezier(.4, 0, .2, 1);
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'DM Sans', sans-serif;
+            --shadow-sm: 0 2px 8px rgba(15, 28, 46, .06);
+            --shadow-md: 0 8px 32px rgba(15, 28, 46, .08);
+            --shadow-lg: 0 16px 48px rgba(15, 28, 46, .12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-mid);
+            background: linear-gradient(135deg, #fbf7f7 0%, #eef3f9 100%);
+            min-height: 100vh;
+            padding-top: 100px;
+            padding-bottom: 60px;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ── Utility ── */
+        .container {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 24px;
+            font-family: var(--font-body);
+            font-size: .88rem;
+            font-weight: 600;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            outline: none;
+        }
+
+        .btn-primary {
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(15, 28, 46, 0.15);
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: var(--white);
+        }
+
+        .btn-accent:hover {
+            background: #ab3254;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(196, 66, 105, 0.2);
+        }
+
+        .btn-outline {
+            border: 1.5px solid rgba(15, 28, 46, 0.12);
+            background: transparent;
+            color: var(--text-dark);
+        }
+
+        .btn-outline:hover {
+            background: rgba(15, 28, 46, 0.04);
+            border-color: var(--navy);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-mid);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(15, 28, 46, 0.04);
+            color: var(--text-dark);
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 0.78rem;
+        }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 24px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(15, 28, 46, 0.06);
+            transition: box-shadow var(--transition);
+        }
+
+        .navbar__inner {
+            max-width: 1160px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar__logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar__logo img {
+            height: 50px;
+            width: auto;
+            mix-blend-mode: multiply;
+        }
+
+        .navbar__logo span {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .navbar__links {
+            display: flex;
+            align-items: center;
+            gap: 44px;
+            list-style: none;
+        }
+
+        .navbar__links a {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-mid);
+            transition: color var(--transition);
+            position: relative;
+            padding: 4px 0;
+        }
+
+        .navbar__links a:hover,
+        .navbar__links a.active {
+            color: var(--accent);
+        }
+
+        .navbar__links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform var(--transition);
+        }
+
+        .navbar__links a.active::after,
+        .navbar__links a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .nav-badge-container {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .nav-badge {
+            background: var(--accent);
+            color: var(--white);
+            border-radius: 50%;
+            min-width: 18px;
+            height: 18px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -6px;
+            right: -12px;
+            padding: 0 4px;
+        }
+
+        /* ── DASHBOARD CORE LAYOUT ── */
+        .dash-hero {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--steel) 100%);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            color: var(--white);
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .dash-hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(200, 164, 165, .08);
+            pointer-events: none;
+        }
+
+        .dash-hero__title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .dash-hero__sub {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Stats Row */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(15, 28, 46, 0.04);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-card__icon {
+            font-size: 2.2rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--pink-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+        }
+
+        .stat-card__val {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 4px;
+        }
+
+        .stat-card__label {
+            font-size: 0.82rem;
+            color: var(--text-light);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        /* ── PANELS & GRIDS ── */
+        .dash-panel-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 900px) {
+            .dash-panel-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .dash-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(15, 28, 46, 0.05);
+            margin-bottom: 32px;
+        }
+
+        .dash-card__title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Tables */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 10px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(15, 28, 46, 0.06);
+        }
+
+        .dash-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.88rem;
+        }
+
+        .dash-table th {
+            background: #fafbfc;
+            color: var(--navy);
+            font-weight: 600;
+            padding: 14px 18px;
+            border-bottom: 1.5px solid rgba(15, 28, 46, 0.06);
+        }
+
+        .dash-table td {
+            padding: 16px 18px;
+            border-bottom: 1px solid rgba(15, 28, 46, 0.04);
+            color: var(--text-mid);
+            vertical-align: middle;
+        }
+
+        .dash-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .dash-table tr:hover td {
+            background: rgba(15, 28, 46, 0.01);
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            padding: 4px 10px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .badge-pending {
+            background: #fff9e6;
+            color: #d4a017;
+        }
+
+        .badge-progress {
+            background: #e6f0ff;
+            color: #176ad4;
+        }
+
+        .badge-completed {
+            background: #e6fced;
+            color: #17d46c;
+        }
+
+        .badge-blocked {
+            background: #ffe6e6;
+            color: #d41717;
+        }
+
+        /* ── PROGRESS WIDGET ── */
+        .progress-flow {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .progress-node {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #eef3f9;
+            color: var(--text-light);
+            font-size: 0.68rem;
+            font-weight: 700;
+            border: 2px solid transparent;
+            transition: var(--transition);
+        }
+
+        .progress-node.active {
+            background: var(--white);
+            color: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 0 8px rgba(196, 66, 105, 0.2);
+            animation: pulse-node 1.5s infinite;
+        }
+
+        .progress-node.done {
+            background: var(--accent);
+            color: var(--white);
+            border-color: var(--accent);
+        }
+
+        @keyframes pulse-node {
+            0% { box-shadow: 0 0 0 0 rgba(196, 66, 105, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(196, 66, 105, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(196, 66, 105, 0); }
+        }
+
+        .progress-line {
+            flex-grow: 1;
+            height: 3px;
+            background: #eef3f9;
+            border-radius: 2px;
+        }
+
+        .progress-line.done {
+            background: var(--accent);
+        }
+
+        /* Service Checklist */
+        .service-chk-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border: 1.5px solid rgba(15, 28, 46, 0.06);
+            border-radius: var(--radius);
+            margin-bottom: 10px;
+            transition: var(--transition);
+            background: #fafbfc;
+        }
+
+        .service-chk-item:hover {
+            border-color: var(--navy);
+            background: var(--white);
+        }
+
+        .service-chk-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Toggle switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: .3s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--accent);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        /* Tabs CSS */
+        .tab-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 1.5px solid rgba(15, 28, 46, 0.06);
+            padding-bottom: 8px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--text-light);
+            transition: var(--transition);
+            border-radius: 6px;
+        }
+
+        .tab-btn:hover,
+        .tab-btn.active {
+            color: var(--navy);
+            background: rgba(15, 28, 46, 0.04);
+        }
+
+        /* ── CHART CONTAINER ── */
+        .chart-box {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .sparkline-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .svg-grid-line {
+            stroke: rgba(15, 28, 46, 0.04);
+            stroke-dasharray: 4 4;
+        }
+
+        .svg-bar {
+            fill: var(--pink);
+            transition: fill var(--transition), height 0.5s ease-out;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .svg-bar:hover {
+            fill: var(--accent);
+        }
+
+        /* ── NAVBAR HAMBURGER (mobile) ── */
+        .navbar__hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background var(--transition);
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        .navbar__hamburger:hover { background: rgba(15,28,46,0.05); }
+
+        .navbar__hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--navy);
+            border-radius: 2px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .navbar__hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .navbar__hamburger.open span:nth-child(2) { opacity: 0; }
+        .navbar__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* Mobile slide-down menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            background: rgba(255,255,255,0.98);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(15,28,46,0.08);
+            padding: 16px 24px 24px;
+            z-index: 999;
+            flex-direction: column;
+            gap: 4px;
+            box-shadow: 0 8px 32px rgba(15,28,46,0.08);
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: transform 0.28s ease, opacity 0.28s ease;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .mobile-menu a {
+            padding: 12px 16px;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            border-radius: 10px;
+            transition: background var(--transition);
+        }
+
+        .mobile-menu a:hover, .mobile-menu a.active {
+            background: var(--pink-light);
+            color: var(--accent);
+        }
+
+        .mobile-menu__divider {
+            height: 1px;
+            background: rgba(15,28,46,0.06);
+            margin: 8px 0;
+        }
+
+        @media (max-width: 768px) {
+            .navbar__links { display: none; }
+            .navbar__actions { display: none !important; }
+            .navbar__hamburger { display: flex; }
+            .dash-hero { padding: 24px; }
+            .dash-card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── NAVBAR ── -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar__inner">
+            <a href="index.html" class="navbar__logo">
+                <img src="stuserveLogo.png" alt="StuServe Logo">
+                <span>StuServe</span>
+            </a>
+            <ul class="navbar__links">
+                <li><a href="Services.html">Browse Services</a></li>
+                <li><a href="Find Students.html">Find Students</a></li>
+                <li><a href="Post a Job.html">Post a Job</a></li>
+                <li><a href="Messages.html" id="navMessagesLink">Messages</a></li>
+                <li><a href="Dashboard.html" class="active" id="navDashboardLink">Dashboard</a></li>
+            </ul>
+            <div class="navbar__actions" style="display:flex; align-items:center; gap:16px;">
+                <!-- Populated dynamically -->
+            </div>
+            <button class="navbar__hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ── MOBILE MENU ── -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="Services.html">Browse Services</a>
+        <a href="Find Students.html">Find Students</a>
+        <a href="Post a Job.html">Post a Job</a>
+        <a href="Messages.html" id="mobileNavMessages">Messages</a>
+        <a href="Dashboard.html" class="active">Dashboard</a>
+        <div class="mobile-menu__divider"></div>
+        <div id="mobileNavActions" style="display:flex; flex-direction:column; gap:8px;">
+            <!-- Populated dynamically -->
+        </div>
+    </div>
+
+    <!-- ── CORE CONTAINER ── -->
+    <div class="container" style="margin-top: 20px;">
+
+        <!-- Dynamic Header Greeting -->
+        <div class="dash-hero" id="dashHeroBlock">
+            <div>
+                <h1 class="dash-hero__title" id="dashGreeting">Welcome Back!</h1>
+                <p class="dash-hero__sub" id="dashHeroSubtitle">Manage your platform interactions and projects here.</p>
+            </div>
+            <div id="heroActions">
+                <!-- Action buttons based on role -->
+            </div>
+        </div>
+
+        <!-- ── STUDENT DASHBOARD MODULE ── -->
+        <div id="studentDashboard" style="display:none;">
+            
+            <!-- Student Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card__icon">💰</div>
+                    <div>
+                        <div class="stat-card__val" id="studentEarningsVal">BD 0</div>
+                        <div class="stat-card__label">Total Earnings</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__icon">🛠️</div>
+                    <div>
+                        <div class="stat-card__val" id="studentActiveOrdersVal">0</div>
+                        <div class="stat-card__label">Active Orders</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__icon">✅</div>
+                    <div>
+                        <div class="stat-card__val" id="studentCompletedOrdersVal">0</div>
+                        <div class="stat-card__label">Completed Jobs</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__icon">⭐</div>
+                    <div>
+                        <div class="stat-card__val" id="studentRatingVal">5.0</div>
+                        <div class="stat-card__label">Rating Avg</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dash-panel-grid">
+                
+                <!-- Left Main Panel: Orders -->
+                <div>
+                    <div class="dash-card">
+                        <div class="dash-card__title">📋 Managed Projects & Requests</div>
+                        
+                        <div class="table-responsive">
+                            <table class="dash-table" id="studentOrdersTable">
+                                <thead>
+                                    <tr>
+                                        <th>Client Name</th>
+                                        <th>Service Requested</th>
+                                        <th>Scope & Description</th>
+                                        <th>Pricing</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar Panel: Earnings graph + Services -->
+                <div>
+                    <!-- SVG Chart -->
+                    <div class="dash-card" style="padding: 20px;">
+                        <div class="dash-card__title" style="font-size: 1.2rem; margin-bottom: 12px;">📊 Monthly Earnings (BD)</div>
+                        <div class="chart-box">
+                            <svg class="sparkline-svg" id="earningsChart">
+                                <!-- Grid Lines -->
+                                <line x1="0" y1="40" x2="300" y2="40" class="svg-grid-line"></line>
+                                <line x1="0" y1="90" x2="300" y2="90" class="svg-grid-line"></line>
+                                <line x1="0" y1="140" x2="300" y2="140" class="svg-grid-line"></line>
+                                <line x1="0" y1="180" x2="300" y2="180" stroke="rgba(15, 28, 46, 0.1)"></line>
+                                
+                                <!-- Columns filled dynamically -->
+                            </svg>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-light); margin-top:8px; padding:0 8px;">
+                            <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May (Current)</span>
+                        </div>
+                    </div>
+
+                    <!-- Services checklist -->
+                    <div class="dash-card" style="padding: 20px;">
+                        <div class="dash-card__title" style="font-size: 1.2rem; margin-bottom: 12px;">
+                            ⚙️ My Offered Skills
+                        </div>
+                        <div id="studentServicesChecklist">
+                            <!-- Toggle service switches dynamically -->
+                        </div>
+                        <a href="Profile.html" class="btn btn-outline btn-sm" style="width:100%; margin-top:10px; justify-content:center;">
+                            ✏️ Edit Profile Skills
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ── CLIENT DASHBOARD MODULE ── -->
+        <div id="clientDashboard" style="display:none;">
+            
+            <!-- Client Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card__icon">💳</div>
+                    <div>
+                        <div class="stat-card__val" id="clientSpentVal">BD 0</div>
+                        <div class="stat-card__label">Total Invested</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__icon">🏃‍♂️</div>
+                    <div>
+                        <div class="stat-card__val" id="clientActiveHiresVal">0</div>
+                        <div class="stat-card__label">Active Hires</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__icon">⏳</div>
+                    <div>
+                        <div class="stat-card__val" id="clientPendingVal">0</div>
+                        <div class="stat-card__label">Pending Requests</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__icon">💬</div>
+                    <div>
+                        <div class="stat-card__val" id="clientChatsVal">0</div>
+                        <div class="stat-card__label">Inbox Threads</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dash-panel-grid">
+                
+                <!-- Left Panel: My Placed Orders -->
+                <div>
+                    <div class="dash-card">
+                        <div class="dash-card__title">📦 Placed Talent Orders & Milestone Tracker</div>
+                        <div class="table-responsive">
+                            <table class="dash-table" id="clientOrdersTable">
+                                <thead>
+                                    <tr>
+                                        <th>Student Freelancer</th>
+                                        <th>Service Category</th>
+                                        <th>Project Milestone Tracker</th>
+                                        <th>Budget</th>
+                                        <th>Order Date</th>
+                                        <th>Chat</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Dynamic placed orders -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Payment history list -->
+                <div>
+                    <div class="dash-card" style="padding: 20px;">
+                        <div class="dash-card__title" style="font-size: 1.2rem; margin-bottom: 12px;">🧾 BenefitPay Receipts</div>
+                        <div id="clientPaymentsLog" style="display:flex; flex-direction:column; gap:12px;">
+                            <!-- Invoices list -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- ── ADMIN DASHBOARD MODULE ── -->
+        <div id="adminDashboard" style="display:none;">
+            
+            <!-- Admin Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card__icon">👥</div>
+                    <div>
+                        <div class="stat-card__val" id="adminStudentsVal">0</div>
+                        <div class="stat-card__label">Total Students</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__icon">💼</div>
+                    <div>
+                        <div class="stat-card__val" id="adminClientsVal">0</div>
+                        <div class="stat-card__label">Total Clients</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__icon">🏷️</div>
+                    <div>
+                        <div class="stat-card__val" id="adminServicesVal">0</div>
+                        <div class="stat-card__label">Dynamic Services</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card__icon">💱</div>
+                    <div>
+                        <div class="stat-card__val" id="adminVolumeVal">BD 0</div>
+                        <div class="stat-card__label">Platform Volume</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Controls -->
+            <div class="tab-row">
+                <button class="tab-btn active" id="tabUsersBtn" onclick="switchAdminTab('users')">👥 Accounts Directory</button>
+                <button class="tab-btn" id="tabCatalogBtn" onclick="switchAdminTab('catalog')">🛠️ Services Catalog Moderator</button>
+                <button class="tab-btn" id="tabOrdersBtn" onclick="switchAdminTab('orders')">📜 Platform Orders History</button>
+            </div>
+
+            <!-- Admin Tab Sections -->
+            <div class="dash-card">
+                
+                <!-- Users Registry -->
+                <div id="adminTabUsers">
+                    <div class="dash-card__title" style="margin-bottom:12px;">👥 Accounts Directory</div>
+                    <div class="table-responsive">
+                        <table class="dash-table" id="adminUsersTable">
+                            <thead>
+                                <tr>
+                                    <th>Avatar</th>
+                                    <th>Full Name</th>
+                                    <th>Email Address</th>
+                                    <th>User Role</th>
+                                    <th>Status</th>
+                                    <th>Moderation Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Users rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Custom Services Catalog Moderator -->
+                <div id="adminTabCatalog" style="display:none;">
+                    <div class="dash-card__title" style="margin-bottom:12px;">🛠️ Custom Services Moderator</div>
+                    <div class="table-responsive">
+                        <table class="dash-table" id="adminCatalogTable">
+                            <thead>
+                                <tr>
+                                    <th>Emoji</th>
+                                    <th>Custom Skill Title</th>
+                                    <th>Minimum Budget</th>
+                                    <th>Providing Students</th>
+                                    <th>Platform Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Catalog rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Platform Orders Registry -->
+                <div id="adminTabOrders" style="display:none;">
+                    <div class="dash-card__title" style="margin-bottom:12px;">📜 Global Transactions Log</div>
+                    <div class="table-responsive">
+                        <table class="dash-table" id="adminOrdersTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Freelancer</th>
+                                    <th>Client</th>
+                                    <th>Service Type</th>
+                                    <th>Total Budget</th>
+                                    <th>Registry Date</th>
+                                    <th>Milestone State</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Global Orders rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Firebase loader: exposes Firestore helpers to window._fb -->
+    <script type="module">
+        import { loadOrdersFromCloud, saveOrdersToCloud, loadAccountsFromCloud, saveMessagesToCloud } from './firebase-config.js';
+        window._fb = { loadOrdersFromCloud, saveOrdersToCloud, loadAccountsFromCloud, saveMessagesToCloud };
+        window.dispatchEvent(new Event('firebaseReady'));
+    </script>
+
+    <!-- ── SCRIPTS ── -->
+    <script>
+        // ── STATE VARIABLES ──
+        let loggedInUser = null;
+        let accounts = {};
+        let orders = [];
+        let payments = [];
+
+        const avatarEmojiMap = {
+            "avatar1": "🎨", "avatar2": "👨‍💻", "avatar3": "📸", "avatar4": "🎬", "avatar5": "📚",
+            "avatar6": "✍️", "avatar7": "🔬", "avatar8": "🎹", "avatar9": "🚀", "avatar10": "🌟"
+        };
+
+        // ── INITIALIZATION ──
+        window.addEventListener('DOMContentLoaded', async () => {
+            initializeUserSession();
+            seedMockDatabases();
+            // If Firebase ready immediately (cached), load now; else wait
+            if (window._fb) {
+                await loadDashboardData();
+            } else {
+                // Load from localStorage first for instant render
+                loadDashboardDataLocal();
+                window.addEventListener('firebaseReady', async () => { await loadDashboardData(); }, { once: true });
+            }
+        });
+
+        function initializeUserSession() {
+            const userStr = localStorage.getItem('loggedInUser');
+            
+            // Check Admin setup
+            const accountsRegistry = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
+            if (!accountsRegistry['admin@stuserve.bh']) {
+                accountsRegistry['admin@stuserve.bh'] = {
+                    name: "Admin Moderator",
+                    email: "admin@stuserve.bh",
+                    role: "admin",
+                    avatar: "avatar9"
+                };
+                localStorage.setItem('stuserve_accounts', JSON.stringify(accountsRegistry));
+            }
+            
+            if (userStr) {
+                loggedInUser = JSON.parse(userStr);
+                
+                // Set custom dynamic greeting
+                document.getElementById('dashGreeting').textContent = `Hello, ${loggedInUser.name}!`;
+                
+                // Show dashboard nav quick links dynamic badge
+                const navMessagesLink = document.getElementById('navMessagesLink');
+                if (navMessagesLink) {
+                    navMessagesLink.style.display = 'inline-flex';
+                    navMessagesLink.classList.add('nav-badge-container');
+                    const existingBadge = navMessagesLink.querySelector('.nav-badge');
+                    if (existingBadge) existingBadge.remove();
+
+                    // Count unread
+                    const messages = JSON.parse(localStorage.getItem('stuserve_messages') || '[]');
+                    const unreadCount = messages.filter(m => m.receiver === loggedInUser.email && !m.read).length;
+
+                    if (unreadCount > 0) {
+                        const badge = document.createElement('span');
+                        badge.className = 'nav-badge';
+                        badge.textContent = unreadCount;
+                        navMessagesLink.appendChild(badge);
+                    }
+                }
+
+                // Render navbar actions
+                const navActions = document.querySelector('.navbar__actions');
+                const mobileNavActions = document.getElementById('mobileNavActions');
+                if (navActions) {
+                    const actionsHTML = `
+                        <span style="font-family:var(--font-body); font-size:.9rem; font-weight:600; color:var(--text-dark);">
+                            Hello, <span style="color:var(--accent);">${loggedInUser.name}</span>!
+                        </span>
+                        ${loggedInUser.role === 'student' ? `
+                            <a href="Profile.html" class="btn btn-outline btn-sm" style="text-decoration:none;">
+                                My Profile
+                            </a>
+                        ` : ''}
+                        <button class="btn btn-ghost btn-sm" onclick="handleLogout()">
+                            Log Out
+                        </button>
+                    `;
+                    navActions.innerHTML = actionsHTML;
+                    if (mobileNavActions) {
+                        mobileNavActions.innerHTML = `
+                            ${loggedInUser.role === 'student' ? `<a href="Profile.html" class="btn btn-outline" style="text-decoration:none; text-align:center;">My Profile</a>` : ''}
+                            <button class="btn btn-ghost" onclick="handleLogout(); closeMobileMenu();">Log Out</button>
+                        `;
+                    }
+                }
+            } else {
+                // Not logged in — redirect to homepage
+                window.location.href = 'index.html';
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('loggedInUser');
+            window.location.href = 'index.html';
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.getElementById('hamburger');
+            const isOpen = menu.classList.contains('open');
+            menu.classList.toggle('open', !isOpen);
+            btn.classList.toggle('open', !isOpen);
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('open');
+            document.getElementById('hamburger').classList.remove('open');
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.getElementById('hamburger');
+            if (menu && menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) {
+                closeMobileMenu();
+            }
+        });
+
+        // Seeding database
+        function seedMockDatabases() {
+            const ordersKey = 'stuserve_orders';
+            const paymentsKey = 'stuserve_payments';
+            
+            // Seed mock orders
+            if (!localStorage.getItem(ordersKey)) {
+                const initialOrders = [
+                    {
+                        id: "ord_1001",
+                        serviceTitle: "Graphic Design",
+                        clientEmail: "client@example.com",
+                        clientName: "Ahmed Al-Fardan",
+                        studentEmail: "sara@example.com",
+                        studentName: "Sara Yusuf",
+                        price: "BD 15",
+                        status: "completed",
+                        date: "2026-05-10",
+                        description: "Modern brand logo design and style guide."
+                    },
+                    {
+                        id: "ord_1002",
+                        serviceTitle: "Academic Tutoring",
+                        clientEmail: "client@example.com",
+                        clientName: "Ahmed Al-Fardan",
+                        studentEmail: "mohammed@example.com",
+                        studentName: "Mohammed Ali",
+                        price: "BD 12",
+                        status: "completed",
+                        date: "2026-05-12",
+                        description: "Calculus revision mock-exam preparation."
+                    },
+                    {
+                        id: "ord_1003",
+                        serviceTitle: "Video Editing",
+                        clientEmail: "client@example.com",
+                        clientName: "Ahmed Al-Fardan",
+                        studentEmail: "yousef@example.com",
+                        studentName: "Yousef Khalid",
+                        price: "BD 28",
+                        status: "in_progress",
+                        date: "2026-05-18",
+                        description: "Promo dynamic reel editor project."
+                    },
+                    {
+                        id: "ord_1004",
+                        serviceTitle: "Creative Photography",
+                        clientEmail: "client@example.com",
+                        clientName: "Ahmed Al-Fardan",
+                        studentEmail: "fatima@example.com",
+                        studentName: "Fatima Hasan",
+                        price: "BD 45",
+                        status: "pending",
+                        date: "2026-05-20",
+                        description: "Model catalog photoshoot editing and shots."
+                    }
+                ];
+                
+                // Add orders matching active user emails to make tests feel alive!
+                if (loggedInUser.role === 'student') {
+                    // Make sure they have a pending and an in-progress order to test actions
+                    initialOrders.push({
+                        id: "ord_1005",
+                        serviceTitle: "Creative Custom Skill",
+                        clientEmail: "client@example.com",
+                        clientName: "Ahmed Al-Fardan",
+                        studentEmail: loggedInUser.email,
+                        studentName: loggedInUser.name,
+                        price: "BD 20",
+                        status: "pending",
+                        date: "2026-05-20",
+                        description: "Premium project requested by premium client."
+                    });
+                    initialOrders.push({
+                        id: "ord_1006",
+                        serviceTitle: "Dynamic Freelance Job",
+                        clientEmail: "client@example.com",
+                        clientName: "Ahmed Al-Fardan",
+                        studentEmail: loggedInUser.email,
+                        studentName: loggedInUser.name,
+                        price: "BD 35",
+                        status: "in_progress",
+                        date: "2026-05-19",
+                        description: "Interactive application milestones design task."
+                    });
+                } else if (loggedInUser.role === 'client') {
+                    // Make sure the client has orders referencing their actual email!
+                    initialOrders.forEach(o => {
+                        o.clientEmail = loggedInUser.email;
+                        o.clientName = loggedInUser.name;
+                    });
+                }
+                
+                localStorage.setItem(ordersKey, JSON.stringify(initialOrders));
+            }
+            
+            // Seed mock payments
+            if (!localStorage.getItem(paymentsKey)) {
+                const initialPayments = [
+                    {
+                        id: "pay_2001",
+                        orderId: "ord_1001",
+                        clientEmail: "client@example.com",
+                        studentEmail: "sara@example.com",
+                        studentName: "Sara Yusuf",
+                        amount: 15,
+                        status: "completed",
+                        date: "2026-05-10",
+                        method: "BenefitPay"
+                    },
+                    {
+                        id: "pay_2002",
+                        orderId: "ord_1002",
+                        clientEmail: "client@example.com",
+                        studentEmail: "mohammed@example.com",
+                        studentName: "Mohammed Ali",
+                        amount: 12,
+                        status: "completed",
+                        date: "2026-05-12",
+                        method: "BenefitPay"
+                    }
+                ];
+                
+                if (loggedInUser.role === 'client') {
+                    initialPayments.forEach(p => {
+                        p.clientEmail = loggedInUser.email;
+                    });
+                }
+                localStorage.setItem(paymentsKey, JSON.stringify(initialPayments));
+            }
+        }
+
+        // Retrieve and render
+        async function loadDashboardData() {
+            // Cloud-first: load orders and accounts from Firestore
+            if (window._fb) {
+                accounts = await window._fb.loadAccountsFromCloud();
+                orders = await window._fb.loadOrdersFromCloud();
+            } else {
+                accounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
+                orders = JSON.parse(localStorage.getItem('stuserve_orders') || '[]');
+            }
+            payments = JSON.parse(localStorage.getItem('stuserve_payments') || '[]');
+
+            const role = loggedInUser.role;
+
+            if (role === 'student') {
+                document.getElementById('studentDashboard').style.display = 'block';
+                document.getElementById('dashHeroSubtitle').textContent = "Track your earnings, manage your active requests, and toggle service options.";
+                
+                // Add Quick Profile Link button to hero
+                document.getElementById('heroActions').innerHTML = `
+                    <a href="Profile.html" class="btn btn-accent" style="text-decoration:none;">✏️ Go to Profile Dashboard</a>
+                `;
+                
+                renderStudentDashboard();
+            } else if (role === 'client') {
+                document.getElementById('clientDashboard').style.display = 'block';
+                document.getElementById('dashHeroSubtitle').textContent = "Track your placed student orders, review payment logs, and discover top Bahraini talent.";
+                
+                // Add Hire Student button to hero
+                document.getElementById('heroActions').innerHTML = `
+                    <a href="Find Students.html" class="btn btn-accent" style="text-decoration:none;">🔍 Hire Student Talent</a>
+                `;
+                
+                renderClientDashboard();
+            } else if (role === 'admin') {
+                document.getElementById('adminDashboard').style.display = 'block';
+                document.getElementById('dashHeroSubtitle').textContent = "System moderation console. Manage all student directories, accounts, custom tag catalogs, and logs.";
+                renderAdminDashboard();
+            }
+        }
+
+        // ── STUDENT DASHBOARD RENDERING ──
+        function renderStudentDashboard() {
+            const email = loggedInUser.email;
+            
+            // Filters
+            const studentOrders = orders.filter(o => o.studentEmail === email);
+            const studentPayments = payments.filter(p => p.studentEmail === email);
+
+            // 1. Core counters calculations
+            const totalEarnings = studentPayments.reduce((sum, p) => sum + parseFloat(p.amount), 0);
+            const activeOrdersCount = studentOrders.filter(o => o.status === 'in_progress').length;
+            const completedOrdersCount = studentOrders.filter(o => o.status === 'completed').length;
+            
+            // Retrieve rating from profile
+            let ratingAvg = "5.0";
+            const profile = JSON.parse(localStorage.getItem('profile_' + email));
+            if (profile) {
+                if (profile.reviews && profile.reviews.length > 0) {
+                    const totalRating = profile.reviews.reduce((sum, r) => sum + parseInt(r.rating), 0);
+                    ratingAvg = (totalRating / profile.reviews.length).toFixed(1);
+                }
+            }
+
+            document.getElementById('studentEarningsVal').textContent = `BD ${totalEarnings}`;
+            document.getElementById('studentActiveOrdersVal').textContent = activeOrdersCount;
+            document.getElementById('studentCompletedOrdersVal').textContent = completedOrdersCount;
+            document.getElementById('studentRatingVal').textContent = ratingAvg + " ★";
+
+            // 2. Orders Table populating
+            const tbody = document.querySelector('#studentOrdersTable tbody');
+            tbody.innerHTML = '';
+
+            if (studentOrders.length > 0) {
+                studentOrders.forEach(o => {
+                    const tr = document.createElement('tr');
+                    
+                    let actionHtml = '';
+                    if (o.status === 'pending') {
+                        actionHtml = `<button class="btn btn-primary btn-sm" onclick="transitionOrderStatus('${o.id}', 'in_progress')">Accept</button>`;
+                    } else if (o.status === 'in_progress') {
+                        actionHtml = `<button class="btn btn-accent btn-sm" onclick="transitionOrderStatus('${o.id}', 'completed')">Complete</button>`;
+                    } else {
+                        actionHtml = `<span style="font-size:0.8rem; color:var(--text-light); font-weight:600;">Fulfilled</span>`;
+                    }
+
+                    tr.innerHTML = `
+                        <td style="font-weight:600; color:var(--navy);">${o.clientName}</td>
+                        <td><span class="badge" style="background:var(--pink-light); color:var(--accent); font-weight:700;">${o.serviceTitle}</span></td>
+                        <td style="font-size:0.82rem; max-width:260px;">${o.description || 'No project description provided.'}</td>
+                        <td style="font-weight:700; color:var(--accent);">${o.price}</td>
+                        <td style="font-size:0.8rem; white-space:nowrap;">${o.date}</td>
+                        <td><span class="badge badge-${o.status}">${o.status.replace('_', ' ')}</span></td>
+                        <td>${actionHtml}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } else {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align:center; padding:40px; color:var(--text-light);">
+                            No project requests found. Check back later or optimize your profile keywords!
+                        </td>
+                    </tr>
+                `;
+            }
+
+            // 3. Render Earnings SVG Graph Chart
+            renderEarningsSVGChart(studentPayments);
+
+            // 4. Render Skills checklist
+            renderStudentSkillsChecklist(profile);
+        }
+
+        function renderEarningsSVGChart(paymentsList) {
+            const chart = document.getElementById('earningsChart');
+            
+            // Remove previous dynamically loaded columns
+            chart.querySelectorAll('.svg-bar, .chart-tag, text').forEach(el => el.remove());
+
+            // Build mock monthly totals based on our data
+            const months = [
+                { name: "Jan", amt: 0 },
+                { name: "Feb", amt: 0 },
+                { name: "Mar", amt: 0 },
+                { name: "Apr", amt: 0 },
+                { name: "May", amt: 0 }
+            ];
+
+            // Distribute payments based on mock months or populate mock charts!
+            paymentsList.forEach(p => {
+                const monthIndex = new Date(p.date).getMonth();
+                // Map mock values or add them dynamically
+                if (monthIndex >= 0 && monthIndex < 5) {
+                    months[monthIndex].amt += parseFloat(p.amount);
+                } else {
+                    // Fallback to May
+                    months[4].amt += parseFloat(p.amount);
+                }
+            });
+
+            // Ensure we have some decorative historical mock amounts if earnings are 0 to make it look premium
+            if (months.reduce((sum, m) => sum + m.amt, 0) === 0) {
+                months[0].amt = 15;
+                months[1].amt = 35;
+                months[2].amt = 25;
+                months[3].amt = 50;
+                months[4].amt = 10;
+            }
+
+            // Draw SVG rect columns
+            const barWidth = 32;
+            const gap = 28;
+            const startX = 24;
+            const maxHeight = 120;
+            const maxAmt = Math.max(...months.map(m => m.amt), 1);
+
+            months.forEach((m, idx) => {
+                const barHeight = (m.amt / maxAmt) * maxHeight;
+                const x = startX + idx * (barWidth + gap);
+                const y = 180 - barHeight;
+
+                const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                rect.setAttribute("x", x);
+                rect.setAttribute("y", y);
+                rect.setAttribute("width", barWidth);
+                rect.setAttribute("height", barHeight);
+                rect.setAttribute("class", "svg-bar");
+                rect.setAttribute("rx", "4");
+
+                // Hover tag details
+                const title = document.createElementNS("http://www.w3.org/2000/svg", "title");
+                title.textContent = `${m.name}: BD ${m.amt}`;
+                rect.appendChild(title);
+
+                // Text value indicator above bar
+                const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                txt.setAttribute("x", x + barWidth/2);
+                txt.setAttribute("y", y - 6);
+                txt.setAttribute("text-anchor", "middle");
+                txt.setAttribute("fill", "var(--text-dark)");
+                txt.setAttribute("font-size", "10px");
+                txt.setAttribute("font-weight", "700");
+                txt.textContent = m.amt > 0 ? `BD ${m.amt}` : '-';
+
+                chart.appendChild(rect);
+                chart.appendChild(txt);
+            });
+        }
+
+        function renderStudentSkillsChecklist(profile) {
+            const list = document.getElementById('studentServicesChecklist');
+            list.innerHTML = '';
+
+            if (profile && profile.skills) {
+                const skills = profile.skills.split(',').map(s => s.trim()).filter(Boolean);
+                skills.forEach((skill, idx) => {
+                    const row = document.createElement('div');
+                    row.className = 'service-chk-item';
+                    
+                    // Simple representation
+                    let icon = "🚀";
+                    if (skill.toLowerCase().includes('design')) icon = "🎨";
+                    else if (skill.toLowerCase().includes('tutor') || skill.toLowerCase().includes('math')) icon = "📚";
+                    else if (skill.toLowerCase().includes('photo')) icon = "📸";
+                    else if (skill.toLowerCase().includes('edit') || skill.toLowerCase().includes('video')) icon = "🎬";
+                    else if (skill.toLowerCase().includes('write') || skill.toLowerCase().includes('content')) icon = "✍️";
+                    else if (skill.toLowerCase().includes('social') || skill.toLowerCase().includes('marketing')) icon = "📱";
+                    else if (skill.toLowerCase().includes('web') || skill.toLowerCase().includes('code')) icon = "💻";
+
+                    row.innerHTML = `
+                        <div class="service-chk-info">
+                            <span style="font-size:1.15rem;">${icon}</span>
+                            <span style="font-size:0.85rem; font-weight:600; color:var(--navy);">${skill}</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked onchange="toggleSkillActiveState('${skill}', this.checked)">
+                            <span class="slider"></span>
+                        </label>
+                    `;
+                    list.appendChild(row);
+                });
+            } else {
+                list.innerHTML = `<p style="font-size:0.82rem; color:var(--text-light); padding:10px 0;">No active skills registered in your profile profile. Click below to add skills!</p>`;
+            }
+        }
+
+        function toggleSkillActiveState(skillName, isActive) {
+            // Simulated toggle
+            console.log(`Simulated skill status change: ${skillName} active state is now ${isActive}`);
+        }
+
+        // Transition Order Status
+        async function transitionOrderStatus(orderId, newStatus) {
+            // Find order
+            const ordersRegistry = JSON.parse(localStorage.getItem('stuserve_orders') || '[]');
+            const index = ordersRegistry.findIndex(o => o.id === orderId);
+            
+            if (index !== -1) {
+                const o = ordersRegistry[index];
+                const oldStatus = o.status;
+                o.status = newStatus;
+                
+                // If moving to completed, trigger dynamic payment creation!
+                if (newStatus === 'completed') {
+                    const paymentsRegistry = JSON.parse(localStorage.getItem('stuserve_payments') || '[]');
+                    const cleanAmount = parseFloat(o.price.replace(/[^\d.]/g, '')) || 10;
+                    
+                    const paymentObj = {
+                        id: "pay_" + Date.now(),
+                        orderId: o.id,
+                        clientEmail: o.clientEmail,
+                        studentEmail: o.studentEmail,
+                        studentName: o.studentName,
+                        amount: cleanAmount,
+                        status: "completed",
+                        date: new Date().toISOString().split('T')[0],
+                        method: "BenefitPay"
+                    };
+                    paymentsRegistry.unshift(paymentObj);
+                    localStorage.setItem('stuserve_payments', JSON.stringify(paymentsRegistry));
+                }
+
+                // Save to localStorage immediately
+                localStorage.setItem('stuserve_orders', JSON.stringify(ordersRegistry));
+                // Push order change to cloud
+                if (window._fb) await window._fb.saveOrdersToCloud(ordersRegistry);
+
+                // Inject system message & push to cloud
+                injectSystemChatNotification(o, newStatus);
+
+                // Reload and Alert
+                alert(`Order successfully transition from ${oldStatus} to ${newStatus}!`);
+                await loadDashboardData();
+            }
+        }
+
+        // Auto-inject system messages in chats
+        function injectSystemChatNotification(order, state) {
+            const messages = JSON.parse(localStorage.getItem('stuserve_messages') || '[]');
+            
+            let noticeText = "";
+            if (state === 'in_progress') {
+                noticeText = `🚨 AUTOMATED SYSTEM: Student freelancer ${order.studentName} has accepted your order request for "${order.serviceTitle}"! Work has officially started.`;
+            } else if (state === 'completed') {
+                noticeText = `🎉 AUTOMATED SYSTEM: Project completed! Student ${order.studentName} has delivered the work for "${order.serviceTitle}". A mock BenefitPay invoice of BD ${order.price.replace(/[^\d.]/g, '')} has been processed successfully.`;
+            }
+
+            if (noticeText) {
+                const sysMsg = {
+                    id: "sys_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9),
+                    sender: order.studentEmail,
+                    receiver: order.clientEmail,
+                    text: noticeText,
+                    timestamp: Date.now(),
+                    read: false,
+                    file: null
+                };
+                messages.push(sysMsg);
+                localStorage.setItem('stuserve_messages', JSON.stringify(messages));
+                // Push system message to cloud in background
+                if (window._fb) window._fb.saveMessagesToCloud(messages).catch(() => {});
+            }
+        }
+
+        // Local-only dashboard load (used as instant fallback before Firebase loads)
+        function loadDashboardDataLocal() {
+            accounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
+            orders = JSON.parse(localStorage.getItem('stuserve_orders') || '[]');
+            payments = JSON.parse(localStorage.getItem('stuserve_payments') || '[]');
+            const role = loggedInUser ? loggedInUser.role : null;
+            if (role === 'student') { document.getElementById('studentDashboard').style.display = 'block'; renderStudentDashboard(); }
+            else if (role === 'client') { document.getElementById('clientDashboard').style.display = 'block'; renderClientDashboard(); }
+            else if (role === 'admin') { document.getElementById('adminDashboard').style.display = 'block'; renderAdminDashboard(); }
+        }
+
+        // ── EXPOSE FUNCTIONS GLOBALLY (onclick attributes need global scope) ──
+        window.transitionOrderStatus = transitionOrderStatus;
+        window.switchAdminTab = switchAdminTab;
+        window.deleteUserAccount = deleteUserAccount;
+        window.deleteCustomServiceCard = deleteCustomServiceCard;
+        window.toggleSkillActiveState = toggleSkillActiveState;
+        window.handleLogout = handleLogout;
+        window.toggleMobileMenu = toggleMobileMenu;
+        window.closeMobileMenu = closeMobileMenu;
+
+
+        // ── CLIENT DASHBOARD RENDERING ──
+        function renderClientDashboard() {
+            const email = loggedInUser.email;
+
+            // Filters
+            const clientOrders = orders.filter(o => o.clientEmail === email);
+            const clientPayments = payments.filter(p => p.clientEmail === email);
+
+            // 1. Metrics counters
+            const totalSpent = clientPayments.reduce((sum, p) => sum + parseFloat(p.amount), 0);
+            const activeHires = clientOrders.filter(o => o.status === 'in_progress').length;
+            const pendingRequests = clientOrders.filter(o => o.status === 'pending').length;
+
+            // Inbox threads
+            const allMessages = JSON.parse(localStorage.getItem('stuserve_messages') || '[]');
+            const uniqueThreads = new Set();
+            allMessages.forEach(m => {
+                if (m.sender === email) uniqueThreads.add(m.receiver);
+                if (m.receiver === email) uniqueThreads.add(m.sender);
+            });
+
+            document.getElementById('clientSpentVal').textContent = `BD ${totalSpent}`;
+            document.getElementById('clientActiveHiresVal').textContent = activeHires;
+            document.getElementById('clientPendingVal').textContent = pendingRequests;
+            document.getElementById('clientChatsVal').textContent = uniqueThreads.size;
+
+            // 2. Active Orders Table populating
+            const tbody = document.querySelector('#clientOrdersTable tbody');
+            tbody.innerHTML = '';
+
+            if (clientOrders.length > 0) {
+                clientOrders.forEach(o => {
+                    const tr = document.createElement('tr');
+
+                    // Tracker milestones calculation
+                    let node1Class = "progress-node done";
+                    let node2Class = "progress-node";
+                    let node3Class = "progress-node";
+                    
+                    let line1Class = "progress-line";
+                    let line2Class = "progress-line";
+
+                    if (o.status === 'pending') {
+                        node2Class += " active";
+                    } else if (o.status === 'in_progress') {
+                        node2Class += " done";
+                        line1Class += " done";
+                        node3Class += " active";
+                    } else if (o.status === 'completed') {
+                        node2Class += " done";
+                        node3Class += " done";
+                        line1Class += " done";
+                        line2Class += " done";
+                    }
+
+                    const trackerHtml = `
+                        <div class="progress-flow">
+                            <div class="${node1Class}" title="Order Placed">1</div>
+                            <div class="${line1Class}"></div>
+                            <div class="${node2Class}" title="Active Progress">2</div>
+                            <div class="${line2Class}"></div>
+                            <div class="${node3Class}" title="Fulfilled & Cleared">3</div>
+                        </div>
+                    `;
+
+                    tr.innerHTML = `
+                        <td style="font-weight:600; color:var(--navy);">${o.studentName}</td>
+                        <td><span class="badge" style="background:var(--pink-light); color:var(--accent); font-weight:700;">${o.serviceTitle}</span></td>
+                        <td>
+                            <div style="margin-bottom:6px; font-size:0.75rem; color:var(--text-light); text-transform:uppercase; font-weight:700;">State: ${o.status.replace('_', ' ')}</div>
+                            ${trackerHtml}
+                        </td>
+                        <td style="font-weight:700; color:var(--accent);">${o.price}</td>
+                        <td style="font-size:0.8rem;">${o.date}</td>
+                        <td>
+                            <a href="Messages.html?chat=${o.studentEmail}" class="btn btn-outline btn-sm" style="text-decoration:none;">📨 Chat</a>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } else {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align:center; padding:40px; color:var(--text-light);">
+                            You have not placed any talent orders yet. Explore top student services or directory pages to get started!
+                        </td>
+                    </tr>
+                `;
+            }
+
+            // 3. Receipts log list
+            const logDiv = document.getElementById('clientPaymentsLog');
+            logDiv.innerHTML = '';
+
+            if (clientPayments.length > 0) {
+                clientPayments.forEach(p => {
+                    const card = document.createElement('div');
+                    card.style.background = '#fafbfc';
+                    card.style.border = '1px solid rgba(15,28,46,0.06)';
+                    card.style.padding = '12px 16px';
+                    card.style.borderRadius = 'var(--radius)';
+                    card.style.display = 'flex';
+                    card.style.justifyContent = 'space-between';
+                    card.style.alignItems = 'center';
+                    
+                    card.innerHTML = `
+                        <div>
+                            <div style="font-size:0.82rem; font-weight:700; color:var(--navy);">Receipt for ${p.studentName}</div>
+                            <div style="font-size:0.72rem; color:var(--text-light); margin-top:2px;">Transaction ${p.id} • ${p.date}</div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-weight:700; color:var(--accent);">BD ${p.amount}</div>
+                            <span class="badge badge-completed" style="font-size:0.6rem; padding:2px 6px; margin-top:4px;">BenefitPay</span>
+                        </div>
+                    `;
+                    logDiv.appendChild(card);
+                });
+            } else {
+                logDiv.innerHTML = `
+                    <div style="text-align:center; padding:20px 0; color:var(--text-light); font-size:0.82rem;">
+                        No transaction invoices found. When a student completes your active order, receipts are automatically logged here.
+                    </div>
+                `;
+            }
+        }
+
+
+        // ── ADMIN DASHBOARD RENDERING ──
+        let activeAdminTab = 'users';
+
+        function switchAdminTab(tabName) {
+            activeAdminTab = tabName;
+            
+            // Tab button styles
+            document.getElementById('tabUsersBtn').classList.toggle('active', tabName === 'users');
+            document.getElementById('tabCatalogBtn').classList.toggle('active', tabName === 'catalog');
+            document.getElementById('tabOrdersBtn').classList.toggle('active', tabName === 'orders');
+
+            // Show sections
+            document.getElementById('adminTabUsers').style.display = tabName === 'users' ? 'block' : 'none';
+            document.getElementById('adminTabCatalog').style.display = tabName === 'catalog' ? 'block' : 'none';
+            document.getElementById('adminTabOrders').style.display = tabName === 'orders' ? 'block' : 'none';
+        }
+
+        function renderAdminDashboard() {
+            // Count registered roles in stuserve_accounts
+            const accountsList = Object.values(accounts);
+            const studentsCount = accountsList.filter(a => a.role === 'student').length;
+            const clientsCount = accountsList.filter(a => a.role === 'client').length;
+
+            // Cumulative platform payments volume
+            const platformVolume = payments.reduce((sum, p) => sum + parseFloat(p.amount), 0);
+
+            // Services count
+            const customServices = JSON.parse(localStorage.getItem('stuserve_custom_services') || '[]');
+            const totalServicesCount = 6 + customServices.length; // 6 Predefined standard services + custom tags
+
+            document.getElementById('adminStudentsVal').textContent = studentsCount;
+            document.getElementById('adminClientsVal').textContent = clientsCount;
+            document.getElementById('adminServicesVal').textContent = totalServicesCount;
+            document.getElementById('adminVolumeVal').textContent = `BD ${platformVolume}`;
+
+            // 1. Tab Users Grid
+            const userBody = document.querySelector('#adminUsersTable tbody');
+            userBody.innerHTML = '';
+            
+            accountsList.forEach(a => {
+                const tr = document.createElement('tr');
+                const emoji = avatarEmojiMap[a.avatar] || "🎓";
+                
+                // Allow blocking admin
+                let actionBtn = '';
+                if (a.role === 'admin') {
+                    actionBtn = `<span style="font-size:0.78rem; color:var(--text-light); font-weight:600;">System Administrator</span>`;
+                } else {
+                    actionBtn = `
+                        <button class="btn btn-outline btn-sm" onclick="deleteUserAccount('${a.email}')" style="color:var(--accent); border-color:rgba(196,66,105,0.15);">Delete</button>
+                    `;
+                }
+
+                tr.innerHTML = `
+                    <td style="font-size:1.45rem; text-align:center; width:64px;">${emoji}</td>
+                    <td style="font-weight:600; color:var(--navy);">${a.name}</td>
+                    <td style="font-family:monospace; font-size:0.8rem;">${a.email}</td>
+                    <td><span class="badge" style="background:#eef3f9; color:var(--text-dark); font-weight:700;">${a.role}</span></td>
+                    <td><span class="badge badge-completed">Active</span></td>
+                    <td>${actionBtn}</td>
+                `;
+                userBody.appendChild(tr);
+            });
+
+            // 2. Tab Custom Services Catalog Grid
+            const catBody = document.querySelector('#adminCatalogTable tbody');
+            catBody.innerHTML = '';
+
+            if (customServices.length > 0) {
+                customServices.forEach(s => {
+                    const tr = document.createElement('tr');
+                    
+                    const providersText = s.students ? s.students.map(st => st.name).join(', ') : 'Student Freelancer';
+
+                    tr.innerHTML = `
+                        <td style="font-size:1.45rem; text-align:center; width:64px;">${s.icon}</td>
+                        <td style="font-weight:600; color:var(--navy);">${s.title}</td>
+                        <td style="font-weight:700; color:var(--accent);">${s.price}</td>
+                        <td style="font-size:0.82rem; max-width:240px;">${providersText}</td>
+                        <td>
+                            <button class="btn btn-outline btn-sm" onclick="deleteCustomServiceCard('${s.id}')" style="color:var(--accent); border-color:rgba(196,66,105,0.15);">Remove Card</button>
+                        </td>
+                    `;
+                    catBody.appendChild(tr);
+                });
+            } else {
+                catBody.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align:center; padding:30px; color:var(--text-light);">
+                            No dynamically registered custom service section cards found in the system.
+                        </td>
+                    </tr>
+                `;
+            }
+
+            // 3. Tab Orders Global Grid
+            const ordBody = document.querySelector('#adminTabOrders tbody');
+            ordBody.innerHTML = '';
+
+            if (orders.length > 0) {
+                orders.forEach(o => {
+                    const tr = document.createElement('tr');
+
+                    tr.innerHTML = `
+                        <td style="font-family:monospace; font-size:0.75rem; color:var(--text-light); font-weight:700;">${o.id}</td>
+                        <td style="font-weight:600; color:var(--navy);">${o.studentName}</td>
+                        <td style="font-weight:600; color:var(--text-mid);">${o.clientName}</td>
+                        <td><span class="badge" style="background:var(--pink-light); color:var(--accent); font-weight:700;">${o.serviceTitle}</span></td>
+                        <td style="font-weight:700; color:var(--accent);">${o.price}</td>
+                        <td style="font-size:0.8rem; white-space:nowrap;">${o.date}</td>
+                        <td><span class="badge badge-${o.status}">${o.status.replace('_', ' ')}</span></td>
+                    `;
+                    ordBody.appendChild(tr);
+                });
+            } else {
+                ordBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align:center; padding:30px; color:var(--text-light);">
+                            No platform order history found in the transactions registry.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Moderate Actions
+        function deleteUserAccount(email) {
+            if (confirm(`Are you absolutely sure you want to moderate and delete the account registry for email: ${email}? This will clean up their profile and authentication credentials.`)) {
+                
+                // 1. Delete from stuserve_accounts
+                const accountsRegistry = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
+                delete accountsRegistry[email];
+                localStorage.setItem('stuserve_accounts', JSON.stringify(accountsRegistry));
+
+                // 2. Delete from profile
+                localStorage.removeItem('profile_' + email);
+
+                // 3. Rebuild custom services snapshot in case they had skills
+                syncCustomServicesSnapshot();
+
+                alert(`Account registry for ${email} has been moderated and removed from StuServe.`);
+                loadDashboardData();
+            }
+        }
+
+        function deleteCustomServiceCard(serviceId) {
+            if (confirm(`Are you sure you want to moderate and remove the custom service card with ID: ${serviceId} from the professional catalog grid?`)) {
+                
+                const customServices = JSON.parse(localStorage.getItem('stuserve_custom_services') || '[]');
+                const filtered = customServices.filter(s => s.id !== serviceId);
+                localStorage.setItem('stuserve_custom_services', JSON.stringify(filtered));
+
+                alert(`Custom service card has been deleted successfully.`);
+                loadDashboardData();
+            }
+        }
+
+        // Shared helper to sync custom services in admin moderation
+        function syncCustomServicesSnapshot() {
+            const standardServices = [
+                "Graphic Design", "Academic Tutoring", "Creative Photography", 
+                "Social Media Management", "Content Writing", "Video Editing"
+            ];
+            const customServicesMap = {};
+
+            const keys = Object.keys(localStorage);
+            keys.forEach(key => {
+                if (key.startsWith('profile_')) {
+                    try {
+                        const profile = JSON.parse(localStorage.getItem(key));
+                        if (profile && profile.skills) {
+                            const skills = profile.skills.split(',').map(s => s.trim()).filter(Boolean);
+                            skills.forEach(skill => {
+                                const isStandard = standardServices.some(std => std.toLowerCase() === skill.toLowerCase());
+                                if (!isStandard) {
+                                    const capitalized = skill.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ');
+                                    if (!customServicesMap[capitalized]) {
+                                        customServicesMap[capitalized] = {
+                                            id: "service_custom_" + capitalized.toLowerCase().replace(/[^a-z0-9]+/g, '_'),
+                                            title: capitalized,
+                                            icon: "🚀",
+                                            price: profile.price,
+                                            students: []
+                                        };
+                                    }
+                                    if (!customServicesMap[capitalized].students.some(s => s.email === profile.email)) {
+                                        customServicesMap[capitalized].students.push({
+                                            name: profile.name,
+                                            email: profile.email
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    } catch (e) {}
+                }
+            });
+
+            const list = Object.values(customServicesMap).map(s => {
+                return {
+                    id: s.id,
+                    title: s.title,
+                    icon: s.title.toLowerCase().includes('web') ? '💻' : '🚀',
+                    desc: `Professional ${s.title} services offered by our talented student freelancers.`,
+                    price: "Starting from " + s.price,
+                    students: s.students
+                };
+            });
+            localStorage.setItem('stuserve_custom_services', JSON.stringify(list));
+        }
+    </script>
+</body>
+</html>

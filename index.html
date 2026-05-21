@@ -1,0 +1,2279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>StuServe — Student Talent, Professional Results</title>
+    <meta name="description"
+        content="Connect with talented Bahraini students for design, tutoring, photography, writing and more.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        /* ============================================================
+       STUSERVE — Design System
+       ============================================================ */
+        :root {
+            --navy: #0f1c2e;
+            --steel: #3a5068;
+            --blush: #c8a4a5;
+            --lavender: #b8b4c0;
+            --pink: #e8cdd0;
+            --pink-light: #f4e4e6;
+            --white: #ffffff;
+            --text-dark: #0f1c2e;
+            --text-mid: #3a5068;
+            --text-light: #7a8fa6;
+            --accent: #c44269;
+
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'DM Sans', sans-serif;
+
+            --shadow-sm: 0 2px 8px rgba(15, 28, 46, .08);
+            --shadow-md: 0 8px 32px rgba(15, 28, 46, .12);
+            --shadow-lg: 0 24px 64px rgba(15, 28, 46, .18);
+
+            --radius: 12px;
+            --radius-lg: 24px;
+            --transition: .28s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--text-dark);
+            background: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* ── Utility ── */
+        .container {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .section {
+            padding: 96px 0;
+        }
+
+        .section--alt {
+            background: var(--pink-light);
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: .7rem;
+            font-weight: 600;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            color: var(--navy);
+            line-height: 1.15;
+            margin-bottom: 16px;
+        }
+
+        .section-sub {
+            font-size: 1.05rem;
+            color: var(--text-light);
+            max-width: 520px;
+            margin-bottom: 48px;
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-family: var(--font-body);
+            font-size: .9rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: var(--transition);
+            letter-spacing: .02em;
+            white-space: nowrap;
+        }
+
+        .btn-primary {
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--steel);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--navy);
+            border-color: var(--navy);
+        }
+
+        .btn-outline:hover {
+            background: var(--navy);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: var(--white);
+        }
+
+        .btn-accent:hover {
+            background: #a8364f;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(196, 66, 105, .3);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--white);
+            border-color: rgba(255, 255, 255, .4);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(255, 255, 255, .15);
+            border-color: var(--white);
+        }
+
+        /* ── Navbar ── */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0 24px;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, .92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(15, 28, 46, .06);
+            transition: box-shadow var(--transition);
+        }
+
+        .navbar.scrolled {
+            box-shadow: var(--shadow-sm);
+        }
+
+        .navbar__inner {
+            max-width: 1160px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar__logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar__logo img {
+            height: 60px;
+            width: auto;
+            mix-blend-mode: multiply;
+        }
+
+        .navbar__logo span {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        /* Nav Badge styling */
+        .nav-badge-container {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .nav-badge {
+            background: var(--accent);
+            color: var(--white);
+            border-radius: 50%;
+            min-width: 18px;
+            height: 18px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -6px;
+            right: -12px;
+            padding: 0 4px;
+            animation: pulse-badge 2s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(196, 66, 105, 0.7);
+            }
+
+            70% {
+                transform: scale(1.1);
+                box-shadow: 0 0 0 6px rgba(196, 66, 105, 0);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(196, 66, 105, 0);
+            }
+        }
+
+        .navbar__links {
+            display: flex;
+            align-items: center;
+            gap: 44px;
+        }
+
+        .navbar__links a {
+            font-size: .875rem;
+            font-weight: 500;
+            color: var(--text-mid);
+            transition: color var(--transition);
+            position: relative;
+        }
+
+        .navbar__links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transition: transform var(--transition);
+        }
+
+        .navbar__links a:hover {
+            color: var(--navy);
+        }
+
+        .navbar__links a:hover::after {
+            transform: scaleX(1);
+        }
+
+        .navbar__actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .navbar__hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .navbar__hamburger span {
+            width: 22px;
+            height: 2px;
+            background: var(--navy);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        /* Mobile menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            inset: 72px 0 0 0;
+            background: var(--white);
+            z-index: 999;
+            flex-direction: column;
+            padding: 32px 24px;
+            gap: 4px;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(15, 28, 46, .06);
+            display: block;
+        }
+
+        .mobile-menu .btn {
+            margin-top: 8px;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 72px;
+            padding-bottom: 120px;
+            background: var(--navy);
+        }
+
+        .hero__bg {
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 70% at 70% 40%, rgba(58, 80, 104, .6) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 50% at 20% 80%, rgba(200, 164, 165, .15) 0%, transparent 60%);
+        }
+
+        .hero__decor {
+            position: absolute;
+            right: -80px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 520px;
+            height: 520px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(200, 164, 165, .2), rgba(184, 180, 192, .1));
+            border: 1px solid rgba(200, 164, 165, .2);
+            animation: float 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        .hero__decor::before {
+            content: '';
+            position: absolute;
+            inset: 40px;
+            border-radius: 50%;
+            border: 1px solid rgba(200, 164, 165, .15);
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(-50%) scale(1);
+            }
+
+            50% {
+                transform: translateY(calc(-50% - 16px)) scale(1.02);
+            }
+        }
+
+        .hero__content {
+            position: relative;
+            z-index: 1;
+            max-width: 600px;
+        }
+
+        .hero__eyebrow {
+            font-size: .75rem;
+            font-weight: 600;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: var(--blush);
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeUp .8s .2s forwards;
+        }
+
+        .hero__title {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 600;
+            color: var(--white);
+            line-height: 1.08;
+            margin-bottom: 24px;
+            opacity: 0;
+            animation: fadeUp .8s .4s forwards;
+        }
+
+        .hero__title em {
+            font-style: italic;
+            color: var(--blush);
+        }
+
+        .hero__sub {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, .65);
+            margin-bottom: 40px;
+            max-width: 460px;
+            line-height: 1.7;
+            opacity: 0;
+            animation: fadeUp .8s .6s forwards;
+        }
+
+        .hero__actions {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeUp .8s .8s forwards;
+        }
+
+        .hero__stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 64px;
+            opacity: 0;
+            animation: fadeUp .8s 1s forwards;
+        }
+
+        .hero__stat-num {
+            font-family: var(--font-display);
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .hero__stat-label {
+            font-size: .8rem;
+            color: rgba(255, 255, 255, .5);
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        .hero__wave {
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+        }
+
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 32px;
+        }
+
+        .cat-pill {
+            padding: 8px 18px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, .1);
+            border: 1px solid rgba(255, 255, 255, .2);
+            color: rgba(255, 255, 255, .8);
+            font-size: .8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .cat-pill:hover {
+            background: rgba(255, 255, 255, .2);
+            color: #fff;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(24px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── Services ── */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 24px;
+        }
+
+        .service-card {
+            background: var(--white);
+            border: 1px solid rgba(15, 28, 46, .08);
+            border-radius: var(--radius-lg);
+            padding: 32px 28px;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--navy), var(--blush));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform var(--transition);
+        }
+
+        .service-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: transparent;
+        }
+
+        .service-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .service-card__icon {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius);
+            background: var(--pink-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            transition: background var(--transition);
+        }
+
+        .service-card:hover .service-card__icon {
+            background: var(--pink);
+        }
+
+        .service-card__title {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .service-card__desc {
+            font-size: .875rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .service-card__count {
+            display: inline-block;
+            margin-top: 16px;
+            font-size: .75rem;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: .06em;
+        }
+
+        /* ── Steps ── */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 0;
+            position: relative;
+        }
+
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 36px;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--blush), transparent);
+        }
+
+        .step {
+            text-align: center;
+            padding: 0 24px;
+            position: relative;
+        }
+
+        .step__num {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: var(--navy);
+            color: var(--white);
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 0 0 8px var(--pink-light), 0 0 0 16px rgba(200, 164, 165, .15);
+        }
+
+        .step__title {
+            font-family: var(--font-display);
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .step__desc {
+            font-size: .875rem;
+            color: var(--text-light);
+        }
+
+        /* ── Why grid ── */
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+        }
+
+        .why-card {
+            text-align: center;
+            padding: 40px 28px;
+            border-radius: var(--radius-lg);
+            background: var(--white);
+            border: 1px solid rgba(15, 28, 46, .06);
+            transition: var(--transition);
+        }
+
+        .why-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+
+        .why-card__icon {
+            font-size: 2.4rem;
+            margin-bottom: 16px;
+        }
+
+        .why-card__title {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 10px;
+        }
+
+        .why-card__desc {
+            font-size: .875rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* ── Profiles ── */
+        .profile-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            border: 1px solid rgba(15, 28, 46, .07);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .profile-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+
+        .profile-card__avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            background: linear-gradient(135deg, var(--navy), var(--steel));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            color: var(--white);
+            font-weight: 700;
+            border: 4px solid var(--pink-light);
+        }
+
+        .profile-card__name {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        .profile-card__skill {
+            font-size: .8rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin: 4px 0 12px;
+            letter-spacing: .04em;
+        }
+
+        .profile-card__rate {
+            font-size: .85rem;
+            color: var(--text-light);
+        }
+
+        .profile-card__tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            margin: 14px 0;
+        }
+
+        .featured-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, var(--blush), var(--pink));
+            color: var(--navy);
+            font-size: .7rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: 10px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: .7rem;
+            font-weight: 600;
+            background: var(--pink-light);
+            color: var(--steel);
+            letter-spacing: .04em;
+        }
+
+        /* ── Testimonials ── */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .testimonial-card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 36px 32px;
+            border: 1px solid rgba(15, 28, 46, .06);
+            transition: var(--transition);
+        }
+
+        .testimonial-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+
+        .testimonial-card__quote {
+            font-family: var(--font-display);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            color: var(--text-mid);
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+
+        .testimonial-card__author {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .testimonial-card__avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--navy), var(--steel));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: .95rem;
+            flex-shrink: 0;
+        }
+
+        .testimonial-card__name {
+            font-weight: 600;
+            font-size: .9rem;
+            color: var(--navy);
+        }
+
+        .testimonial-card__role {
+            font-size: .8rem;
+            color: var(--text-light);
+        }
+
+        .stars {
+            color: var(--accent);
+            font-size: .85rem;
+            margin-bottom: 16px;
+        }
+
+        /* ── CTA Band ── */
+        .cta-band {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--steel) 100%);
+            padding: 96px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-band::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: rgba(200, 164, 165, .08);
+            pointer-events: none;
+        }
+
+        .cta-band__title {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            color: var(--white);
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .cta-band__sub {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, .6);
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .cta-band__actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            position: relative;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            background: var(--navy);
+            color: rgba(255, 255, 255, .6);
+            padding: 64px 24px 32px;
+        }
+
+        .footer__grid {
+            max-width: 1160px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 48px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid rgba(255, 255, 255, .08);
+        }
+
+        .footer__brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .footer__brand-logo img {
+            height: 70px;
+            width: auto;
+            opacity: 1;
+            mix-blend-mode: multiply;
+        }
+
+        .footer__brand-logo span {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .footer__brand-desc {
+            font-size: .875rem;
+            line-height: 1.7;
+            max-width: 260px;
+        }
+
+        .footer__col-title {
+            font-size: .75rem;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--white);
+            margin-bottom: 20px;
+        }
+
+        .footer__col a {
+            display: block;
+            font-size: .875rem;
+            margin-bottom: 10px;
+            transition: color var(--transition);
+        }
+
+        .footer__col a:hover {
+            color: var(--blush);
+        }
+
+        .footer__bottom {
+            max-width: 1160px;
+            margin: 32px auto 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: .8rem;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer__social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer__social a {
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(255, 255, 255, .15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: .9rem;
+            transition: var(--transition);
+        }
+
+        .footer__social a:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: var(--white);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--lavender);
+            border-radius: 3px;
+        }
+
+        /* ── Animate in ── */
+        .animate-in {
+            transition: opacity .6s ease, transform .6s ease;
+        }
+
+        /* ── AUTH MODAL ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 28, 46, .6);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 48px 40px;
+            width: 100%;
+            max-width: 440px;
+            position: relative;
+            animation: modalIn .3s cubic-bezier(.4, 0, .2, 1);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(24px) scale(.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal__close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--pink-light);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--text-mid);
+            transition: var(--transition);
+        }
+
+        .modal__close:hover {
+            background: var(--pink);
+            color: var(--navy);
+        }
+
+        .modal__logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 28px;
+        }
+
+        .modal__logo img {
+            height: 48px;
+            width: auto;
+            mix-blend-mode: multiply;
+        }
+
+        .modal__logo span {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .modal__title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 6px;
+        }
+
+        .modal__sub {
+            font-size: .875rem;
+            color: var(--text-light);
+            margin-bottom: 28px;
+        }
+
+        .modal__tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--pink-light);
+            border-radius: 50px;
+            padding: 4px;
+            margin-bottom: 28px;
+        }
+
+        .modal__tab {
+            flex: 1;
+            padding: 10px;
+            border-radius: 50px;
+            font-size: .875rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: var(--text-mid);
+            transition: var(--transition);
+            font-family: var(--font-body);
+            text-align: center;
+        }
+
+        .modal__tab.active {
+            background: var(--navy);
+            color: var(--white);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: .82rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 7px;
+            letter-spacing: .02em;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1.5px solid rgba(15, 28, 46, .12);
+            border-radius: var(--radius);
+            font-family: var(--font-body);
+            font-size: .9rem;
+            color: var(--text-dark);
+            background: var(--white);
+            transition: border-color var(--transition), box-shadow var(--transition);
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--navy);
+            box-shadow: 0 0 0 3px rgba(15, 28, 46, .08);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-light);
+        }
+
+        .role-pills {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .role-pill {
+            flex: 1;
+            padding: 14px 10px;
+            border-radius: var(--radius);
+            border: 1.5px solid rgba(15, 28, 46, .12);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: .875rem;
+            font-weight: 600;
+            color: var(--text-mid);
+        }
+
+        .role-pill.selected {
+            border-color: var(--navy);
+            background: rgba(15, 28, 46, .04);
+            color: var(--navy);
+        }
+
+        .role-pill .role-icon {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .modal__footer {
+            font-size: .8rem;
+            color: var(--text-light);
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .modal__footer a {
+            color: var(--accent);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .modal-success {
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        .modal-success__icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        .modal-success__title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .modal-success__msg {
+            font-size: .9rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 900px) {
+
+            .navbar__links,
+            .navbar__actions {
+                display: none;
+            }
+
+            .navbar__hamburger {
+                display: flex;
+            }
+
+            .footer__grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .steps::before {
+                display: none;
+            }
+
+            .why-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .section {
+                padding: 64px 0;
+            }
+
+            .hero__stats {
+                flex-wrap: wrap;
+                gap: 24px;
+            }
+
+            .footer__grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero__decor {
+                display: none;
+            }
+
+            .modal {
+                padding: 36px 24px;
+            }
+
+            .why-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero__actions {
+                flex-direction: column;
+            }
+
+            .hero__actions .btn {
+                justify-content: center;
+            }
+
+            .cta-band__actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── NAVBAR ── -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar__inner">
+            <a href="index.html" class="navbar__logo">
+                <img src="stuserveLogo.png" alt="StuServe Logo">
+                <span>StuServe</span>
+            </a>
+            <ul class="navbar__links">
+                <li><a href="Services.html">Browse Services</a></li>
+                <li><a href="Find Students.html">Find Students</a></li>
+                <li><a href="Post a Job.html">Post a Job</a></li>
+                <li><a href="Messages.html" id="navMessagesLink">Messages</a></li>
+                <li><a href="index.html">About</a></li>
+                <li><a href="index.html">Contact</a></li>
+            </ul>
+            <div class="navbar__actions">
+                <button class="btn btn-outline" style="padding:10px 20px;font-size:.85rem;"
+                    onclick="openModal('login')">Log In</button>
+                <button class="btn btn-primary" style="padding:10px 20px;font-size:.85rem;"
+                    onclick="openModal('signup')">Sign Up</button>
+            </div>
+            <div class="navbar__hamburger" id="hamburger">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ── MOBILE MENU ── -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="Services.html">Browse Services</a>
+        <a href="Find Students.html">Find Students</a>
+        <a href="Post a Job.html">Post a Job</a>
+        <a href="index.html">About</a>
+        <a href="index.html">Contact</a>
+        <button class="btn btn-outline" style="margin-top:8px;" onclick="openModal('login');closeMobileMenu()">Log
+            In</button>
+        <button class="btn btn-primary" style="margin-top:4px;" onclick="openModal('signup');closeMobileMenu()">Sign
+            Up</button>
+    </div>
+
+    <!-- ════════════════════════════════════════
+     HERO
+════════════════════════════════════════ -->
+    <section class="hero">
+        <div class="hero__bg"></div>
+        <div class="hero__decor"></div>
+        <div class="container">
+            <div class="hero__content">
+                <p class="hero__eyebrow">✦ Bahrain's Student Talent Platform</p>
+                <h1 class="hero__title">
+                    Great work,<br>from <em>student<br>talent</em>
+                </h1>
+                <p class="hero__sub">
+                    Hire skilled Bahraini students for design, tutoring, photography, writing and more — or join as a
+                    student and start earning on your schedule.
+                </p>
+                <div class="hero__actions">
+                    <button class="btn btn-accent" onclick="openModal('signup','client')">Hire a Student ↗</button>
+                    <button class="btn btn-ghost" onclick="openModal('signup','student')">Join as a Student</button>
+                </div>
+                <div class="categories">
+                    <span class="cat-pill">🎨 Graphic Design</span>
+                    <span class="cat-pill">📚 Tutoring</span>
+                    <span class="cat-pill">📸 Photography</span>
+                    <span class="cat-pill">✍️ Writing</span>
+                    <span class="cat-pill">🎬 Video Editing</span>
+                    <span class="cat-pill">📱 Social Media</span>
+                </div>
+                <div class="hero__stats">
+                    <div>
+                        <div class="hero__stat-num">500+</div>
+                        <div class="hero__stat-label">Students</div>
+                    </div>
+                    <div>
+                        <div class="hero__stat-num">1,200+</div>
+                        <div class="hero__stat-label">Projects Done</div>
+                    </div>
+                    <div>
+                        <div class="hero__stat-num">4.9★</div>
+                        <div class="hero__stat-label">Avg Rating</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <svg class="hero__wave" viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 80H1440V20C1200 80 960 0 720 20C480 40 240 0 0 20V80Z" fill="#ffffff" />
+        </svg>
+    </section>
+
+    <!-- ════════════════════════════════════════
+     POPULAR SERVICES
+════════════════════════════════════════ -->
+    <section class="section">
+        <div class="container">
+            <p class="tag">What you can hire for</p>
+            <h2 class="section-title">Popular Services</h2>
+            <p class="section-sub">From creative work to academic support — students are ready to help.</p>
+            <div class="services-grid animate-in">
+                <div class="service-card">
+                    <div class="service-card__icon">🎨</div>
+                    <div class="service-card__title">Graphic Design</div>
+                    <div class="service-card__desc">Logos, social posts, flyers, branding, and more from creative design
+                        students.</div>
+                    <span class="service-card__count">68 students available</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-card__icon">📚</div>
+                    <div class="service-card__title">Tutoring</div>
+                    <div class="service-card__desc">Math, science, language, and more from top university students.
+                    </div>
+                    <span class="service-card__count">112 students available</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-card__icon">📸</div>
+                    <div class="service-card__title">Photography</div>
+                    <div class="service-card__desc">Events, portraits, product shots and creative photography sessions.
+                    </div>
+                    <span class="service-card__count">44 students available</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-card__icon">🎬</div>
+                    <div class="service-card__title">Video Editing</div>
+                    <div class="service-card__desc">Reels, YouTube, event videos — polished and professional.</div>
+                    <span class="service-card__count">39 students available</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-card__icon">✍️</div>
+                    <div class="service-card__title">Writing</div>
+                    <div class="service-card__desc">Articles, blogs, scripts, CVs and academic content.</div>
+                    <span class="service-card__count">57 students available</span>
+                </div>
+                <div class="service-card">
+                    <div class="service-card__icon">📱</div>
+                    <div class="service-card__title">Social Media</div>
+                    <div class="service-card__desc">Content planning, captions, scheduling and growth strategies.</div>
+                    <span class="service-card__count">82 students available</span>
+                </div>
+            </div>
+            <div style="text-align:center;margin-top:48px;">
+                <button class="btn btn-outline">View All Services →</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+     HOW IT WORKS
+════════════════════════════════════════ -->
+    <section class="section section--alt">
+        <div class="container">
+            <p class="tag" style="display:block;text-align:center;">Simple process</p>
+            <h2 class="section-title" style="text-align:center;margin:0 auto 12px;">How StuServe Works</h2>
+            <p class="section-sub" style="margin:0 auto 64px;text-align:center;">Get from idea to done in four easy
+                steps.</p>
+            <div class="steps animate-in">
+                <div class="step">
+                    <div class="step__num">1</div>
+                    <div class="step__title">Browse & Search</div>
+                    <div class="step__desc">Explore student profiles and services, filter by skill, price, or
+                        availability.</div>
+                </div>
+                <div class="step">
+                    <div class="step__num">2</div>
+                    <div class="step__title">Post or Hire</div>
+                    <div class="step__desc">Post a job or hire directly from a student's profile with one click.</div>
+                </div>
+                <div class="step">
+                    <div class="step__num">3</div>
+                    <div class="step__title">Collaborate</div>
+                    <div class="step__desc">Chat, share files, and track progress through your secure dashboard.</div>
+                </div>
+                <div class="step">
+                    <div class="step__num">4</div>
+                    <div class="step__title">Pay Safely</div>
+                    <div class="step__desc">Funds are held in escrow and released when you're happy with the work.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+     WHY STUSERVE
+════════════════════════════════════════ -->
+    <section class="section">
+        <div class="container">
+            <p class="tag">Why choose us</p>
+            <h2 class="section-title">Built for Trust &amp; Quality</h2>
+            <p class="section-sub">Every feature designed to give clients confidence and students opportunity.</p>
+            <div class="why-grid animate-in">
+                <div class="why-card">
+                    <div class="why-card__icon">🔒</div>
+                    <div class="why-card__title">Secure Escrow Payments</div>
+                    <div class="why-card__desc">Your payment is held safely until you approve the work. BenefitPay
+                        supported.</div>
+                </div>
+                <div class="why-card">
+                    <div class="why-card__icon">✅</div>
+                    <div class="why-card__title">Verified Students</div>
+                    <div class="why-card__desc">Every student is verified with their university ID before joining the
+                        platform.</div>
+                </div>
+                <div class="why-card">
+                    <div class="why-card__icon">⭐</div>
+                    <div class="why-card__title">Ratings &amp; Reviews</div>
+                    <div class="why-card__desc">Transparent reviews from real clients help you hire with confidence.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+     FEATURED STUDENTS
+════════════════════════════════════════ -->
+    <section class="section section--alt">
+        <div class="container">
+            <p class="tag">Student spotlight</p>
+            <h2 class="section-title">Top-Rated Students</h2>
+            <p class="section-sub">Meet some of our highest-rated talent ready to work for you.</p>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;"
+                id="featuredStudentsGrid" class="animate-in">
+                <!-- Dynamically populated from localStorage -->
+            </div>
+            <div style="text-align:center;margin-top:40px;">
+                <button class="btn btn-outline">Browse All Students →</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+     TESTIMONIALS
+════════════════════════════════════════ -->
+    <section class="section">
+        <div class="container">
+            <p class="tag">What people say</p>
+            <h2 class="section-title">Success Stories</h2>
+            <p class="section-sub">Real results from real people on StuServe.</p>
+            <div class="testimonials-grid animate-in">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-card__quote">"I needed a logo in 48 hours. The student delivered something
+                        better than any agency I'd used before, at a fraction of the cost."</p>
+                    <div class="testimonial-card__author">
+                        <div class="testimonial-card__avatar">AH</div>
+                        <div>
+                            <div class="testimonial-card__name">Ahmed Hassan</div>
+                            <div class="testimonial-card__role">Small Business Owner, Manama</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-card__quote">"As a student, StuServe helped me earn money between classes
+                        while building a real portfolio. I've already completed 12 projects."</p>
+                    <div class="testimonial-card__author">
+                        <div class="testimonial-card__avatar">LM</div>
+                        <div>
+                            <div class="testimonial-card__name">Lara Mohammed</div>
+                            <div class="testimonial-card__role">Design Student, UOB</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-card__quote">"The escrow payment system made me feel completely safe. I only
+                        paid when I was satisfied with the final product."</p>
+                    <div class="testimonial-card__author">
+                        <div class="testimonial-card__avatar">NS</div>
+                        <div>
+                            <div class="testimonial-card__name">Noora Sultan</div>
+                            <div class="testimonial-card__role">Event Organizer, Riffa</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+     CTA BAND
+════════════════════════════════════════ -->
+    <div class="cta-band">
+        <h2 class="cta-band__title">Ready to get started?</h2>
+        <p class="cta-band__sub">Join hundreds of students and clients already using StuServe.</p>
+        <div class="cta-band__actions">
+            <button class="btn btn-accent" onclick="openModal('signup','client')">Hire a Student →</button>
+            <button class="btn btn-ghost" onclick="openModal('signup','student')">Join as a Student</button>
+        </div>
+    </div>
+
+    <!-- ── FOOTER ── -->
+    <footer class="footer">
+        <div class="footer__grid">
+            <div>
+                <div class="footer__brand-logo">
+                    <img src="logo.png" alt="StuServe Logo">
+                    <span>StuServe</span>
+                </div>
+                <p class="footer__brand-desc">Connecting talented Bahraini students with clients who need their skills.
+                    Empowering the next generation of professionals.</p>
+            </div>
+            <div class="footer__col">
+                <div class="footer__col-title">Platform</div>
+                <a href="Services.html">Browse Services</a>
+                <a href="Find Students.html">Find Students</a>
+                <a href="Post a Job.html">Post a Job</a>
+                <a href="#" onclick="openModal('signup')">Sign Up</a>
+            </div>
+            <div class="footer__col">
+                <div class="footer__col-title">Company</div>
+                <a href="#">About Us</a>
+                <a href="#">Contact</a>
+                <a href="#">FAQ</a>
+            </div>
+            <div class="footer__col">
+                <div class="footer__col-title">Connect</div>
+                <a href="https://www.instagram.com/stuserve.bh?igsh=MzF3OXFxbDlwcW9i">Instagram</a>
+                <a href="#">Tiktok</a>
+                <a href="mailto:hello@stuserve.bh">hello@stuserve.bh</a>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <span>© 2026 StuServe. All rights reserved.</span>
+            <div class="footer__social">
+                <a href="https://www.instagram.com/stuserve.bh?igsh=MzF3OXFxbDlwcW9i">📷</a>
+                <a href="#">🎵</a>
+                <a href="#">💼</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ════════════════════════════════════════
+     AUTH MODAL
+════════════════════════════════════════ -->
+    <div class="modal-overlay" id="authModal" onclick="handleOverlayClick(event)">
+        <div class="modal" id="modalBox">
+            <button class="modal__close" onclick="closeModal()">✕</button>
+
+            <!-- Login form -->
+            <div id="loginForm">
+                <div class="modal__logo">
+                    <img src="logo.png" alt="StuServe Logo">
+                </div>
+                <div class="modal__title">Welcome back</div>
+                <div class="modal__sub">Log in to your account to continue.</div>
+                <div class="modal__tabs">
+                    <button class="modal__tab active" onclick="switchMode('login')">Log In</button>
+                    <button class="modal__tab" onclick="switchMode('signup')">Sign Up</button>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email address</label>
+                    <input type="email" id="loginEmail" class="form-control" placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="••••••••">
+                </div>
+                <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;"
+                    onclick="handleSubmit('login')">Log In →</button>
+                <div class="modal__footer">Don't have an account? <a onclick="switchMode('signup')">Sign up free</a>
+                </div>
+            </div>
+
+            <!-- Signup form -->
+            <div id="signupForm" style="display:none;">
+                <div class="modal__logo"><span>StuServe</span></div>
+                <div class="modal__title">Create account</div>
+                <div class="modal__sub">Join Bahrain's student talent platform.</div>
+                <div class="modal__tabs">
+                    <button class="modal__tab" onclick="switchMode('login')">Log In</button>
+                    <button class="modal__tab active" onclick="switchMode('signup')">Sign Up</button>
+                </div>
+                <div class="role-pills" id="rolePills">
+                    <div class="role-pill selected" id="pillStudent" onclick="selectRole('student')">
+                        <span class="role-icon">🎓</span>I'm a Student
+                    </div>
+                    <div class="role-pill" id="pillClient" onclick="selectRole('client')">
+                        <span class="role-icon">💼</span>I'm a Client
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Full name</label>
+                    <input type="text" id="signupName" class="form-control" placeholder="Your full name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email address</label>
+                    <input type="email" id="signupEmail" class="form-control" placeholder="you@example.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="signupPassword" class="form-control"
+                        placeholder="Create a strong password">
+                </div>
+                <div class="form-group" id="signupUnivGroup">
+                    <label class="form-label">University</label>
+                    <select id="signupUniv" class="form-control"
+                        style="-webkit-appearance: listbox; appearance: listbox;">
+                        <option value="" disabled selected>Select your university</option>
+                        <option value="University of Bahrain (UOB)">University of Bahrain (UOB)</option>
+                        <option value="Ahlia University">Ahlia University</option>
+                        <option value="Applied Science University (ASU)">Applied Science University (ASU)</option>
+                        <option value="Arab Open University (AOU)">Arab Open University (AOU)</option>
+                        <option value="Bahrain Polytechnic">Bahrain Polytechnic</option>
+                        <option value="British University of Bahrain (BUB)">British University of Bahrain (BUB)</option>
+                        <option value="Royal University for Women (RUW)">Royal University for Women (RUW)</option>
+                        <option value="RCSI Bahrain">RCSI Bahrain</option>
+                        <option value="Kingdom University">Kingdom University</option>
+                        <option value="University of Technology Bahrain (UTB)">University of Technology Bahrain (UTB)
+                        </option>
+                    </select>
+                </div>
+                <button class="btn btn-accent" style="width:100%;justify-content:center;padding:14px;"
+                    onclick="handleSubmit('signup')">Create Account →</button>
+                <div class="modal__footer">Already have an account? <a onclick="switchMode('login')">Log in</a></div>
+            </div>
+
+            <!-- Success state -->
+            <div id="successState" style="display:none;" class="modal-success">
+                <div class="modal-success__icon">🎉</div>
+                <div class="modal-success__title">You're in!</div>
+                <div class="modal-success__msg">Welcome to StuServe. Your account is being set up — we'll be in touch
+                    shortly.</div>
+                <button class="btn btn-primary" style="margin-top:28px;" onclick="closeModal()">Back to
+                    Homepage</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ── Navbar scroll effect ──
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 20);
+        });
+
+        // ── Hamburger ──
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+        function closeMobileMenu() { mobileMenu.classList.remove('open'); }
+        mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobileMenu));
+
+        // ── Animate in on scroll ──
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.style.opacity = '1';
+                    e.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.animate-in').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(24px)';
+            el.style.transition = 'opacity .6s ease, transform .6s ease';
+            observer.observe(el);
+        });
+
+        // ── Auth Modal ──
+        let currentRole = 'student';
+
+        function openModal(mode, role) {
+            document.getElementById('authModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('successState').style.display = 'none';
+            switchMode(mode || 'signup');
+            if (role) {
+                selectRole(role);
+            } else {
+                selectRole(currentRole);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('authModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function handleOverlayClick(e) {
+            if (e.target === document.getElementById('authModal')) closeModal();
+        }
+
+        function switchMode(mode) {
+            const isLogin = mode === 'login';
+            document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
+            document.getElementById('signupForm').style.display = isLogin ? 'none' : 'block';
+        }
+
+        function selectRole(role) {
+            currentRole = role;
+            document.getElementById('pillStudent').classList.toggle('selected', role === 'student');
+            document.getElementById('pillClient').classList.toggle('selected', role === 'client');
+
+            const univGroup = document.getElementById('signupUnivGroup');
+            if (univGroup) {
+                univGroup.style.display = role === 'student' ? 'block' : 'none';
+            }
+        }
+
+        async function handleSubmit(mode) {
+            if (mode === 'signup') {
+                const name = document.getElementById('signupName').value.trim();
+                const email = document.getElementById('signupEmail').value.trim();
+                const password = document.getElementById('signupPassword').value.trim();
+                let university = '';
+
+                if (currentRole === 'student') {
+                    university = document.getElementById('signupUniv').value;
+                    if (!name || !email || !password || !university) {
+                        alert('Please fill out all fields, including your university.');
+                        return;
+                    }
+                } else {
+                    if (!name || !email || !password) {
+                        alert('Please fill out all fields.');
+                        return;
+                    }
+                }
+
+                // Create user session
+                const user = { name, email, role: currentRole, university: university };
+                localStorage.setItem('loggedInUser', JSON.stringify(user));
+
+                // Sync user account globally in localStorage and Firebase Cloud
+                let accounts = {};
+                if (window._fb && window._fb.loadAccountsFromCloud) {
+                    try {
+                        accounts = await window._fb.loadAccountsFromCloud();
+                    } catch (e) {
+                        console.error("[Firebase] Error loading accounts, using local:", e);
+                        accounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
+                    }
+                } else {
+                    accounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
+                }
+
+                if (!accounts[email]) {
+                    accounts[email] = {
+                        name: name,
+                        email: email,
+                        role: currentRole,
+                        avatar: currentRole === 'student' ? 'avatar1' : 'avatar10',
+                        university: university,
+                        password: password // Keep the simple mock authentication registry complete
+                    };
+                    localStorage.setItem('stuserve_accounts', JSON.stringify(accounts));
+                    if (window._fb && window._fb.saveAccountsToCloud) {
+                        try {
+                            await window._fb.saveAccountsToCloud(accounts);
+                        } catch (e) {
+                            console.error("[Firebase] Error saving accounts registry:", e);
+                        }
+                    }
+                }
+
+                // If it's a student, set up an initial empty profile in localStorage and Firebase
+                if (currentRole === 'student') {
+                    let existingProfile = localStorage.getItem('profile_' + email);
+                    let newProfile = null;
+                    if (window._fb && window._fb.loadProfileFromCloud) {
+                        try {
+                            const cloudProfile = await window._fb.loadProfileFromCloud(email);
+                            if (cloudProfile) {
+                                newProfile = cloudProfile;
+                            }
+                        } catch (e) {
+                            console.error("[Firebase] Error searching cloud profiles:", e);
+                        }
+                    }
+                    if (!newProfile) {
+                        newProfile = existingProfile ? JSON.parse(existingProfile) : {
+                            email: email,
+                            name: name,
+                            headline: 'Student Talent | Professional Freelancer',
+                            price: 'BD 10 / hour',
+                            skills: 'Graphic Design, Photography, Writing',
+                            avatar: 'avatar1',
+                            bio: 'Hello! I am a student ready to help you with high-quality services. Feel free to contact me!',
+                            portfolio: [],
+                            reviews: [],
+                            university: university
+                        };
+                    }
+                    localStorage.setItem('profile_' + email, JSON.stringify(newProfile));
+                    if (window._fb && window._fb.saveProfileToCloud) {
+                        try {
+                            await window._fb.saveProfileToCloud(newProfile);
+                        } catch (e) {
+                            console.error("[Firebase] Error saving new profile:", e);
+                        }
+                    }
+                }
+
+                document.getElementById('signupForm').style.display = 'none';
+
+                // Update success message based on role
+                const successTitle = document.querySelector('#successState .modal-success__title');
+                const successMsg = document.querySelector('#successState .modal-success__msg');
+                const successBtn = document.querySelector('#successState button');
+
+                successTitle.textContent = "Welcome, " + name + "!";
+                if (currentRole === 'student') {
+                    successMsg.innerHTML = "You're registered as a Student. Let's create your profile to showcase your skills to clients!";
+                    successBtn.textContent = "Create My Profile";
+                    successBtn.onclick = function () {
+                        closeModal();
+                        window.location.href = 'Profile.html';
+                    };
+                } else {
+                    successMsg.textContent = "You're registered as a Client. You can now browse top-rated students and hire them for your projects.";
+                    successBtn.textContent = "Browse Students";
+                    successBtn.onclick = function () {
+                        closeModal();
+                        window.location.href = 'Find Students.html';
+                    };
+                }
+                document.getElementById('successState').style.display = 'block';
+                updateNavbar();
+
+                // Refresh features immediately
+                if (window._fb && window._fb.loadAllProfilesFromCloud) {
+                    loadFeaturedStudentsFromCloud();
+                }
+            } else if (mode === 'login') {
+                const email = document.getElementById('loginEmail').value.trim();
+                const password = document.getElementById('loginPassword').value.trim();
+
+                if (!email || !password) {
+                    alert('Please enter your email and password.');
+                    return;
+                }
+
+                // Look up in stuserve_accounts or Firebase Cloud
+                let accounts = {};
+                if (window._fb && window._fb.loadAccountsFromCloud) {
+                    try {
+                        accounts = await window._fb.loadAccountsFromCloud();
+                    } catch (e) {
+                        console.error("[Firebase] Error loading accounts during login:", e);
+                        accounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
+                    }
+                } else {
+                    accounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
+                }
+
+                // Sync stuserve_accounts locally
+                localStorage.setItem('stuserve_accounts', JSON.stringify(accounts));
+
+                let name = '';
+                let role = '';
+                let avatar = '';
+
+                // Intercept Admin Sign-in
+                if (email === 'admin@stuserve.bh') {
+                    if (password === 'admin123') {
+                        name = 'Admin Moderator';
+                        role = 'admin';
+                        avatar = 'avatar9';
+                        accounts[email] = { name, email, role, avatar };
+                        localStorage.setItem('stuserve_accounts', JSON.stringify(accounts));
+                        if (window._fb && window._fb.saveAccountsToCloud) {
+                            await window._fb.saveAccountsToCloud(accounts).catch(e => console.error(e));
+                        }
+                    } else {
+                        alert('Incorrect password for Admin Account.');
+                        return;
+                    }
+                } else if (accounts[email]) {
+                    // Very simple mock password validation: if account registry has a password, verify it matches
+                    if (accounts[email].password && accounts[email].password !== password) {
+                        alert('Incorrect password. Please try again.');
+                        return;
+                    }
+                    name = accounts[email].name;
+                    role = accounts[email].role;
+                    avatar = accounts[email].avatar || (role === 'student' ? 'avatar1' : 'avatar10');
+                } else {
+                    alert('Account not found. Please sign up first.');
+                    return;
+                }
+
+                const user = { name, email, role, avatar };
+                localStorage.setItem('loggedInUser', JSON.stringify(user));
+
+                // If user is a student, load their profile from the cloud to ensure all their data syncs to this device!
+                if (role === 'student') {
+                    if (window._fb && window._fb.loadProfileFromCloud) {
+                        try {
+                            const cloudProfile = await window._fb.loadProfileFromCloud(email);
+                            if (cloudProfile) {
+                                localStorage.setItem('profile_' + email, JSON.stringify(cloudProfile));
+                            }
+                        } catch (e) {
+                            console.error("[Firebase] Error syncing student profile during login:", e);
+                        }
+                    }
+                }
+
+                document.getElementById('loginForm').style.display = 'none';
+
+                const successTitle = document.querySelector('#successState .modal-success__title');
+                const successMsg = document.querySelector('#successState .modal-success__msg');
+                const successBtn = document.querySelector('#successState button');
+
+                successTitle.textContent = "Welcome Back!";
+                successMsg.textContent = "Successfully logged in as " + name + ".";
+                successBtn.textContent = "Continue";
+                successBtn.onclick = function () {
+                    closeModal();
+                    if (role === 'admin') {
+                        window.location.href = 'Dashboard.html';
+                    } else if (role === 'student') {
+                        window.location.href = 'Profile.html';
+                    } else {
+                        window.location.href = 'Find Students.html';
+                    }
+                };
+
+                document.getElementById('successState').style.display = 'block';
+                updateNavbar();
+
+                // Refresh features immediately
+                if (window._fb && window._fb.loadAllProfilesFromCloud) {
+                    loadFeaturedStudentsFromCloud();
+                }
+            }
+        }
+
+        function updateNavbar() {
+            const userStr = localStorage.getItem('loggedInUser');
+            const navActions = document.querySelector('.navbar__actions');
+
+            // Handle Messages link visibility and dynamic badge
+            const navMessagesLink = document.getElementById('navMessagesLink');
+            if (navMessagesLink) {
+                if (userStr) {
+                    const user = JSON.parse(userStr);
+                    navMessagesLink.style.display = 'inline-flex';
+                    navMessagesLink.classList.add('nav-badge-container');
+
+                    // Remove existing badge if any
+                    const existingBadge = navMessagesLink.querySelector('.nav-badge');
+                    if (existingBadge) existingBadge.remove();
+
+                    // Count unread messages
+                    const messages = JSON.parse(localStorage.getItem('stuserve_messages') || '[]');
+                    const unreadCount = messages.filter(m => m.receiver === user.email && !m.read).length;
+
+                    if (unreadCount > 0) {
+                        const badge = document.createElement('span');
+                        badge.className = 'nav-badge';
+                        badge.textContent = unreadCount;
+                        navMessagesLink.appendChild(badge);
+                    }
+                } else {
+                    navMessagesLink.style.display = 'none';
+                }
+            }
+
+            // Handle Dashboard link visibility dynamically in navbar
+            const navbarLinksList = document.querySelector('.navbar__links');
+            if (navbarLinksList) {
+                let navDashboardLink = document.getElementById('navDashboardLink');
+                if (userStr) {
+                    if (!navDashboardLink) {
+                        const li = document.createElement('li');
+                        li.innerHTML = '<a href="Dashboard.html" id="navDashboardLink">Dashboard</a>';
+                        // Insert after Messages link or append
+                        const messagesLi = Array.from(navbarLinksList.children).find(child => child.querySelector('#navMessagesLink'));
+                        if (messagesLi) {
+                            navbarLinksList.insertBefore(li, messagesLi.nextSibling);
+                        } else {
+                            navbarLinksList.appendChild(li);
+                        }
+                    }
+                } else {
+                    if (navDashboardLink) {
+                        navDashboardLink.parentElement.remove();
+                    }
+                }
+            }
+
+            // Handle Mobile Menu Dashboard link visibility
+            const mobileMenuElement = document.getElementById('mobileMenu');
+            if (mobileMenuElement) {
+                let mobileDashboardLink = document.getElementById('mobileDashboardLink');
+                if (userStr) {
+                    if (!mobileDashboardLink) {
+                        const a = document.createElement('a');
+                        a.href = 'Dashboard.html';
+                        a.id = 'mobileDashboardLink';
+                        a.textContent = 'Dashboard';
+                        // Insert before first button
+                        const firstButton = mobileMenuElement.querySelector('button');
+                        if (firstButton) {
+                            mobileMenuElement.insertBefore(a, firstButton);
+                        } else {
+                            mobileMenuElement.appendChild(a);
+                        }
+                    }
+                } else {
+                    if (mobileDashboardLink) {
+                        mobileDashboardLink.remove();
+                    }
+                }
+            }
+
+            if (!navActions) return;
+
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                navActions.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:16px;">
+                        <span style="font-family:var(--font-body); font-size:.9rem; font-weight:600; color:var(--text-dark);">
+                            Hello, <span style="color:var(--accent);">${user.name}</span>!
+                        </span>
+                        ${user.role === 'student' ? `
+                            <a href="Profile.html" class="btn btn-outline" style="padding:10px 20px; font-size:.85rem; text-decoration:none; display:inline-flex; align-items:center;">
+                                My Profile
+                            </a>
+                        ` : ''}
+                        <button class="btn btn-ghost" style="padding:10px 20px; font-size:.85rem; border:1px solid rgba(15,28,46,0.15); color:var(--text-dark);" onclick="handleLogout()">
+                            Log Out
+                        </button>
+                    </div>
+                `;
+            } else {
+                navActions.innerHTML = `
+                    <button class="btn btn-outline" style="padding:10px 20px;font-size:.85rem;"
+                        onclick="openModal('login')">Log In</button>
+                    <button class="btn btn-primary" style="padding:10px 20px;font-size:.85rem;"
+                        onclick="openModal('signup')">Sign Up</button>
+                `;
+            }
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('loggedInUser');
+            window.location.reload();
+        }
+
+        function loadFeaturedStudents() {
+            const grid = document.getElementById('featuredStudentsGrid');
+            if (!grid) return;
+
+            grid.innerHTML = '';
+            const featuredStudents = [];
+
+            const keys = Object.keys(localStorage);
+            keys.forEach(key => {
+                if (key.startsWith('profile_')) {
+                    const prof = JSON.parse(localStorage.getItem(key));
+                    featuredStudents.push(prof);
+                }
+            });
+
+            const avatarEmojiMap = {
+                "avatar1": "🎨", "avatar2": "👨‍💻", "avatar3": "📸", "avatar4": "🎬", "avatar5": "📚",
+                "avatar6": "✍️", "avatar7": "🔬", "avatar8": "🎹", "avatar9": "🚀", "avatar10": "🌟"
+            };
+
+            if (featuredStudents.length > 0) {
+                // Show up to 4 featured students
+                featuredStudents.slice(0, 4).forEach(student => {
+                    const card = document.createElement('div');
+                    card.className = 'profile-card';
+
+                    const avatarEmoji = avatarEmojiMap[student.avatar] || "🎓";
+
+                    // Deduce rating
+                    let avgRating = "5.0";
+                    if (student.reviews && student.reviews.length > 0) {
+                        avgRating = (student.reviews.reduce((sum, r) => sum + r.rating, 0) / student.reviews.length).toFixed(1);
+                    }
+
+                    // Get first 2 skills as badges
+                    const skillBadges = student.skills.split(',').map(s => s.trim()).filter(Boolean).slice(0, 2);
+                    const badgesHtml = skillBadges.map(badge => `<span class="badge">${badge}</span>`).join('');
+
+                    card.innerHTML = `
+                        <div class="profile-card__avatar">${avatarEmoji}</div>
+                        <div class="featured-badge">⭐ ${avgRating} Rating</div>
+                        <div class="profile-card__name">${student.name}</div>
+                        <div class="profile-card__skill">${student.headline}</div>
+                        <div class="profile-card__tags">${badgesHtml}</div>
+                        <div class="profile-card__rate">${student.price}</div>
+                        <a href="Profile.html?email=${student.email}" class="btn btn-primary"
+                            style="width:100%;justify-content:center;margin-top:16px;padding:10px;text-align:center;display:flex;align-items:center;">View Profile</a>
+                    `;
+                    grid.appendChild(card);
+                });
+            } else {
+                grid.style.display = 'block';
+                grid.innerHTML = `
+                    <div style="text-align:center; padding:48px 0; color:var(--text-light); width: 100%;">
+                        <div style="font-size:3rem; margin-bottom:16px;">✨</div>
+                        <h3>New Student Talents Coming Soon!</h3>
+                        <p style="font-size:0.95rem; margin-top:8px; max-width: 480px; margin-left: auto; margin-right: auto;">
+                            StuServe is preparing to launch! Be among the first to register as a student and showcase your skills to clients.
+                        </p>
+                    </div>
+                `;
+            }
+        }
+
+        let profilesSubscription = null;
+
+        function loadFeaturedStudentsFromCloud() {
+            if (window._fb && window._fb.subscribeToProfilesFromCloud) {
+                if (profilesSubscription) {
+                    profilesSubscription();
+                }
+                profilesSubscription = window._fb.subscribeToProfilesFromCloud((cloudProfiles) => {
+                    if (cloudProfiles && cloudProfiles.length > 0) {
+                        cloudProfiles.forEach(prof => {
+                            localStorage.setItem('profile_' + prof.email, JSON.stringify(prof));
+                        });
+                        loadFeaturedStudents();
+                    }
+                });
+            } else if (window._fb && window._fb.loadAllProfilesFromCloud) {
+                // Fallback to one-time load if subscribe is unavailable
+                window._fb.loadAllProfilesFromCloud().then(cloudProfiles => {
+                    if (cloudProfiles && cloudProfiles.length > 0) {
+                        cloudProfiles.forEach(prof => {
+                            localStorage.setItem('profile_' + prof.email, JSON.stringify(prof));
+                        });
+                        loadFeaturedStudents();
+                    }
+                });
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            updateNavbar();
+            loadFeaturedStudents();
+
+            if (window._fb) {
+                loadFeaturedStudentsFromCloud();
+            } else {
+                window.addEventListener('firebaseReady', loadFeaturedStudentsFromCloud, { once: true });
+            }
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    </script>
+
+    <!-- Firebase loader: imports Firestore helpers and exposes them to window._fb -->
+    <script type="module">
+        import { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, loadAccountsFromCloud, loadAllProfilesFromCloud, subscribeToProfilesFromCloud, showSyncStatus } from './firebase-config.js';
+        window._fb = { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, loadAccountsFromCloud, loadAllProfilesFromCloud, subscribeToProfilesFromCloud, showSyncStatus };
+        window.dispatchEvent(new Event('firebaseReady'));
+    </script>
+</body>
+
+</html>
