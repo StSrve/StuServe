@@ -6,76 +6,69 @@ function closeSignupForm() {
   document.getElementById("signupForm").style.display = "none";
 }
 
-// Add 'async' right here before the function keyword
+// Add 'async' right before your function definition
 async function submitForm() {
+
   var fname = document.getElementById("fname").value;
   var lname = document.getElementById("lname").value;
   var mobile = document.getElementById("mobile").value;
   var email = document.getElementById("email").value;
 
-  // ... Keep your exact input validation rules here ...
+  // ... [Keep your exact error clearing and validation rules here] ...
 
-  if (fname.length < 3 || lname.length < 3 || !/^\d{8}$/.test(mobile) || !email.includes("@")) return;
-
-  // REPLACE YOUR OLD LOCALSTORAGE LINES WITH THIS TRY/CATCH BLOCK:
-  try {
-    const studentKey = `student_${email}`;
-
-    // Send to your stuserve_store table
-    const { data, error } = await supabase
-      .from('stuserve_store')
-      .insert([
-        {
-          key: studentKey,
-          value: {
-            firstName: fname,
-            lastName: lname,
-            mobile: mobile,
-            email: email
-          }
-        }
-      ]);
-
-    if (error) throw error; // If Supabase reports an error, jump to the catch block
-
-    // Global success triggers!
-    alert("Registration successful! Welcome, " + fname + "!");
-    document.getElementById("userName").innerHTML = fname;
-    closeSignupForm();
-
-    // Reset inputs
-    document.getElementById("fname").value = "";
-    document.getElementById("lname").value = "";
-    document.getElementById("mobile").value = "";
-    document.getElementById("email").value = "";
-
-  } catch (error) {
-    console.error("Database connection failure:", error.message);
-    alert("Could not save registration across devices: " + error.message);
+  if (fname.length < 3 || lname.length < 3 || !/^\d{8}$/.test(mobile) || !email.includes("@")) {
+    return;
   }
+
+  // 1. Package the student data into an object
+  var newProfile = {
+    firstName: fname,
+    lastName: lname,
+    mobile: mobile,
+    email: email
+  };
+
+  // 2. USE YOUR CLOUD HELPER METHOD INSTEAD OF LOCALSTORAGE
+  // This pushes the data safely to 'stuserve_store' with the correct key structure
+  await saveProfileToCloud(newProfile);
+
+  // 3. Keep your UI feedback working synchronously
+  document.getElementById("userName").innerHTML = fname;
+  alert("Registration successful! Welcome, " + fname + "!");
+
+  closeSignupForm();
+
+  // Clear fields
+  document.getElementById("fname").value = "";
+  document.getElementById("lname").value = "";
+  document.getElementById("mobile").value = "";
+  document.getElementById("email").value = "";
 }
 
+// 1. Make sure this import is at the very top of your file
+import { loadAllProfilesFromCloud } from 'supabase-config.js';
+
+// 2. Replace your old loadStudents function with this async version
 async function loadStudents() {
   try {
-    const { data, error } = await supabase
-      .from('stuserve_store')
-      .select('*');
+    // Fetch the global array of student profiles using your helper
+    const profiles = await loadAllProfilesFromCloud();
 
-    if (error) throw error;
-
-    // Clear out your current browse container UI element first
     const container = document.getElementById("browseStudentsContainer");
-    container.innerHTML = "";
+    if (!container) {
+      console.error("Could not find the element #browseStudentsContainer on this page.");
+      return;
+    }
 
-    // Loop through the data array returned from your cloud table
-    data.forEach(function (row) {
-      // Read out the properties directly from your custom JSON value bucket
-      var student = row.value;
+    container.innerHTML = ""; // Clear out any stale local cards or spinners
 
-      // Build simple UI cards dynamically for every student entry found
+    // Loop through the profiles and display them
+    profiles.forEach(function (student) {
+      // Note: Make sure the properties match exactly how you save them in step 1!
+      // If you saved them as student.firstName, use that here.
       container.innerHTML += `
                 <div class="student-card">
-                    <h3>${student.firstName} ${student.lastName}</h3>
+                    <h3>${student.firstName || student.fname} ${student.lastName || student.lname}</h3>
                     <p>Email: ${student.email}</p>
                     <p>Mobile: ${student.mobile}</p>
                 </div>
@@ -83,10 +76,9 @@ async function loadStudents() {
     });
 
   } catch (error) {
-    console.error("Error reading students from Supabase:", error.message);
+    console.error("Failed to refresh the browse student list:", error);
   }
 }
-
 
 
 //get the first name of the user    
