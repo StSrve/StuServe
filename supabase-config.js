@@ -4,10 +4,10 @@
 
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
+
 // YOUR ACTION REQUIRED: Replace these configuration values with your Supabase credentials.
 const supabaseUrl = "https://dnbtsniwpilqoxpmypyn.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuYnRzbml3cGlscW94cG15cHluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0MDcyMTAsImV4cCI6MjA5NDk4MzIxMH0.Pfgi1-YMycXkmK0x4ASEYAs6tIK7YcENwanmJ5xZ8LA";
-
+const supabaseKey = "sb_publishable_Uq_3JBOM0KeC1QyCzqVcBQ_e97DY_x_";
 // Initialize Supabase Client
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
