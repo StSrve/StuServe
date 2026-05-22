@@ -1,79 +1,99 @@
-function showSignupForm(){
-    document.getElementById("signupForm").style.display = "flex";
-  }
+function showSignupForm() {
+  document.getElementById("signupForm").style.display = "flex";
+}
 
-  function closeSignupForm(){
-    document.getElementById("signupForm").style.display = "none";
-  }
+function closeSignupForm() {
+  document.getElementById("signupForm").style.display = "none";
+}
 
-  function submitForm(){
+// Add 'async' right here before the function keyword
+async function submitForm() {
+  var fname = document.getElementById("fname").value;
+  var lname = document.getElementById("lname").value;
+  var mobile = document.getElementById("mobile").value;
+  var email = document.getElementById("email").value;
 
-    var fname = document.getElementById("fname").value;
-    var lname = document.getElementById("lname").value;
-    var mobile = document.getElementById("mobile").value;
-    var email = document.getElementById("email").value;
+  // ... Keep your exact input validation rules here ...
 
-    //To clear any preveious error
+  if (fname.length < 3 || lname.length < 3 || !/^\d{8}$/.test(mobile) || !email.includes("@")) return;
 
-    document.getElementById("fnameError").innerHTML = "";
-    document.getElementById("lnameError").innerHTML = "";
-    document.getElementById("mobileError").innerHTML = "";
-    document.getElementById("emailError").innerHTML = "";
+  // REPLACE YOUR OLD LOCALSTORAGE LINES WITH THIS TRY/CATCH BLOCK:
+  try {
+    const studentKey = `student_${email}`;
 
-    if(fname.length < 3){
-      document.getElementById("fnameError").innerHTML = "First name must have at least 3 characters";
-    }
+    // Send to your stuserve_store table
+    const { data, error } = await supabase
+      .from('stuserve_store')
+      .insert([
+        {
+          key: studentKey,
+          value: {
+            firstName: fname,
+            lastName: lname,
+            mobile: mobile,
+            email: email
+          }
+        }
+      ]);
 
-    if(lname.length < 3){
-      document.getElementById("lnameError").innerHTML = "Last name must have at least 3 characters";
-    }
-        
-      /* "^" is the start of string
-     /d{8} means exactly 8 digits
-      $ means end of string*/
+    if (error) throw error; // If Supabase reports an error, jump to the catch block
 
-    if(!/^\d{8}$/.test(mobile)){
-      
-      document.getElementById("mobileError").innerHTML = "Mobile number must be exactly 8 digits";
-    }
-
-    if(!email.includes("@")){
-      document.getElementById("emailError").innerHTML = "Enter A valid email address";
-    }
-
-    if(
-      fname.length < 3 || lname.length < 3 || !/^\d{8}$/.test(mobile) || !email.includes("@")
-    ) return;
-
-
-    //save users's first name in localstorage
-    localStorage.setItem("firstName", fname);
-    
-    //so it immediately shows the name without refresh
+    // Global success triggers!
+    alert("Registration successful! Welcome, " + fname + "!");
     document.getElementById("userName").innerHTML = fname;
+    closeSignupForm();
 
-
-
-
-
-
-    alert("Registration successful! Welcome , "+ fname + "!");
-
-     closeSignupForm();
-
+    // Reset inputs
     document.getElementById("fname").value = "";
     document.getElementById("lname").value = "";
     document.getElementById("mobile").value = "";
     document.getElementById("email").value = "";
+
+  } catch (error) {
+    console.error("Database connection failure:", error.message);
+    alert("Could not save registration across devices: " + error.message);
+  }
+}
+
+async function loadStudents() {
+  try {
+    const { data, error } = await supabase
+      .from('stuserve_store')
+      .select('*');
+
+    if (error) throw error;
+
+    // Clear out your current browse container UI element first
+    const container = document.getElementById("browseStudentsContainer");
+    container.innerHTML = "";
+
+    // Loop through the data array returned from your cloud table
+    data.forEach(function (row) {
+      // Read out the properties directly from your custom JSON value bucket
+      var student = row.value;
+
+      // Build simple UI cards dynamically for every student entry found
+      container.innerHTML += `
+                <div class="student-card">
+                    <h3>${student.firstName} ${student.lastName}</h3>
+                    <p>Email: ${student.email}</p>
+                    <p>Mobile: ${student.mobile}</p>
+                </div>
+            `;
+    });
+
+  } catch (error) {
+    console.error("Error reading students from Supabase:", error.message);
+  }
 }
 
 
 
 //get the first name of the user    
-window.onload = function() {
+window.onload = function () {
   var name = localStorage.getItem("firstName");
-  if(name){
-      document.getElementById("userName").textContent = name;
+  if (name) {
+    document.getElementById("userName").textContent = name;
   }
 };
 
