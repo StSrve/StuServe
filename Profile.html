@@ -1110,12 +1110,14 @@
     </div>
 
     <!-- ── SCRIPTS ── -->
-    <!-- Firebase loader: imports Firestore helpers and exposes them to window._fb -->
+    <!-- Supabase loader: imports DB helpers and exposes them to window._sb -->
     <script type="module">
-        import { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, showSyncStatus } from './firebase-config.js';
-        window._fb = { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, showSyncStatus };
-        // Dispatch event so main script knows Firebase is ready
-        window.dispatchEvent(new Event('firebaseReady'));
+        import { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, loadAccountsFromCloud, loadAllProfilesFromCloud, subscribeToProfilesFromCloud, showSyncStatus } from './supabase-config.js';
+        window._sb = { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, loadAccountsFromCloud, loadAllProfilesFromCloud, subscribeToProfilesFromCloud, showSyncStatus };
+        window._fb = window._sb; // Legacy alias for backward compatibility
+        // Dispatch events so main script knows DB is ready
+        window.dispatchEvent(new Event('supabaseReady'));
+        window.dispatchEvent(new Event('firebaseReady')); // Legacy event for backward compatibility
     </script>
 
     <!-- ── SCRIPTS ── -->
@@ -1137,15 +1139,15 @@
         let tempPortfolio = [];
 
         // ── INITIALIZATION ──
-        // Wait for Firebase to be ready before loading profile data
+        // Wait for Supabase to be ready before loading profile data
         window.addEventListener('DOMContentLoaded', () => {
             initializeUserSession();
-            // If Firebase loaded instantly (cached), run immediately; otherwise wait
-            if (window._fb) {
+            // If Supabase loaded instantly (cached), run immediately; otherwise wait
+            if (window._sb) {
                 loadProfileData();
             } else {
-                window.addEventListener('firebaseReady', () => loadProfileData(false), { once: true });
-                // Safety fallback: load from localStorage if Firebase takes too long
+                window.addEventListener('supabaseReady', () => loadProfileData(false), { once: true });
+                // Safety fallback: load from localStorage if Supabase takes too long
                 setTimeout(() => { if (!currentProfileUser) loadProfileData(true); }, 3000);
             }
         });
@@ -1244,7 +1246,7 @@
             return urlParams.get(param);
         }
 
-        let firebaseChecked = false;
+        let dbChecked = false;
 
         async function loadProfileData(isTimeout = false) {
             // Determine whose profile is being viewed
@@ -1282,10 +1284,10 @@
                 renderProfile(currentProfileUser);
             }
 
-            // 2. Fetch from Firestore if Firebase is ready
-            if (window._fb) {
-                firebaseChecked = true;
-                const cloudProfile = await window._fb.loadProfileFromCloud(queryEmail);
+            // 2. Fetch from Supabase if ready
+            if (window._sb) {
+                dbChecked = true;
+                const cloudProfile = await window._sb.loadProfileFromCloud(queryEmail);
                 if (cloudProfile) {
                     currentProfileUser = cloudProfile;
                     renderProfile(cloudProfile);
@@ -1304,7 +1306,7 @@
                             portfolio: [],
                             reviews: []
                         };
-                        await window._fb.saveProfileToCloud(freshProfile);
+                        await window._sb.saveProfileToCloud(freshProfile);
                         currentProfileUser = freshProfile;
                         renderProfile(freshProfile);
                     } else {
@@ -1313,17 +1315,17 @@
                     }
                 }
             } else {
-                // Firebase is not ready yet
+                // Supabase is not ready yet
                 if (!localProfile) {
                     if (isTimeout) {
-                        // We waited 3 seconds, Firebase is still not available, and we don't have a local profile
+                        // We waited 3 seconds, Supabase is still not available, and we don't have a local profile
                         window.location.href = 'Find Students.html';
                     } else {
-                        // We are still waiting for Firebase initialization event
-                        console.log("[Profile] Waiting for Firebase connection...");
+                        // We are still waiting for Supabase initialization event
+                        console.log("[Profile] Waiting for Supabase connection...");
                     }
-                } else if (isOwner && !firebaseChecked && isTimeout) {
-                    // Firebase never came online but we are owner and have local profile, we keep using local
+                } else if (isOwner && !dbChecked && isTimeout) {
+                    // Supabase never came online but we are owner and have local profile, we keep using local
                     console.log("[Profile] Operating in offline mode using cached local profile.");
                 }
             }
@@ -1599,9 +1601,9 @@
             // Always save to localStorage
             localStorage.setItem('profile_' + currentProfileUser.email, JSON.stringify(currentProfileUser));
 
-            // Push to cloud if Firebase is available
-            if (window._fb) {
-                await window._fb.saveProfileToCloud(currentProfileUser);
+            // Push to cloud if Supabase is available
+            if (window._sb) {
+                await window._sb.saveProfileToCloud(currentProfileUser);
             }
 
             // Update session user
@@ -1626,7 +1628,7 @@
                 accounts[currentProfileUser.email] = { name, university, avatar: selectedAvatar, email: currentProfileUser.email, role: 'student' };
             }
             localStorage.setItem('stuserve_accounts', JSON.stringify(accounts));
-            if (window._fb) window._fb.saveAccountsToCloud(accounts).catch(() => { });
+            if (window._sb) window._sb.saveAccountsToCloud(accounts).catch(() => { });
 
             syncCustomServicesWithAllProfiles();
             initializeUserSession();
@@ -1790,7 +1792,7 @@
             // Save to localStorage always
             localStorage.setItem('profile_' + currentProfileUser.email, JSON.stringify(currentProfileUser));
             // Push to cloud if available
-            if (window._fb) window._fb.saveProfileToCloud(currentProfileUser).catch(() => { });
+            if (window._sb) window._sb.saveProfileToCloud(currentProfileUser).catch(() => { });
 
             renderProfile(currentProfileUser);
             document.getElementById('newReviewComment').value = '';

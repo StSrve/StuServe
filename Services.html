@@ -1477,6 +1477,8 @@
                             university: university
                         };
                     }
+                    console.log("Current role:", currentRole);
+                    console.log("Saving profile:", newProfile);
                     localStorage.setItem('profile_' + email, JSON.stringify(newProfile));
                     if (window._fb && window._fb.saveProfileToCloud) {
                         try {
@@ -1798,7 +1800,7 @@
                 if (key && key.startsWith('profile_')) {
                     try {
                         const profile = JSON.parse(localStorage.getItem(key));
-                        if (profile && profile.skills) {
+                        if (profile && typeof profile.skills === 'string') {
                             const skillArr = profile.skills.split(',').map(s => s.trim()).filter(Boolean);
                             
                             skillArr.forEach(skill => {
@@ -1820,7 +1822,7 @@
                                     }
                                     
                                     // Parse price to find minimum starting price
-                                    const priceNumMatch = profile.price ? profile.price.match(/\d+/) : null;
+                                    const priceNumMatch = profile.price && typeof profile.price === 'string' ? profile.price.match(/\d+/) : null;
                                     const priceNum = priceNumMatch ? parseInt(priceNumMatch[0]) : 5;
                                     
                                     if (priceNum < customServicesMap[capitalizedSkill].priceVal) {
@@ -1914,11 +1916,14 @@
         let profilesSubscription = null;
 
         function loadCustomServicesFromCloud() {
-            if (window._fb && window._fb.subscribeToProfilesFromCloud) {
+            const syncClient = window._sb || window._fb;
+            console.log("Supabase available:", !!window._sb);
+            if (syncClient && syncClient.subscribeToProfilesFromCloud) {
                 if (profilesSubscription) {
                     profilesSubscription();
                 }
-                profilesSubscription = window._fb.subscribeToProfilesFromCloud((cloudProfiles) => {
+                profilesSubscription = syncClient.subscribeToProfilesFromCloud((cloudProfiles) => {
+                    console.log("Cloud profiles:", cloudProfiles);
                     if (cloudProfiles && cloudProfiles.length > 0) {
                         cloudProfiles.forEach(prof => {
                             localStorage.setItem('profile_' + prof.email, JSON.stringify(prof));
@@ -1927,9 +1932,10 @@
                         loadCustomServices();
                     }
                 });
-            } else if (window._fb && window._fb.loadAllProfilesFromCloud) {
+            } else if (syncClient && syncClient.loadAllProfilesFromCloud) {
                 // Fallback to one-time load if subscribe is unavailable
-                window._fb.loadAllProfilesFromCloud().then(cloudProfiles => {
+                syncClient.loadAllProfilesFromCloud().then(cloudProfiles => {
+                    console.log("Cloud profiles:", cloudProfiles);
                     if (cloudProfiles && cloudProfiles.length > 0) {
                         cloudProfiles.forEach(prof => {
                             localStorage.setItem('profile_' + prof.email, JSON.stringify(prof));
@@ -1946,10 +1952,10 @@
             syncCustomServicesWithAllProfiles();
             loadCustomServices();
 
-            if (window._fb) {
+            if (window._sb || window._fb) {
                 loadCustomServicesFromCloud();
             } else {
-                window.addEventListener('firebaseReady', loadCustomServicesFromCloud, { once: true });
+                window.addEventListener('supabaseReady', loadCustomServicesFromCloud, { once: true });
             }
         });
 
@@ -1959,11 +1965,13 @@
         });
     </script>
 
-    <!-- Firebase loader: imports Firestore helpers and exposes them to window._fb -->
+    <!-- Supabase loader: imports DB helpers and exposes them to window._sb -->
     <script type="module">
-        import { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, loadAccountsFromCloud, loadAllProfilesFromCloud, subscribeToProfilesFromCloud, showSyncStatus } from './firebase-config.js';
-        window._fb = { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, loadAccountsFromCloud, loadAllProfilesFromCloud, subscribeToProfilesFromCloud, showSyncStatus };
-        window.dispatchEvent(new Event('firebaseReady'));
+        import { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, loadAccountsFromCloud, loadAllProfilesFromCloud, subscribeToProfilesFromCloud, showSyncStatus } from './supabase-config.js';
+        window._sb = { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, loadAccountsFromCloud, loadAllProfilesFromCloud, subscribeToProfilesFromCloud, showSyncStatus };
+        window._fb = window._sb; // Legacy alias for backward compatibility
+        window.dispatchEvent(new Event('supabaseReady'));
+        window.dispatchEvent(new Event('firebaseReady')); // Legacy event for backward compatibility
     </script>
 </body>
 </html>

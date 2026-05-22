@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Dashboard Hub — StuServe</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --navy: #0f1c2e;
@@ -468,9 +471,17 @@
         }
 
         @keyframes pulse-node {
-            0% { box-shadow: 0 0 0 0 rgba(196, 66, 105, 0.4); }
-            70% { box-shadow: 0 0 0 6px rgba(196, 66, 105, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(196, 66, 105, 0); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(196, 66, 105, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 6px rgba(196, 66, 105, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(196, 66, 105, 0);
+            }
         }
 
         .progress-line {
@@ -546,11 +557,11 @@
             border-radius: 50%;
         }
 
-        input:checked + .slider {
+        input:checked+.slider {
             background-color: var(--accent);
         }
 
-        input:checked + .slider:before {
+        input:checked+.slider:before {
             transform: translateX(20px);
         }
 
@@ -627,7 +638,9 @@
             padding: 0;
         }
 
-        .navbar__hamburger:hover { background: rgba(15,28,46,0.05); }
+        .navbar__hamburger:hover {
+            background: rgba(15, 28, 46, 0.05);
+        }
 
         .navbar__hamburger span {
             display: block;
@@ -638,9 +651,17 @@
             transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
-        .navbar__hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-        .navbar__hamburger.open span:nth-child(2) { opacity: 0; }
-        .navbar__hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        .navbar__hamburger.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .navbar__hamburger.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .navbar__hamburger.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
 
         /* Mobile slide-down menu */
         .mobile-menu {
@@ -649,14 +670,14 @@
             top: 72px;
             left: 0;
             right: 0;
-            background: rgba(255,255,255,0.98);
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(15,28,46,0.08);
+            border-bottom: 1px solid rgba(15, 28, 46, 0.08);
             padding: 16px 24px 24px;
             z-index: 999;
             flex-direction: column;
             gap: 4px;
-            box-shadow: 0 8px 32px rgba(15,28,46,0.08);
+            box-shadow: 0 8px 32px rgba(15, 28, 46, 0.08);
             transform: translateY(-10px);
             opacity: 0;
             transition: transform 0.28s ease, opacity 0.28s ease;
@@ -677,26 +698,42 @@
             transition: background var(--transition);
         }
 
-        .mobile-menu a:hover, .mobile-menu a.active {
+        .mobile-menu a:hover,
+        .mobile-menu a.active {
             background: var(--pink-light);
             color: var(--accent);
         }
 
         .mobile-menu__divider {
             height: 1px;
-            background: rgba(15,28,46,0.06);
+            background: rgba(15, 28, 46, 0.06);
             margin: 8px 0;
         }
 
         @media (max-width: 768px) {
-            .navbar__links { display: none; }
-            .navbar__actions { display: none !important; }
-            .navbar__hamburger { display: flex; }
-            .dash-hero { padding: 24px; }
-            .dash-card { padding: 20px; }
+            .navbar__links {
+                display: none;
+            }
+
+            .navbar__actions {
+                display: none !important;
+            }
+
+            .navbar__hamburger {
+                display: flex;
+            }
+
+            .dash-hero {
+                padding: 24px;
+            }
+
+            .dash-card {
+                padding: 20px;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <!-- ── NAVBAR ── -->
@@ -751,7 +788,7 @@
 
         <!-- ── STUDENT DASHBOARD MODULE ── -->
         <div id="studentDashboard" style="display:none;">
-            
+
             <!-- Student Stats Grid -->
             <div class="stats-grid">
                 <div class="stat-card">
@@ -785,12 +822,12 @@
             </div>
 
             <div class="dash-panel-grid">
-                
+
                 <!-- Left Main Panel: Orders -->
                 <div>
                     <div class="dash-card">
                         <div class="dash-card__title">📋 Managed Projects & Requests</div>
-                        
+
                         <div class="table-responsive">
                             <table class="dash-table" id="studentOrdersTable">
                                 <thead>
@@ -816,7 +853,8 @@
                 <div>
                     <!-- SVG Chart -->
                     <div class="dash-card" style="padding: 20px;">
-                        <div class="dash-card__title" style="font-size: 1.2rem; margin-bottom: 12px;">📊 Monthly Earnings (BD)</div>
+                        <div class="dash-card__title" style="font-size: 1.2rem; margin-bottom: 12px;">📊 Monthly
+                            Earnings (BD)</div>
                         <div class="chart-box">
                             <svg class="sparkline-svg" id="earningsChart">
                                 <!-- Grid Lines -->
@@ -824,11 +862,12 @@
                                 <line x1="0" y1="90" x2="300" y2="90" class="svg-grid-line"></line>
                                 <line x1="0" y1="140" x2="300" y2="140" class="svg-grid-line"></line>
                                 <line x1="0" y1="180" x2="300" y2="180" stroke="rgba(15, 28, 46, 0.1)"></line>
-                                
+
                                 <!-- Columns filled dynamically -->
                             </svg>
                         </div>
-                        <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-light); margin-top:8px; padding:0 8px;">
+                        <div
+                            style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--text-light); margin-top:8px; padding:0 8px;">
                             <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May (Current)</span>
                         </div>
                     </div>
@@ -841,7 +880,8 @@
                         <div id="studentServicesChecklist">
                             <!-- Toggle service switches dynamically -->
                         </div>
-                        <a href="Profile.html" class="btn btn-outline btn-sm" style="width:100%; margin-top:10px; justify-content:center;">
+                        <a href="Profile.html" class="btn btn-outline btn-sm"
+                            style="width:100%; margin-top:10px; justify-content:center;">
                             ✏️ Edit Profile Skills
                         </a>
                     </div>
@@ -853,7 +893,7 @@
 
         <!-- ── CLIENT DASHBOARD MODULE ── -->
         <div id="clientDashboard" style="display:none;">
-            
+
             <!-- Client Stats Grid -->
             <div class="stats-grid">
                 <div class="stat-card">
@@ -887,7 +927,7 @@
             </div>
 
             <div class="dash-panel-grid">
-                
+
                 <!-- Left Panel: My Placed Orders -->
                 <div>
                     <div class="dash-card">
@@ -915,7 +955,8 @@
                 <!-- Right Panel: Payment history list -->
                 <div>
                     <div class="dash-card" style="padding: 20px;">
-                        <div class="dash-card__title" style="font-size: 1.2rem; margin-bottom: 12px;">🧾 BenefitPay Receipts</div>
+                        <div class="dash-card__title" style="font-size: 1.2rem; margin-bottom: 12px;">🧾 BenefitPay
+                            Receipts</div>
                         <div id="clientPaymentsLog" style="display:flex; flex-direction:column; gap:12px;">
                             <!-- Invoices list -->
                         </div>
@@ -928,7 +969,7 @@
 
         <!-- ── ADMIN DASHBOARD MODULE ── -->
         <div id="adminDashboard" style="display:none;">
-            
+
             <!-- Admin Stats Grid -->
             <div class="stats-grid">
                 <div class="stat-card">
@@ -963,14 +1004,17 @@
 
             <!-- Tab Controls -->
             <div class="tab-row">
-                <button class="tab-btn active" id="tabUsersBtn" onclick="switchAdminTab('users')">👥 Accounts Directory</button>
-                <button class="tab-btn" id="tabCatalogBtn" onclick="switchAdminTab('catalog')">🛠️ Services Catalog Moderator</button>
-                <button class="tab-btn" id="tabOrdersBtn" onclick="switchAdminTab('orders')">📜 Platform Orders History</button>
+                <button class="tab-btn active" id="tabUsersBtn" onclick="switchAdminTab('users')">👥 Accounts
+                    Directory</button>
+                <button class="tab-btn" id="tabCatalogBtn" onclick="switchAdminTab('catalog')">🛠️ Services Catalog
+                    Moderator</button>
+                <button class="tab-btn" id="tabOrdersBtn" onclick="switchAdminTab('orders')">📜 Platform Orders
+                    History</button>
             </div>
 
             <!-- Admin Tab Sections -->
             <div class="dash-card">
-                
+
                 <!-- Users Registry -->
                 <div id="adminTabUsers">
                     <div class="dash-card__title" style="margin-bottom:12px;">👥 Accounts Directory</div>
@@ -1043,11 +1087,13 @@
 
     </div>
 
-    <!-- Firebase loader: exposes Firestore helpers to window._fb -->
+    <!-- Supabase loader: imports DB helpers and exposes them to window._sb -->
     <script type="module">
-        import { loadOrdersFromCloud, saveOrdersToCloud, loadAccountsFromCloud, saveMessagesToCloud } from './firebase-config.js';
-        window._fb = { loadOrdersFromCloud, saveOrdersToCloud, loadAccountsFromCloud, saveMessagesToCloud };
-        window.dispatchEvent(new Event('firebaseReady'));
+        import { loadOrdersFromCloud, saveOrdersToCloud, loadAccountsFromCloud, saveMessagesToCloud, showSyncStatus } from './supabase-config.js';
+        window._sb = { loadOrdersFromCloud, saveOrdersToCloud, loadAccountsFromCloud, saveMessagesToCloud, showSyncStatus };
+        window._fb = window._sb; // Legacy alias for backward compatibility
+        window.dispatchEvent(new Event('supabaseReady'));
+        window.dispatchEvent(new Event('firebaseReady')); // Legacy event for backward compatibility
     </script>
 
     <!-- ── SCRIPTS ── -->
@@ -1067,19 +1113,19 @@
         window.addEventListener('DOMContentLoaded', async () => {
             initializeUserSession();
             seedMockDatabases();
-            // If Firebase ready immediately (cached), load now; else wait
-            if (window._fb) {
+            // If Supabase ready immediately (cached), load now; else wait
+            if (window._sb) {
                 await loadDashboardData();
             } else {
                 // Load from localStorage first for instant render
                 loadDashboardDataLocal();
-                window.addEventListener('firebaseReady', async () => { await loadDashboardData(); }, { once: true });
+                window.addEventListener('supabaseReady', async () => { await loadDashboardData(); }, { once: true });
             }
         });
 
         function initializeUserSession() {
             const userStr = localStorage.getItem('loggedInUser');
-            
+
             // Check Admin setup
             const accountsRegistry = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
             if (!accountsRegistry['admin@stuserve.bh']) {
@@ -1091,13 +1137,13 @@
                 };
                 localStorage.setItem('stuserve_accounts', JSON.stringify(accountsRegistry));
             }
-            
+
             if (userStr) {
                 loggedInUser = JSON.parse(userStr);
-                
+
                 // Set custom dynamic greeting
                 document.getElementById('dashGreeting').textContent = `Hello, ${loggedInUser.name}!`;
-                
+
                 // Show dashboard nav quick links dynamic badge
                 const navMessagesLink = document.getElementById('navMessagesLink');
                 if (navMessagesLink) {
@@ -1180,7 +1226,7 @@
         function seedMockDatabases() {
             const ordersKey = 'stuserve_orders';
             const paymentsKey = 'stuserve_payments';
-            
+
             // Seed mock orders
             if (!localStorage.getItem(ordersKey)) {
                 const initialOrders = [
@@ -1233,7 +1279,7 @@
                         description: "Model catalog photoshoot editing and shots."
                     }
                 ];
-                
+
                 // Add orders matching active user emails to make tests feel alive!
                 if (loggedInUser.role === 'student') {
                     // Make sure they have a pending and an in-progress order to test actions
@@ -1268,10 +1314,10 @@
                         o.clientName = loggedInUser.name;
                     });
                 }
-                
+
                 localStorage.setItem(ordersKey, JSON.stringify(initialOrders));
             }
-            
+
             // Seed mock payments
             if (!localStorage.getItem(paymentsKey)) {
                 const initialPayments = [
@@ -1298,7 +1344,7 @@
                         method: "BenefitPay"
                     }
                 ];
-                
+
                 if (loggedInUser.role === 'client') {
                     initialPayments.forEach(p => {
                         p.clientEmail = loggedInUser.email;
@@ -1310,10 +1356,10 @@
 
         // Retrieve and render
         async function loadDashboardData() {
-            // Cloud-first: load orders and accounts from Firestore
-            if (window._fb) {
-                accounts = await window._fb.loadAccountsFromCloud();
-                orders = await window._fb.loadOrdersFromCloud();
+            // Cloud-first: load orders and accounts from Supabase
+            if (window._sb) {
+                accounts = await window._sb.loadAccountsFromCloud();
+                orders = await window._sb.loadOrdersFromCloud();
             } else {
                 accounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
                 orders = JSON.parse(localStorage.getItem('stuserve_orders') || '[]');
@@ -1325,22 +1371,22 @@
             if (role === 'student') {
                 document.getElementById('studentDashboard').style.display = 'block';
                 document.getElementById('dashHeroSubtitle').textContent = "Track your earnings, manage your active requests, and toggle service options.";
-                
+
                 // Add Quick Profile Link button to hero
                 document.getElementById('heroActions').innerHTML = `
                     <a href="Profile.html" class="btn btn-accent" style="text-decoration:none;">✏️ Go to Profile Dashboard</a>
                 `;
-                
+
                 renderStudentDashboard();
             } else if (role === 'client') {
                 document.getElementById('clientDashboard').style.display = 'block';
                 document.getElementById('dashHeroSubtitle').textContent = "Track your placed student orders, review payment logs, and discover top Bahraini talent.";
-                
+
                 // Add Hire Student button to hero
                 document.getElementById('heroActions').innerHTML = `
                     <a href="Find Students.html" class="btn btn-accent" style="text-decoration:none;">🔍 Hire Student Talent</a>
                 `;
-                
+
                 renderClientDashboard();
             } else if (role === 'admin') {
                 document.getElementById('adminDashboard').style.display = 'block';
@@ -1352,7 +1398,7 @@
         // ── STUDENT DASHBOARD RENDERING ──
         function renderStudentDashboard() {
             const email = loggedInUser.email;
-            
+
             // Filters
             const studentOrders = orders.filter(o => o.studentEmail === email);
             const studentPayments = payments.filter(p => p.studentEmail === email);
@@ -1361,7 +1407,7 @@
             const totalEarnings = studentPayments.reduce((sum, p) => sum + parseFloat(p.amount), 0);
             const activeOrdersCount = studentOrders.filter(o => o.status === 'in_progress').length;
             const completedOrdersCount = studentOrders.filter(o => o.status === 'completed').length;
-            
+
             // Retrieve rating from profile
             let ratingAvg = "5.0";
             const profile = JSON.parse(localStorage.getItem('profile_' + email));
@@ -1384,7 +1430,7 @@
             if (studentOrders.length > 0) {
                 studentOrders.forEach(o => {
                     const tr = document.createElement('tr');
-                    
+
                     let actionHtml = '';
                     if (o.status === 'pending') {
                         actionHtml = `<button class="btn btn-primary btn-sm" onclick="transitionOrderStatus('${o.id}', 'in_progress')">Accept</button>`;
@@ -1424,7 +1470,7 @@
 
         function renderEarningsSVGChart(paymentsList) {
             const chart = document.getElementById('earningsChart');
-            
+
             // Remove previous dynamically loaded columns
             chart.querySelectorAll('.svg-bar, .chart-tag, text').forEach(el => el.remove());
 
@@ -1485,7 +1531,7 @@
 
                 // Text value indicator above bar
                 const txt = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                txt.setAttribute("x", x + barWidth/2);
+                txt.setAttribute("x", x + barWidth / 2);
                 txt.setAttribute("y", y - 6);
                 txt.setAttribute("text-anchor", "middle");
                 txt.setAttribute("fill", "var(--text-dark)");
@@ -1507,7 +1553,7 @@
                 skills.forEach((skill, idx) => {
                     const row = document.createElement('div');
                     row.className = 'service-chk-item';
-                    
+
                     // Simple representation
                     let icon = "🚀";
                     if (skill.toLowerCase().includes('design')) icon = "🎨";
@@ -1545,17 +1591,17 @@
             // Find order
             const ordersRegistry = JSON.parse(localStorage.getItem('stuserve_orders') || '[]');
             const index = ordersRegistry.findIndex(o => o.id === orderId);
-            
+
             if (index !== -1) {
                 const o = ordersRegistry[index];
                 const oldStatus = o.status;
                 o.status = newStatus;
-                
+
                 // If moving to completed, trigger dynamic payment creation!
                 if (newStatus === 'completed') {
                     const paymentsRegistry = JSON.parse(localStorage.getItem('stuserve_payments') || '[]');
                     const cleanAmount = parseFloat(o.price.replace(/[^\d.]/g, '')) || 10;
-                    
+
                     const paymentObj = {
                         id: "pay_" + Date.now(),
                         orderId: o.id,
@@ -1574,7 +1620,7 @@
                 // Save to localStorage immediately
                 localStorage.setItem('stuserve_orders', JSON.stringify(ordersRegistry));
                 // Push order change to cloud
-                if (window._fb) await window._fb.saveOrdersToCloud(ordersRegistry);
+                if (window._sb) await window._sb.saveOrdersToCloud(ordersRegistry);
 
                 // Inject system message & push to cloud
                 injectSystemChatNotification(o, newStatus);
@@ -1588,7 +1634,7 @@
         // Auto-inject system messages in chats
         function injectSystemChatNotification(order, state) {
             const messages = JSON.parse(localStorage.getItem('stuserve_messages') || '[]');
-            
+
             let noticeText = "";
             if (state === 'in_progress') {
                 noticeText = `🚨 AUTOMATED SYSTEM: Student freelancer ${order.studentName} has accepted your order request for "${order.serviceTitle}"! Work has officially started.`;
@@ -1609,7 +1655,7 @@
                 messages.push(sysMsg);
                 localStorage.setItem('stuserve_messages', JSON.stringify(messages));
                 // Push system message to cloud in background
-                if (window._fb) window._fb.saveMessagesToCloud(messages).catch(() => {});
+                if (window._sb) window._sb.saveMessagesToCloud(messages).catch(() => { });
             }
         }
 
@@ -1673,7 +1719,7 @@
                     let node1Class = "progress-node done";
                     let node2Class = "progress-node";
                     let node3Class = "progress-node";
-                    
+
                     let line1Class = "progress-line";
                     let line2Class = "progress-line";
 
@@ -1739,7 +1785,7 @@
                     card.style.display = 'flex';
                     card.style.justifyContent = 'space-between';
                     card.style.alignItems = 'center';
-                    
+
                     card.innerHTML = `
                         <div>
                             <div style="font-size:0.82rem; font-weight:700; color:var(--navy);">Receipt for ${p.studentName}</div>
@@ -1767,7 +1813,7 @@
 
         function switchAdminTab(tabName) {
             activeAdminTab = tabName;
-            
+
             // Tab button styles
             document.getElementById('tabUsersBtn').classList.toggle('active', tabName === 'users');
             document.getElementById('tabCatalogBtn').classList.toggle('active', tabName === 'catalog');
@@ -1800,11 +1846,11 @@
             // 1. Tab Users Grid
             const userBody = document.querySelector('#adminUsersTable tbody');
             userBody.innerHTML = '';
-            
+
             accountsList.forEach(a => {
                 const tr = document.createElement('tr');
                 const emoji = avatarEmojiMap[a.avatar] || "🎓";
-                
+
                 // Allow blocking admin
                 let actionBtn = '';
                 if (a.role === 'admin') {
@@ -1833,7 +1879,7 @@
             if (customServices.length > 0) {
                 customServices.forEach(s => {
                     const tr = document.createElement('tr');
-                    
+
                     const providersText = s.students ? s.students.map(st => st.name).join(', ') : 'Student Freelancer';
 
                     tr.innerHTML = `
@@ -1890,7 +1936,7 @@
         // Moderate Actions
         function deleteUserAccount(email) {
             if (confirm(`Are you absolutely sure you want to moderate and delete the account registry for email: ${email}? This will clean up their profile and authentication credentials.`)) {
-                
+
                 // 1. Delete from stuserve_accounts
                 const accountsRegistry = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
                 delete accountsRegistry[email];
@@ -1909,7 +1955,7 @@
 
         function deleteCustomServiceCard(serviceId) {
             if (confirm(`Are you sure you want to moderate and remove the custom service card with ID: ${serviceId} from the professional catalog grid?`)) {
-                
+
                 const customServices = JSON.parse(localStorage.getItem('stuserve_custom_services') || '[]');
                 const filtered = customServices.filter(s => s.id !== serviceId);
                 localStorage.setItem('stuserve_custom_services', JSON.stringify(filtered));
@@ -1922,7 +1968,7 @@
         // Shared helper to sync custom services in admin moderation
         function syncCustomServicesSnapshot() {
             const standardServices = [
-                "Graphic Design", "Academic Tutoring", "Creative Photography", 
+                "Graphic Design", "Academic Tutoring", "Creative Photography",
                 "Social Media Management", "Content Writing", "Video Editing"
             ];
             const customServicesMap = {};
@@ -1956,7 +2002,7 @@
                                 }
                             });
                         }
-                    } catch (e) {}
+                    } catch (e) { }
                 }
             });
 
@@ -1974,4 +2020,5 @@
         }
     </script>
 </body>
+
 </html>

@@ -1004,11 +1004,13 @@
         </div>
     </div>
 
-    <!-- Firebase loader: exposes Firestore helpers to window._fb -->
+    <!-- Supabase loader: imports DB helpers and exposes them to window._sb -->
     <script type="module">
-        import { saveJobsToCloud, loadJobsFromCloud, saveAccountsToCloud, loadAccountsFromCloud, saveMessagesToCloud, loadMessagesFromCloud } from './firebase-config.js';
-        window._fb = { saveJobsToCloud, loadJobsFromCloud, saveAccountsToCloud, loadAccountsFromCloud, saveMessagesToCloud, loadMessagesFromCloud };
-        window.dispatchEvent(new Event('firebaseReady'));
+        import { saveJobsToCloud, loadJobsFromCloud, saveAccountsToCloud, loadAccountsFromCloud, saveMessagesToCloud, loadMessagesFromCloud, saveProfileToCloud, loadProfileFromCloud, showSyncStatus } from './supabase-config.js';
+        window._sb = { saveJobsToCloud, loadJobsFromCloud, saveAccountsToCloud, loadAccountsFromCloud, saveMessagesToCloud, loadMessagesFromCloud, saveProfileToCloud, loadProfileFromCloud, showSyncStatus };
+        window._fb = window._sb; // Legacy alias for backward compatibility
+        window.dispatchEvent(new Event('supabaseReady'));
+        window.dispatchEvent(new Event('firebaseReady')); // Legacy event for backward compatibility
     </script>
 
     <!-- ── JAVASCRIPT LOGIC ── -->
@@ -1036,12 +1038,12 @@
         window.addEventListener('DOMContentLoaded', () => {
             initializeUserSession();
             
-            // Listen to firebaseReady to sync cloud jobs once ready
-            window.addEventListener('firebaseReady', async () => {
+            // Listen to supabaseReady to sync cloud jobs once ready
+            window.addEventListener('supabaseReady', async () => {
                 await loadJobsData();
             }, { once: true });
 
-            // Fallback load in case Firebase is slow/blocked
+            // Fallback load in case Supabase is slow/blocked
             setTimeout(() => {
                 if (allJobs.length === 0) {
                     loadLocalJobsData();
@@ -1195,9 +1197,9 @@
 
         // ── LOAD & SYNC JOBS DATA ──
         async function loadJobsData() {
-            if (window._fb && window._fb.loadJobsFromCloud) {
+            if (window._sb && window._sb.loadJobsFromCloud) {
                 try {
-                    const cloudJobs = await window._fb.loadJobsFromCloud();
+                    const cloudJobs = await window._sb.loadJobsFromCloud();
                     if (cloudJobs && cloudJobs.length > 0) {
                         allJobs = cloudJobs;
                         localStorage.setItem('stuserve_jobs', JSON.stringify(allJobs));
@@ -1218,9 +1220,9 @@
 
         async function saveJobsData() {
             localStorage.setItem('stuserve_jobs', JSON.stringify(allJobs));
-            if (window._fb && window._fb.saveJobsToCloud) {
+            if (window._sb && window._sb.saveJobsToCloud) {
                 try {
-                    await window._fb.saveJobsToCloud(allJobs);
+                    await window._sb.saveJobsToCloud(allJobs);
                 } catch (e) {
                     console.error("[Post a Job] Firestore save error.", e);
                 }
@@ -1661,11 +1663,11 @@
                 }
                 localStorage.setItem('stuserve_accounts', JSON.stringify(accounts));
 
-                if (window._fb && window._fb.saveMessagesToCloud) {
+                if (window._sb && window._sb.saveMessagesToCloud) {
                     try {
-                        await window._fb.saveMessagesToCloud(messages);
+                        await window._sb.saveMessagesToCloud(messages);
                     } catch (e) {
-                        console.error("[Post a Job] Firebase sync messages error.", e);
+                        console.error("[Post a Job] Supabase sync messages error.", e);
                     }
                 }
             }
@@ -1713,7 +1715,7 @@
             }
         }
 
-        function handleSubmit(mode) {
+        async function handleSubmit(mode) {
             if (mode === 'signup') {
                 const name = document.getElementById('signupName').value.trim();
                 const email = document.getElementById('signupEmail').value.trim();
@@ -1737,24 +1739,54 @@
                 const user = { name, email, role: currentRole, university: university };
                 localStorage.setItem('loggedInUser', JSON.stringify(user));
 
-                // Sync account registry in local storage
-                const accounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
+                // Sync accounts from cloud first if available
+                let accounts = {};
+                if (window._sb && window._sb.loadAccountsFromCloud) {
+                    try {
+                        accounts = await window._sb.loadAccountsFromCloud();
+                    } catch (e) {
+                        console.error("[Supabase] Error loading accounts, using local:", e);
+                        accounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
+                    }
+                } else {
+                    accounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
+                }
+
                 if (!accounts[email]) {
                     accounts[email] = {
                         name: name,
                         email: email,
                         role: currentRole,
                         avatar: currentRole === 'student' ? 'avatar1' : 'avatar10',
-                        university: university
+                        university: university,
+                        password: password
                     };
                     localStorage.setItem('stuserve_accounts', JSON.stringify(accounts));
+                    if (window._sb && window._sb.saveAccountsToCloud) {
+                        try {
+                            await window._sb.saveAccountsToCloud(accounts);
+                        } catch (e) {
+                            console.error("[Supabase] Error saving accounts to cloud:", e);
+                        }
+                    }
                 }
 
                 // Student initial profile stub
                 if (currentRole === 'student') {
-                    const existingProfile = localStorage.getItem('profile_' + email);
-                    if (!existingProfile) {
-                        const newProfile = {
+                    let existingProfile = localStorage.getItem('profile_' + email);
+                    let newProfile = null;
+                    if (window._sb && window._sb.loadProfileFromCloud) {
+                        try {
+                            const cloudProfile = await window._sb.loadProfileFromCloud(email);
+                            if (cloudProfile) {
+                                newProfile = cloudProfile;
+                            }
+                        } catch (e) {
+                            console.error("[Supabase] Error searching cloud profiles:", e);
+                        }
+                    }
+                    if (!newProfile) {
+                        newProfile = existingProfile ? JSON.parse(existingProfile) : {
                             email: email,
                             name: name,
                             headline: 'Student Talent | Professional Freelancer',
@@ -1766,7 +1798,16 @@
                             reviews: [],
                             university: university
                         };
-                        localStorage.setItem('profile_' + email, JSON.stringify(newProfile));
+                    }
+                    console.log("Current role:", currentRole);
+                    console.log("Saving profile:", newProfile);
+                    localStorage.setItem('profile_' + email, JSON.stringify(newProfile));
+                    if (window._sb && window._sb.saveProfileToCloud) {
+                        try {
+                            await window._sb.saveProfileToCloud(newProfile);
+                        } catch (e) {
+                            console.error("[Supabase] Error saving new profile:", e);
+                        }
                     }
                 }
 
@@ -1795,10 +1836,6 @@
                 
                 document.getElementById('successState').style.display = 'block';
                 initializeUserSession();
-                
-                if (window._fb && window._fb.saveAccountsToCloud) {
-                    window._fb.saveAccountsToCloud(accounts);
-                }
 
             } else if (mode === 'login') {
                 const email = document.getElementById('loginEmail').value.trim();

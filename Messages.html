@@ -980,11 +980,13 @@
         </div>
     </div>
 
-    <!-- Firebase loader: exposes Firestore helpers to window._fb -->
+    <!-- Supabase loader: imports DB helpers and exposes them to window._sb -->
     <script type="module">
-        import { saveMessagesToCloud, loadMessagesFromCloud, saveAccountsToCloud, loadAccountsFromCloud } from './firebase-config.js';
-        window._fb = { saveMessagesToCloud, loadMessagesFromCloud, saveAccountsToCloud, loadAccountsFromCloud };
-        window.dispatchEvent(new Event('firebaseReady'));
+        import { saveMessagesToCloud, loadMessagesFromCloud, saveAccountsToCloud, loadAccountsFromCloud, showSyncStatus } from './supabase-config.js';
+        window._sb = { saveMessagesToCloud, loadMessagesFromCloud, saveAccountsToCloud, loadAccountsFromCloud, showSyncStatus };
+        window._fb = window._sb; // Legacy alias for backward compatibility
+        window.dispatchEvent(new Event('supabaseReady'));
+        window.dispatchEvent(new Event('firebaseReady')); // Legacy event for backward compatibility
     </script>
 
     <!-- ── JAVASCRIPT LOGIC ── -->
@@ -1038,8 +1040,8 @@
             loadMessagesData();
             loadActiveChatFromQuery();
 
-            // Listen to firebaseReady to sync cloud messages once ready
-            window.addEventListener('firebaseReady', () => {
+            // Listen to supabaseReady to sync cloud messages once ready
+            window.addEventListener('supabaseReady', () => {
                 loadMessagesData();
             }, { once: true });
         });
@@ -1162,10 +1164,10 @@
 
         // ── MESSAGES LOADING & RENDER FLOW ──
         async function loadMessagesData() {
-            // Cloud-first: fetch from Firestore (merges with localStorage)
-            if (window._fb) {
-                allMessages = await window._fb.loadMessagesFromCloud();
-                allAccounts = await window._fb.loadAccountsFromCloud();
+            // Cloud-first: fetch from Supabase (merges with localStorage)
+            if (window._sb) {
+                allMessages = await window._sb.loadMessagesFromCloud();
+                allAccounts = await window._sb.loadAccountsFromCloud();
             } else {
                 allMessages = JSON.parse(localStorage.getItem('stuserve_messages') || '[]');
                 allAccounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
@@ -1307,7 +1309,7 @@
             if (stateChanged) {
                 localStorage.setItem('stuserve_messages', JSON.stringify(allMessages));
                 // Push read-status update to cloud in background
-                if (window._fb) window._fb.saveMessagesToCloud(allMessages).catch(() => {});
+                if (window._sb) window._sb.saveMessagesToCloud(allMessages).catch(() => {});
                 if (window.updateNavbarNotificationCount) {
                     window.updateNavbarNotificationCount();
                 }
@@ -1449,7 +1451,7 @@
 
             allMessages.push(newMsg);
             localStorage.setItem('stuserve_messages', JSON.stringify(allMessages));
-            if (window._fb) window._fb.saveMessagesToCloud(allMessages).catch(() => {});
+            if (window._sb) window._sb.saveMessagesToCloud(allMessages).catch(() => {});
 
             // Refresh UI
             input.value = '';
@@ -1496,7 +1498,7 @@
 
                 allMessages.push(newMsg);
                 localStorage.setItem('stuserve_messages', JSON.stringify(allMessages));
-                if (window._fb) window._fb.saveMessagesToCloud(allMessages).catch(() => {});
+                if (window._sb) window._sb.saveMessagesToCloud(allMessages).catch(() => {});
 
                 loadMessagesData();
                 openChatThread(activeChatEmail);
@@ -1560,7 +1562,7 @@
 
                 allMessages.push(botMsg);
                 localStorage.setItem('stuserve_messages', JSON.stringify(allMessages));
-                if (window._fb) window._fb.saveMessagesToCloud(allMessages).catch(() => {});
+                if (window._sb) window._sb.saveMessagesToCloud(allMessages).catch(() => {});
 
                 // Refresh inbox and chat history feeds
                 loadMessagesData();

@@ -1903,6 +1903,8 @@
                             university: university
                         };
                     }
+                    console.log("Current role:", currentRole);
+                    console.log("Saving profile:", newProfile);
                     localStorage.setItem('profile_' + email, JSON.stringify(newProfile));
                     if (window._fb && window._fb.saveProfileToCloud) {
                         try {
@@ -2191,21 +2193,21 @@
 
                     // Deduce rating
                     let avgRating = "5.0";
-                    if (student.reviews && student.reviews.length > 0) {
-                        avgRating = (student.reviews.reduce((sum, r) => sum + r.rating, 0) / student.reviews.length).toFixed(1);
+                    if (student.reviews && Array.isArray(student.reviews) && student.reviews.length > 0) {
+                        avgRating = (student.reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / student.reviews.length).toFixed(1);
                     }
 
                     // Get first 2 skills as badges
-                    const skillBadges = student.skills.split(',').map(s => s.trim()).filter(Boolean).slice(0, 2);
+                    const skillBadges = (student.skills || "").split(',').map(s => s.trim()).filter(Boolean).slice(0, 2);
                     const badgesHtml = skillBadges.map(badge => `<span class="badge">${badge}</span>`).join('');
 
                     card.innerHTML = `
                         <div class="profile-card__avatar">${avatarEmoji}</div>
                         <div class="featured-badge">⭐ ${avgRating} Rating</div>
-                        <div class="profile-card__name">${student.name}</div>
-                        <div class="profile-card__skill">${student.headline}</div>
+                        <div class="profile-card__name">${student.name || ""}</div>
+                        <div class="profile-card__skill">${student.headline || ""}</div>
                         <div class="profile-card__tags">${badgesHtml}</div>
-                        <div class="profile-card__rate">${student.price}</div>
+                        <div class="profile-card__rate">${student.price || ""}</div>
                         <a href="Profile.html?email=${student.email}" class="btn btn-primary"
                             style="width:100%;justify-content:center;margin-top:16px;padding:10px;text-align:center;display:flex;align-items:center;">View Profile</a>
                     `;
@@ -2228,11 +2230,14 @@
         let profilesSubscription = null;
 
         function loadFeaturedStudentsFromCloud() {
-            if (window._fb && window._fb.subscribeToProfilesFromCloud) {
+            const syncClient = window._sb || window._fb;
+            console.log("Supabase available:", !!window._sb);
+            if (syncClient && syncClient.subscribeToProfilesFromCloud) {
                 if (profilesSubscription) {
                     profilesSubscription();
                 }
-                profilesSubscription = window._fb.subscribeToProfilesFromCloud((cloudProfiles) => {
+                profilesSubscription = syncClient.subscribeToProfilesFromCloud((cloudProfiles) => {
+                    console.log("Cloud profiles:", cloudProfiles);
                     if (cloudProfiles && cloudProfiles.length > 0) {
                         cloudProfiles.forEach(prof => {
                             localStorage.setItem('profile_' + prof.email, JSON.stringify(prof));
@@ -2240,9 +2245,10 @@
                         loadFeaturedStudents();
                     }
                 });
-            } else if (window._fb && window._fb.loadAllProfilesFromCloud) {
+            } else if (syncClient && syncClient.loadAllProfilesFromCloud) {
                 // Fallback to one-time load if subscribe is unavailable
-                window._fb.loadAllProfilesFromCloud().then(cloudProfiles => {
+                syncClient.loadAllProfilesFromCloud().then(cloudProfiles => {
+                    console.log("Cloud profiles:", cloudProfiles);
                     if (cloudProfiles && cloudProfiles.length > 0) {
                         cloudProfiles.forEach(prof => {
                             localStorage.setItem('profile_' + prof.email, JSON.stringify(prof));
@@ -2257,10 +2263,10 @@
             updateNavbar();
             loadFeaturedStudents();
 
-            if (window._fb) {
+            if (window._sb || window._fb) {
                 loadFeaturedStudentsFromCloud();
             } else {
-                window.addEventListener('firebaseReady', loadFeaturedStudentsFromCloud, { once: true });
+                window.addEventListener('supabaseReady', loadFeaturedStudentsFromCloud, { once: true });
             }
         });
 
@@ -2268,11 +2274,13 @@
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
     </script>
 
-    <!-- Firebase loader: imports Firestore helpers and exposes them to window._fb -->
+    <!-- Supabase loader: imports DB helpers and exposes them to window._sb -->
     <script type="module">
-        import { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, loadAccountsFromCloud, loadAllProfilesFromCloud, subscribeToProfilesFromCloud, showSyncStatus } from './firebase-config.js';
-        window._fb = { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, loadAccountsFromCloud, loadAllProfilesFromCloud, subscribeToProfilesFromCloud, showSyncStatus };
-        window.dispatchEvent(new Event('firebaseReady'));
+        import { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, loadAccountsFromCloud, loadAllProfilesFromCloud, subscribeToProfilesFromCloud, showSyncStatus } from './supabase-config.js';
+        window._sb = { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, loadAccountsFromCloud, loadAllProfilesFromCloud, subscribeToProfilesFromCloud, showSyncStatus };
+        window._fb = window._sb; // Legacy alias for backward compatibility
+        window.dispatchEvent(new Event('supabaseReady'));
+        window.dispatchEvent(new Event('firebaseReady')); // Legacy event for backward compatibility
     </script>
 </body>
 
