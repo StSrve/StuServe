@@ -2354,7 +2354,7 @@
 
     <!-- Supabase loader: imports DB helpers and exposes them to window._sb -->
     <script type="module">
-        import { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, loadAccountsFromCloud, loadAllProfilesFromCloud, subscribeToProfilesFromCloud, showSyncStatus } from './supabase-config.js';
+        import { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, loadAccountsFromCloud, loadAllProfilesFromCloud, subscribeToProfilesFromCloud, showSyncStatus } from 'supabase-config.js';
         window._sb = { saveProfileToCloud, loadProfileFromCloud, saveAccountsToCloud, loadAccountsFromCloud, loadAllProfilesFromCloud, subscribeToProfilesFromCloud, showSyncStatus };
         window._fb = window._sb; // Legacy alias for backward compatibility
         window.dispatchEvent(new Event('supabaseReady'));
