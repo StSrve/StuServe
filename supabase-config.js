@@ -5,8 +5,8 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 // YOUR ACTION REQUIRED: Replace these configuration values with your Supabase credentials.
-const supabaseUrl = "https://your-supabase-url.supabase.co"; 
-const supabaseKey = "your-anon-key"; 
+const supabaseUrl = "https://dnbtsniwpilqoxpmypyn.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuYnRzbml3cGlscW94cG15cHluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0MDcyMTAsImV4cCI6MjA5NDk4MzIxMH0.Pfgi1-YMycXkmK0x4ASEYAs6tIK7YcENwanmJ5xZ8LA";
 
 // Initialize Supabase Client
 export const supabase = createClient(supabaseUrl, supabaseKey);
@@ -230,6 +230,6 @@ export function subscribeToProfilesFromCloud(callback) {
         };
     } catch (error) {
         console.error("[Supabase] Error setting up real-time profiles subscription:", error);
-        return () => {};
+        return () => { };
     }
 }

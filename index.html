@@ -456,6 +456,39 @@
             animation: fadeUp .8s .6s forwards;
         }
 
+        .hero__grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero__img-wrapper {
+            margin: 0;
+            width: 100%;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            animation: fadeUp .8s .5s forwards;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+        }
+
+        .hero__img-wrapper:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+
+        .hero__img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+        }
+
         .hero__actions {
             display: flex;
             gap: 14px;
@@ -1275,6 +1308,43 @@
             .why-grid {
                 grid-template-columns: 1fr;
             }
+
+            .hero__grid {
+                grid-template-columns: 1fr;
+                gap: 48px;
+                text-align: center;
+                padding-top: 40px;
+            }
+
+            .hero__img-wrapper {
+                max-width: 480px;
+                margin: 0 auto;
+                order: 2;
+            }
+
+            .hero__content {
+                order: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero__sub {
+                max-width: 100%;
+            }
+
+            .hero__actions {
+                justify-content: center;
+            }
+
+            .categories {
+                justify-content: center;
+            }
+
+            .hero__stats {
+                justify-content: center;
+                margin-top: 40px;
+            }
         }
 
         @media (max-width: 600px) {
@@ -1368,40 +1438,45 @@
         <div class="hero__bg"></div>
         <div class="hero__decor"></div>
         <div class="container">
-            <div class="hero__content">
-                <p class="hero__eyebrow">✦ Bahrain's Student Talent Platform</p>
-                <h1 class="hero__title">
-                    Great work,<br>from <em>student<br>talent</em>
-                </h1>
-                <p class="hero__sub">
-                    Hire skilled Bahraini students for design, tutoring, photography, writing and more — or join as a
-                    student and start earning on your schedule.
-                </p>
-                <div class="hero__actions">
-                    <button class="btn btn-accent" onclick="openModal('signup','client')">Hire a Student ↗</button>
-                    <button class="btn btn-ghost" onclick="openModal('signup','student')">Join as a Student</button>
+            <div class="hero__grid">
+                <div class="hero__content">
+                    <p class="hero__eyebrow">✦ Bahrain's Student Talent Platform</p>
+                    <h1 class="hero__title">
+                        Great work,<br>from <em>student<br>talent</em>
+                    </h1>
+                    <p class="hero__sub">
+                        Hire skilled Bahraini students for design, tutoring, photography, writing and more — or join as a
+                        student and start earning on your schedule.
+                    </p>
+                    <div class="hero__actions">
+                        <button class="btn btn-accent" onclick="openModal('signup','client')">Hire a Student ↗</button>
+                        <button class="btn btn-ghost" onclick="openModal('signup','student')">Join as a Student</button>
+                    </div>
+                    <div class="categories">
+                        <span class="cat-pill">🎨 Graphic Design</span>
+                        <span class="cat-pill">📚 Tutoring</span>
+                        <span class="cat-pill">📸 Photography</span>
+                        <span class="cat-pill">✍️ Writing</span>
+                        <span class="cat-pill">🎬 Video Editing</span>
+                        <span class="cat-pill">📱 Social Media</span>
+                    </div>
+                    <div class="hero__stats">
+                        <div>
+                            <div class="hero__stat-num">500+</div>
+                            <div class="hero__stat-label">Students</div>
+                        </div>
+                        <div>
+                            <div class="hero__stat-num">1,200+</div>
+                            <div class="hero__stat-label">Projects Done</div>
+                        </div>
+                        <div>
+                            <div class="hero__stat-num">4.9★</div>
+                            <div class="hero__stat-label">Avg Rating</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="categories">
-                    <span class="cat-pill">🎨 Graphic Design</span>
-                    <span class="cat-pill">📚 Tutoring</span>
-                    <span class="cat-pill">📸 Photography</span>
-                    <span class="cat-pill">✍️ Writing</span>
-                    <span class="cat-pill">🎬 Video Editing</span>
-                    <span class="cat-pill">📱 Social Media</span>
-                </div>
-                <div class="hero__stats">
-                    <div>
-                        <div class="hero__stat-num">500+</div>
-                        <div class="hero__stat-label">Students</div>
-                    </div>
-                    <div>
-                        <div class="hero__stat-num">1,200+</div>
-                        <div class="hero__stat-label">Projects Done</div>
-                    </div>
-                    <div>
-                        <div class="hero__stat-num">4.9★</div>
-                        <div class="hero__stat-label">Avg Rating</div>
-                    </div>
+                <div class="hero__img-wrapper">
+                    <img src="students.png" alt="StuServe Students" class="hero__img">
                 </div>
             </div>
         </div>
