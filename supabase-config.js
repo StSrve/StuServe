@@ -2,7 +2,7 @@
 // To configure, create a project in your Supabase Console, retrieve credentials from Settings -> API,
 // replace the placeholders below, and run the SQL setup script on your database.
 
-import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 
 
 // YOUR ACTION REQUIRED: Replace these configuration values with your Supabase credentials.
