@@ -1846,11 +1846,26 @@
                     return;
                 }
 
-                const accounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
+                let accounts = {};
+                // UPDATED FOR SUPABASE: Pull down the global account register object
+                if (window._sb && window._sb.loadAccountsFromCloud) {
+                    try {
+                        accounts = await window._sb.loadAccountsFromCloud();
+                    } catch (e) {
+                        console.error("[Supabase] Error loading accounts during login:", e);
+                        accounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
+                    }
+                } else {
+                    accounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
+                }
+
+                localStorage.setItem('stuserve_accounts', JSON.stringify(accounts));
+
                 let name = '';
                 let role = '';
                 let avatar = '';
 
+                // Admin authorization bypass
                 if (email === 'admin@stuserve.bh') {
                     if (password === 'admin123') {
                         name = 'Admin Moderator';
@@ -1858,35 +1873,42 @@
                         avatar = 'avatar9';
                         accounts[email] = { name, email, role, avatar };
                         localStorage.setItem('stuserve_accounts', JSON.stringify(accounts));
+                        if (window._sb && window._sb.saveAccountsToCloud) {
+                            await window._sb.saveAccountsToCloud(accounts).catch(e => console.error(e));
+                        }
                     } else {
                         alert('Incorrect password for Admin Account.');
                         return;
                     }
                 } else if (accounts[email]) {
+                    if (accounts[email].password && accounts[email].password !== password) {
+                        alert('Incorrect password. Please try again.');
+                        return;
+                    }
                     name = accounts[email].name;
                     role = accounts[email].role;
                     avatar = accounts[email].avatar || (role === 'student' ? 'avatar1' : 'avatar10');
                 } else {
-                    name = email.split('@')[0];
-                    name = name.charAt(0).toUpperCase() + name.slice(1);
-                    role = 'student';
-
-                    const existingProfile = localStorage.getItem('profile_' + email);
-                    if (existingProfile) {
-                        const prof = JSON.parse(existingProfile);
-                        name = prof.name;
-                        role = 'student';
-                        avatar = prof.avatar || 'avatar1';
-                    } else {
-                        avatar = 'avatar1';
-                    }
-
-                    accounts[email] = { name, email, role, avatar };
-                    localStorage.setItem('stuserve_accounts', JSON.stringify(accounts));
+                    alert('Account not found. Please sign up first.');
+                    return;
                 }
 
-                const loggedUser = { name, email, role, avatar };
-                localStorage.setItem('loggedInUser', JSON.stringify(loggedUser));
+                const user = { name, email, role, avatar };
+                localStorage.setItem('loggedInUser', JSON.stringify(user));
+
+                // UPDATED FOR SUPABASE: Pull down the user's specific profile when logging in on an alternate device
+                if (role === 'student') {
+                    if (window._sb && window._sb.loadProfileFromCloud) {
+                        try {
+                            const cloudProfile = await window._sb.loadProfileFromCloud(email);
+                            if (cloudProfile) {
+                                localStorage.setItem('profile_' + email, JSON.stringify(cloudProfile));
+                            }
+                        } catch (e) {
+                            console.error("[Supabase] Error syncing profile map during sign-in:", e);
+                        }
+                    }
+                }
 
                 closeModal();
                 window.location.reload();

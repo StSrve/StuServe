@@ -1417,13 +1417,13 @@
                 const user = { name, email, role: currentRole, university: university };
                 localStorage.setItem('loggedInUser', JSON.stringify(user));
 
-                // Sync user account globally in localStorage and Firebase Cloud
+                // Sync user account globally in localStorage and Supabase Cloud
                 let accounts = {};
-                if (window._fb && window._fb.loadAccountsFromCloud) {
+                if (window._sb && window._sb.loadAccountsFromCloud) {
                     try {
-                        accounts = await window._fb.loadAccountsFromCloud();
+                        accounts = await window._sb.loadAccountsFromCloud();
                     } catch (e) {
-                        console.error("[Firebase] Error loading accounts, using local:", e);
+                        console.error("[Supabase] Error loading accounts, using local:", e);
                         accounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
                     }
                 } else {
@@ -1440,29 +1440,33 @@
                         password: password // Keep the simple mock authentication registry complete
                     };
                     localStorage.setItem('stuserve_accounts', JSON.stringify(accounts));
-                    if (window._fb && window._fb.saveAccountsToCloud) {
+                    if (window._sb && window._sb.saveAccountsToCloud) {
                         try {
-                            await window._fb.saveAccountsToCloud(accounts);
+                            await window._sb.saveAccountsToCloud(accounts);
                         } catch (e) {
-                            console.error("[Firebase] Error saving accounts registry:", e);
+                            console.error("[Supabase] Error saving accounts registry:", e);
                         }
                     }
                 }
 
-                // If it's a student, set up an initial empty profile in localStorage and Firebase
+                // If it's a student, set up an initial empty profile in localStorage and Supabase
                 if (currentRole === 'student') {
                     let existingProfile = localStorage.getItem('profile_' + email);
                     let newProfile = null;
-                    if (window._fb && window._fb.loadProfileFromCloud) {
+                    
+                    // UPDATED FOR SUPABASE: Use window._sb instead of window._fb
+                    if (window._sb && window._sb.loadProfileFromCloud) {
                         try {
-                            const cloudProfile = await window._fb.loadProfileFromCloud(email);
+                            // Await the profile from the cloud bucket
+                            const cloudProfile = await window._sb.loadProfileFromCloud(email);
                             if (cloudProfile) {
                                 newProfile = cloudProfile;
                             }
                         } catch (e) {
-                            console.error("[Firebase] Error searching cloud profiles:", e);
+                            console.error("[Supabase] Error checking cloud profiles:", e);
                         }
                     }
+                    
                     if (!newProfile) {
                         newProfile = existingProfile ? JSON.parse(existingProfile) : {
                             email: email,
@@ -1477,14 +1481,15 @@
                             university: university
                         };
                     }
-                    console.log("Current role:", currentRole);
-                    console.log("Saving profile:", newProfile);
+                    
                     localStorage.setItem('profile_' + email, JSON.stringify(newProfile));
-                    if (window._fb && window._fb.saveProfileToCloud) {
+                    
+                    // UPDATED FOR SUPABASE: Save profile using the correct helper
+                    if (window._sb && window._sb.saveProfileToCloud) {
                         try {
-                            await window._fb.saveProfileToCloud(newProfile);
+                            await window._sb.saveProfileToCloud(newProfile);
                         } catch (e) {
-                            console.error("[Firebase] Error saving new profile:", e);
+                            console.error("[Supabase] Error saving new profile:", e);
                         }
                     }
                 }
@@ -1516,7 +1521,7 @@
                 updateNavbar();
 
                 // Refresh features immediately
-                if (window._fb && window._fb.loadAllProfilesFromCloud) {
+                if (window._sb && window._sb.loadAllProfilesFromCloud) {
                     loadCustomServicesFromCloud();
                 }
             } else if (mode === 'login') {
@@ -1528,27 +1533,26 @@
                     return;
                 }
 
-                // Look up in stuserve_accounts or Firebase Cloud
                 let accounts = {};
-                if (window._fb && window._fb.loadAccountsFromCloud) {
+                // UPDATED FOR SUPABASE: Pull down the global account register object
+                if (window._sb && window._sb.loadAccountsFromCloud) {
                     try {
-                        accounts = await window._fb.loadAccountsFromCloud();
+                        accounts = await window._sb.loadAccountsFromCloud();
                     } catch (e) {
-                        console.error("[Firebase] Error loading accounts during login:", e);
+                        console.error("[Supabase] Error loading accounts during login:", e);
                         accounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
                     }
                 } else {
                     accounts = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
                 }
 
-                // Sync stuserve_accounts locally
                 localStorage.setItem('stuserve_accounts', JSON.stringify(accounts));
 
                 let name = '';
                 let role = '';
                 let avatar = '';
 
-                // Intercept Admin Sign-in
+                // Admin authorization bypass
                 if (email === 'admin@stuserve.bh') {
                     if (password === 'admin123') {
                         name = 'Admin Moderator';
@@ -1556,15 +1560,14 @@
                         avatar = 'avatar9';
                         accounts[email] = { name, email, role, avatar };
                         localStorage.setItem('stuserve_accounts', JSON.stringify(accounts));
-                        if (window._fb && window._fb.saveAccountsToCloud) {
-                            await window._fb.saveAccountsToCloud(accounts).catch(e => console.error(e));
+                        if (window._sb && window._sb.saveAccountsToCloud) {
+                            await window._sb.saveAccountsToCloud(accounts).catch(e => console.error(e));
                         }
                     } else {
                         alert('Incorrect password for Admin Account.');
                         return;
                     }
                 } else if (accounts[email]) {
-                    // Very simple mock password validation: if account registry has a password, verify it matches
                     if (accounts[email].password && accounts[email].password !== password) {
                         alert('Incorrect password. Please try again.');
                         return;
@@ -1580,16 +1583,16 @@
                 const user = { name, email, role, avatar };
                 localStorage.setItem('loggedInUser', JSON.stringify(user));
 
-                // If user is a student, load their profile from the cloud to ensure all their data syncs to this device!
+                // UPDATED FOR SUPABASE: Pull down the user's specific profile when logging in on an alternate device
                 if (role === 'student') {
-                    if (window._fb && window._fb.loadProfileFromCloud) {
+                    if (window._sb && window._sb.loadProfileFromCloud) {
                         try {
-                            const cloudProfile = await window._fb.loadProfileFromCloud(email);
+                            const cloudProfile = await window._sb.loadProfileFromCloud(email);
                             if (cloudProfile) {
                                 localStorage.setItem('profile_' + email, JSON.stringify(cloudProfile));
                             }
                         } catch (e) {
-                            console.error("[Firebase] Error syncing student profile during login:", e);
+                            console.error("[Supabase] Error syncing profile map during sign-in:", e);
                         }
                     }
                 }
