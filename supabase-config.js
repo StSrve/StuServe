@@ -2,8 +2,7 @@
 // To configure, create a project in your Supabase Console, retrieve credentials from Settings -> API,
 // replace the placeholders below, and run the SQL setup script on your database.
 
-const createClient = window.supabase ? window.supabase.createClient : null;
-
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm'
 
 // YOUR ACTION REQUIRED: Replace these configuration values with your Supabase credentials.
 const supabaseUrl = "https://dnbtsniwpilqoxpmypyn.supabase.co";
@@ -13,8 +12,7 @@ if (!createClient) {
 }
 
 // 2. Initialize the client securely
-export const supabase = createClient ? createClient(supabaseUrl, supabaseKey) : null;
-
+export const supabase = createClient(supabaseUrl, supabaseKey);
 // Centralized Cloud Sync Helpers
 
 export async function saveProfileToCloud(profile) {
