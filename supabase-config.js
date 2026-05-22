@@ -8,17 +8,12 @@ const createClient = window.supabase ? window.supabase.createClient : null;
 // YOUR ACTION REQUIRED: Replace these configuration values with your Supabase credentials.
 const supabaseUrl = "https://dnbtsniwpilqoxpmypyn.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuYnRzbml3cGlscW94cG15cHluIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0MDcyMTAsImV4cCI6MjA5NDk4MzIxMH0.Pfgi1-YMycXkmK0x4ASEYAs6tIK7YcENwanmJ5xZ8LA";
-// Initialize Supabase Client
-export const supabase = createClient(supabaseUrl, supabaseKey);
-
-// Keep a local copy in localStorage for immediate synchronous page loads (optimistic rendering)
-export function syncLocalSession(user) {
-    if (user) {
-        localStorage.setItem('loggedInUser', JSON.stringify(user));
-    } else {
-        localStorage.removeItem('loggedInUser');
-    }
+if (!createClient) {
+    console.error("[Supabase] Engine failed to load. Make sure the script link is at the very top of your HTML <head>.");
 }
+
+// 2. Initialize the client securely
+export const supabase = createClient ? createClient(supabaseUrl, supabaseKey) : null;
 
 // Centralized Cloud Sync Helpers
 
