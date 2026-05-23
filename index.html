@@ -275,11 +275,11 @@
         .navbar__links {
             display: flex;
             align-items: center;
-            gap: 44px;
+            gap: 20px;
         }
 
         .navbar__links a {
-            font-size: .875rem;
+            font-size: .85rem;
             font-weight: 500;
             color: var(--text-mid);
             transition: color var(--transition);
@@ -310,48 +310,89 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            flex-shrink: 0;
         }
 
+        /* Standardized Premium Animated Hamburger */
         .navbar__hamburger {
             display: none;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
             gap: 5px;
+            width: 40px;
+            height: 40px;
             cursor: pointer;
-            padding: 8px;
+            border-radius: 8px;
+            transition: background var(--transition);
+            background: transparent;
+            border: none;
+            padding: 0;
+            z-index: 1001;
+        }
+
+        .navbar__hamburger:hover {
+            background: rgba(15, 28, 46, 0.05);
         }
 
         .navbar__hamburger span {
+            display: block;
             width: 22px;
             height: 2px;
             background: var(--navy);
             border-radius: 2px;
-            transition: var(--transition);
+            transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
-        /* Mobile menu */
+        .navbar__hamburger.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .navbar__hamburger.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .navbar__hamburger.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* Mobile slide-down menu */
         .mobile-menu {
             display: none;
             position: fixed;
-            inset: 72px 0 0 0;
-            background: var(--white);
+            top: 72px;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(15, 28, 46, 0.08);
+            padding: 16px 24px 24px;
             z-index: 999;
             flex-direction: column;
-            padding: 32px 24px;
             gap: 4px;
-            overflow-y: auto;
+            box-shadow: 0 8px 32px rgba(15, 28, 46, 0.08);
+            transform: translateY(-10px);
+            opacity: 0;
+            transition: transform 0.28s ease, opacity 0.28s ease;
         }
 
         .mobile-menu.open {
             display: flex;
+            transform: translateY(0);
+            opacity: 1;
         }
 
         .mobile-menu a {
-            font-size: 1.05rem;
-            font-weight: 500;
+            padding: 12px 16px;
+            font-size: 0.92rem;
+            font-weight: 600;
             color: var(--text-dark);
-            padding: 14px 0;
-            border-bottom: 1px solid rgba(15, 28, 46, .06);
-            display: block;
+            border-radius: 8px;
+            transition: background var(--transition);
+        }
+
+        .mobile-menu a:hover {
+            background: rgba(15, 28, 46, 0.03);
         }
 
         .mobile-menu .btn {
@@ -1403,19 +1444,16 @@
                 <li><a href="Services.html">Browse Services</a></li>
                 <li><a href="Find Students.html">Find Students</a></li>
                 <li><a href="Post a Job.html">Post a Job</a></li>
-                <li><a href="Messages.html" id="navMessagesLink">Messages</a></li>
+                <li><a href="Messages.html" id="navMessagesLink" style="display: none;">Messages</a></li>
                 <li><a href="index.html">About</a></li>
                 <li><a href="index.html">Contact</a></li>
             </ul>
             <div class="navbar__actions">
-                <button class="btn btn-outline" style="padding:10px 20px;font-size:.85rem;"
-                    onclick="openModal('login')">Log In</button>
-                <button class="btn btn-primary" style="padding:10px 20px;font-size:.85rem;"
-                    onclick="openModal('signup')">Sign Up</button>
+                <!-- Dynamically Populated -->
             </div>
-            <div class="navbar__hamburger" id="hamburger">
+            <button class="navbar__hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                 <span></span><span></span><span></span>
-            </div>
+            </button>
         </div>
     </nav>
 
@@ -1424,12 +1462,13 @@
         <a href="Services.html">Browse Services</a>
         <a href="Find Students.html">Find Students</a>
         <a href="Post a Job.html">Post a Job</a>
+        <a href="Messages.html" id="mobileNavMessages" style="display: none;">Messages</a>
         <a href="index.html">About</a>
         <a href="index.html">Contact</a>
-        <button class="btn btn-outline" style="margin-top:8px;" onclick="openModal('login');closeMobileMenu()">Log
-            In</button>
-        <button class="btn btn-primary" style="margin-top:4px;" onclick="openModal('signup');closeMobileMenu()">Sign
-            Up</button>
+        <div class="mobile-menu__divider" style="height: 1px; background: rgba(15, 28, 46, 0.06); margin: 12px 0;"></div>
+        <div id="mobileNavActions" style="display: flex; flex-direction: column; gap: 8px;">
+            <!-- Dynamically Populated -->
+        </div>
     </div>
 
     <!-- ════════════════════════════════════════
@@ -1831,10 +1870,23 @@
         });
 
         // ── Hamburger ──
-        const hamburger = document.getElementById('hamburger');
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.getElementById('hamburger');
+            if (!menu || !btn) return;
+            const isOpen = menu.classList.contains('open');
+            menu.classList.toggle('open', !isOpen);
+            btn.classList.toggle('open', !isOpen);
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.getElementById('hamburger');
+            if (menu) menu.classList.remove('open');
+            if (btn) btn.classList.remove('open');
+        }
+
         const mobileMenu = document.getElementById('mobileMenu');
-        hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
-        function closeMobileMenu() { mobileMenu.classList.remove('open'); }
         mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobileMenu));
 
         // ── Animate in on scroll ──
@@ -2131,44 +2183,55 @@
 
         function updateNavbar() {
             const userStr = localStorage.getItem('loggedInUser');
+            const currentUser = userStr ? JSON.parse(userStr) : null;
+            
             const navActions = document.querySelector('.navbar__actions');
-
-            // Handle Messages link visibility and dynamic badge
+            const mobileNavActions = document.getElementById('mobileNavActions');
             const navMessagesLink = document.getElementById('navMessagesLink');
-            if (navMessagesLink) {
-                if (userStr) {
-                    const user = JSON.parse(userStr);
+            const mobileNavMessages = document.getElementById('mobileNavMessages');
+            
+            // 1. Manage Messages link and dynamic badge
+            if (currentUser) {
+                if (navMessagesLink) {
                     navMessagesLink.style.display = 'inline-flex';
                     navMessagesLink.classList.add('nav-badge-container');
-
-                    // Remove existing badge if any
+                    
                     const existingBadge = navMessagesLink.querySelector('.nav-badge');
                     if (existingBadge) existingBadge.remove();
-
-                    // Count unread messages
+                    
                     const messages = JSON.parse(localStorage.getItem('stuserve_messages') || '[]');
-                    const unreadCount = messages.filter(m => m.receiver === user.email && !m.read).length;
-
+                    const unreadCount = messages.filter(m => m.receiver === currentUser.email && !m.read).length;
                     if (unreadCount > 0) {
                         const badge = document.createElement('span');
                         badge.className = 'nav-badge';
                         badge.textContent = unreadCount;
                         navMessagesLink.appendChild(badge);
                     }
-                } else {
-                    navMessagesLink.style.display = 'none';
                 }
+                
+                if (mobileNavMessages) {
+                    mobileNavMessages.style.display = 'block';
+                    const messages = JSON.parse(localStorage.getItem('stuserve_messages') || '[]');
+                    const unreadCount = messages.filter(m => m.receiver === currentUser.email && !m.read).length;
+                    if (unreadCount > 0) {
+                        mobileNavMessages.innerHTML = `Messages <span style="background:var(--accent); color:var(--white); border-radius:50%; padding:2px 8px; font-size:0.75rem; font-weight:700; margin-left:6px;">${unreadCount}</span>`;
+                    } else {
+                        mobileNavMessages.textContent = 'Messages';
+                    }
+                }
+            } else {
+                if (navMessagesLink) navMessagesLink.style.display = 'none';
+                if (mobileNavMessages) mobileNavMessages.style.display = 'none';
             }
 
-            // Handle Dashboard link visibility dynamically in navbar
+            // 2. Manage Dashboard link visibility
             const navbarLinksList = document.querySelector('.navbar__links');
             if (navbarLinksList) {
                 let navDashboardLink = document.getElementById('navDashboardLink');
-                if (userStr) {
+                if (currentUser) {
                     if (!navDashboardLink) {
                         const li = document.createElement('li');
                         li.innerHTML = '<a href="Dashboard.html" id="navDashboardLink">Dashboard</a>';
-                        // Insert after Messages link or append
                         const messagesLi = Array.from(navbarLinksList.children).find(child => child.querySelector('#navMessagesLink'));
                         if (messagesLi) {
                             navbarLinksList.insertBefore(li, messagesLi.nextSibling);
@@ -2177,66 +2240,90 @@
                         }
                     }
                 } else {
-                    if (navDashboardLink) {
-                        navDashboardLink.parentElement.remove();
-                    }
+                    if (navDashboardLink) navDashboardLink.parentElement.remove();
                 }
             }
 
-            // Handle Mobile Menu Dashboard link visibility
             const mobileMenuElement = document.getElementById('mobileMenu');
             if (mobileMenuElement) {
                 let mobileDashboardLink = document.getElementById('mobileDashboardLink');
-                if (userStr) {
+                if (currentUser) {
                     if (!mobileDashboardLink) {
                         const a = document.createElement('a');
                         a.href = 'Dashboard.html';
                         a.id = 'mobileDashboardLink';
                         a.textContent = 'Dashboard';
-                        // Insert before first button
-                        const firstButton = mobileMenuElement.querySelector('button');
-                        if (firstButton) {
-                            mobileMenuElement.insertBefore(a, firstButton);
+                        const divider = mobileMenuElement.querySelector('.mobile-menu__divider');
+                        if (divider) {
+                            mobileMenuElement.insertBefore(a, divider);
                         } else {
                             mobileMenuElement.appendChild(a);
                         }
                     }
                 } else {
-                    if (mobileDashboardLink) {
-                        mobileDashboardLink.remove();
-                    }
+                    if (mobileDashboardLink) mobileDashboardLink.remove();
                 }
-            }
+            // Highlight other active page links dynamically
+            const currentPath = window.location.pathname;
+            const allLinks = document.querySelectorAll('.navbar__links a, .mobile-menu a');
+            allLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && currentPath.endsWith(href)) {
+                    link.classList.add('active');
+                } else if (href && !currentPath.endsWith(href) && href !== 'Dashboard.html') {
+                    link.classList.remove('active');
+                }
+            });
 
-            if (!navActions) return;
-
-            if (userStr) {
-                const user = JSON.parse(userStr);
-                navActions.innerHTML = `
+            // 3. Render Actions (both Desktop & Mobile)
+            if (currentUser) {
+                const shortName = currentUser.name ? currentUser.name.split(' ')[0] : 'User';
+                const actionsHTML = `
                     <div style="display:flex; align-items:center; gap:16px;">
-                        <span style="font-family:var(--font-body); font-size:.9rem; font-weight:600; color:var(--text-dark);">
-                            Hello, <span style="color:var(--accent);">${user.name}</span>!
+                        <span style="font-family:var(--font-body); font-size:.9rem; font-weight:600; color:var(--text-dark); white-space:nowrap;">
+                            Hello, <span style="color:var(--accent);">${shortName}</span>!
                         </span>
-                        ${user.role === 'student' ? `
-                            <a href="Profile.html" class="btn btn-outline" style="padding:10px 20px; font-size:.85rem; text-decoration:none; display:inline-flex; align-items:center;">
+                        ${currentUser.role === 'student' ? `
+                            <a href="Profile.html" class="btn btn-outline btn-sm" style="text-decoration:none; padding:8px 16px; font-size:0.8rem; display:inline-flex; align-items:center; white-space:nowrap;">
                                 My Profile
                             </a>
                         ` : ''}
-                        <button class="btn btn-ghost" style="padding:10px 20px; font-size:.85rem; border:1px solid rgba(15,28,46,0.15); color:var(--text-dark);" onclick="handleLogout()">
+                        <button class="btn btn-ghost btn-sm" style="padding:8px 16px; font-size:0.8rem; white-space:nowrap;" onclick="handleLogout()">
                             Log Out
                         </button>
                     </div>
                 `;
+                
+                if (navActions) navActions.innerHTML = actionsHTML;
+                
+                if (mobileNavActions) {
+                    mobileNavActions.innerHTML = `
+                        ${currentUser.role === 'student' ? `<a href="Profile.html" class="btn btn-outline" style="text-decoration:none; text-align:center; padding:10px; font-size:0.85rem; justify-content:center;">My Profile</a>` : ''}
+                        <button class="btn btn-primary" style="padding:10px; font-size:0.85rem; justify-content:center;" onclick="handleLogout(); closeMobileMenu();">Log Out</button>
+                    `;
+                }
             } else {
-                navActions.innerHTML = `
-                    <button class="btn btn-outline" style="padding:10px 20px;font-size:.85rem;"
-                        onclick="openModal('login')">Log In</button>
-                    <button class="btn btn-primary" style="padding:10px 20px;font-size:.85rem;"
-                        onclick="openModal('signup')">Sign Up</button>
-                `;
+                const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('StuServe') || window.location.pathname.endsWith('StuServe/');
+                
+                const loginAction = isIndexPage ? "openModal('login')" : "window.location.href='index.html?action=login'";
+                const signupAction = isIndexPage ? "openModal('signup')" : "window.location.href='index.html?action=signup'";
+                
+                if (navActions) {
+                    navActions.innerHTML = `
+                        <button class="btn btn-outline btn-sm" style="padding:8px 16px; font-size:0.8rem;" onclick="${loginAction}">Log In</button>
+                        <button class="btn btn-primary" style="padding:8px 16px; font-size:0.8rem;" onclick="${signupAction}">Sign Up</button>
+                    `;
+                }
+                
+                if (mobileNavActions) {
+                    mobileNavActions.innerHTML = `
+                        <button class="btn btn-outline" style="padding:10px; font-size:0.85rem; justify-content:center;" onclick="${loginAction}; closeMobileMenu();">Log In</button>
+                        <button class="btn btn-primary" style="padding:10px; font-size:0.85rem; justify-content:center;" onclick="${signupAction}; closeMobileMenu();">Sign Up</button>
+                    `;
+                }
             }
         }
-
+        
         function handleLogout() {
             localStorage.removeItem('loggedInUser');
             window.location.reload();

@@ -175,41 +175,44 @@
         .navbar__links {
             display: flex;
             align-items: center;
-            gap: 44px;
-            list-style: none;
+            gap: 20px;
         }
 
         .navbar__links a {
-            font-size: 0.9rem;
+            font-size: .85rem;
             font-weight: 500;
             color: var(--text-mid);
             transition: color var(--transition);
             position: relative;
-            padding: 4px 0;
-        }
-
-        .navbar__links a:hover,
-        .navbar__links a.active {
-            color: var(--accent);
         }
 
         .navbar__links a::after {
             content: '';
             position: absolute;
-            bottom: 0;
+            bottom: -4px;
             left: 0;
-            width: 100%;
+            right: 0;
             height: 2px;
             background: var(--accent);
             transform: scaleX(0);
-            transform-origin: right;
             transition: transform var(--transition);
+        }
+
+        .navbar__links a:hover,
+        .navbar__links a.active {
+            color: var(--navy);
         }
 
         .navbar__links a.active::after,
         .navbar__links a:hover::after {
             transform: scaleX(1);
-            transform-origin: left;
+        }
+
+        .navbar__actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
         }
 
         .nav-badge-container {
@@ -233,6 +236,22 @@
             top: -6px;
             right: -12px;
             padding: 0 4px;
+            animation: pulse-badge 2s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(196, 66, 105, 0.7);
+            }
+            70% {
+                transform: scale(1.1);
+                box-shadow: 0 0 0 6px rgba(196, 66, 105, 0);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(196, 66, 105, 0);
+            }
         }
 
         /* ── DASHBOARD CORE LAYOUT ── */
@@ -621,7 +640,7 @@
             fill: var(--accent);
         }
 
-        /* ── NAVBAR HAMBURGER (mobile) ── */
+        /* Standardized Premium Animated Hamburger */
         .navbar__hamburger {
             display: none;
             flex-direction: column;
@@ -636,6 +655,7 @@
             background: transparent;
             border: none;
             padding: 0;
+            z-index: 1001;
         }
 
         .navbar__hamburger:hover {
@@ -663,7 +683,7 @@
             transform: translateY(-7px) rotate(-45deg);
         }
 
-        /* Mobile slide-down menu */
+        /* Premium Mobile Slide-down Menu */
         .mobile-menu {
             display: none;
             position: fixed;
@@ -694,35 +714,27 @@
             font-size: 0.92rem;
             font-weight: 600;
             color: var(--text-dark);
-            border-radius: 10px;
+            border-radius: 8px;
             transition: background var(--transition);
         }
 
         .mobile-menu a:hover,
         .mobile-menu a.active {
-            background: var(--pink-light);
+            background: rgba(15, 28, 46, 0.03);
             color: var(--accent);
         }
 
-        .mobile-menu__divider {
-            height: 1px;
-            background: rgba(15, 28, 46, 0.06);
-            margin: 8px 0;
+        /* Mobile responsive breakpoints trigger */
+        @media (max-width: 900px) {
+            .navbar__links, .navbar__actions {
+                display: none !important;
+            }
+            .navbar__hamburger {
+                display: flex !important;
+            }
         }
 
         @media (max-width: 768px) {
-            .navbar__links {
-                display: none;
-            }
-
-            .navbar__actions {
-                display: none !important;
-            }
-
-            .navbar__hamburger {
-                display: flex;
-            }
-
             .dash-hero {
                 padding: 24px;
             }
@@ -747,13 +759,14 @@
                 <li><a href="Services.html">Browse Services</a></li>
                 <li><a href="Find Students.html">Find Students</a></li>
                 <li><a href="Post a Job.html">Post a Job</a></li>
-                <li><a href="Messages.html" id="navMessagesLink">Messages</a></li>
-                <li><a href="Dashboard.html" class="active" id="navDashboardLink">Dashboard</a></li>
+                <li><a href="Messages.html" id="navMessagesLink" style="display: none;">Messages</a></li>
+                <li><a href="index.html">About</a></li>
+                <li><a href="index.html">Contact</a></li>
             </ul>
-            <div class="navbar__actions" style="display:flex; align-items:center; gap:16px;">
-                <!-- Populated dynamically -->
+            <div class="navbar__actions">
+                <!-- Dynamically Populated -->
             </div>
-            <button class="navbar__hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Open menu">
+            <button class="navbar__hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Toggle menu">
                 <span></span><span></span><span></span>
             </button>
         </div>
@@ -764,11 +777,12 @@
         <a href="Services.html">Browse Services</a>
         <a href="Find Students.html">Find Students</a>
         <a href="Post a Job.html">Post a Job</a>
-        <a href="Messages.html" id="mobileNavMessages">Messages</a>
-        <a href="Dashboard.html" class="active">Dashboard</a>
-        <div class="mobile-menu__divider"></div>
-        <div id="mobileNavActions" style="display:flex; flex-direction:column; gap:8px;">
-            <!-- Populated dynamically -->
+        <a href="Messages.html" id="mobileNavMessages" style="display: none;">Messages</a>
+        <a href="index.html">About</a>
+        <a href="index.html">Contact</a>
+        <div class="mobile-menu__divider" style="height: 1px; background: rgba(15, 28, 46, 0.06); margin: 12px 0;"></div>
+        <div id="mobileNavActions" style="display: flex; flex-direction: column; gap: 8px;">
+            <!-- Dynamically Populated -->
         </div>
     </div>
 
@@ -1186,57 +1200,32 @@
                 loggedInUser = JSON.parse(userStr);
 
                 // Set custom dynamic greeting
-                document.getElementById('dashGreeting').textContent = `Hello, ${loggedInUser.name}!`;
-
-                // Show dashboard nav quick links dynamic badge
-                const navMessagesLink = document.getElementById('navMessagesLink');
-                if (navMessagesLink) {
-                    navMessagesLink.style.display = 'inline-flex';
-                    navMessagesLink.classList.add('nav-badge-container');
-                    const existingBadge = navMessagesLink.querySelector('.nav-badge');
-                    if (existingBadge) existingBadge.remove();
-
-                    // Count unread
-                    const messages = JSON.parse(localStorage.getItem('stuserve_messages') || '[]');
-                    const unreadCount = messages.filter(m => m.receiver === loggedInUser.email && !m.read).length;
-
-                    if (unreadCount > 0) {
-                        const badge = document.createElement('span');
-                        badge.className = 'nav-badge';
-                        badge.textContent = unreadCount;
-                        navMessagesLink.appendChild(badge);
-                    }
+                const dashGreeting = document.getElementById('dashGreeting');
+                if (dashGreeting) {
+                    dashGreeting.textContent = `Hello, ${loggedInUser.name}!`;
                 }
-
-                // Render navbar actions
-                const navActions = document.querySelector('.navbar__actions');
-                const mobileNavActions = document.getElementById('mobileNavActions');
-                if (navActions) {
-                    const actionsHTML = `
-                        <span style="font-family:var(--font-body); font-size:.9rem; font-weight:600; color:var(--text-dark);">
-                            Hello, <span style="color:var(--accent);">${loggedInUser.name}</span>!
-                        </span>
-                        ${loggedInUser.role === 'student' ? `
-                            <a href="Profile.html" class="btn btn-outline btn-sm" style="text-decoration:none;">
-                                My Profile
-                            </a>
-                        ` : ''}
-                        <button class="btn btn-ghost btn-sm" onclick="handleLogout()">
-                            Log Out
-                        </button>
-                    `;
-                    navActions.innerHTML = actionsHTML;
-                    if (mobileNavActions) {
-                        mobileNavActions.innerHTML = `
-                            ${loggedInUser.role === 'student' ? `<a href="Profile.html" class="btn btn-outline" style="text-decoration:none; text-align:center;">My Profile</a>` : ''}
-                            <button class="btn btn-ghost" onclick="handleLogout(); closeMobileMenu();">Log Out</button>
-                        `;
-                    }
-                }
+                
+                updateNavbar();
             } else {
                 // Not logged in — redirect to homepage
                 window.location.href = 'index.html';
             }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.getElementById('hamburger');
+            if (!menu || !btn) return;
+            const isOpen = menu.classList.contains('open');
+            menu.classList.toggle('open', !isOpen);
+            btn.classList.toggle('open', !isOpen);
+        }
+
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const btn = document.getElementById('hamburger');
+            if (menu) menu.classList.remove('open');
+            if (btn) btn.classList.remove('open');
         }
 
         function handleLogout() {
@@ -1244,17 +1233,154 @@
             window.location.href = 'index.html';
         }
 
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            const btn = document.getElementById('hamburger');
-            const isOpen = menu.classList.contains('open');
-            menu.classList.toggle('open', !isOpen);
-            btn.classList.toggle('open', !isOpen);
-        }
+        function updateNavbar() {
+            const userStr = localStorage.getItem('loggedInUser');
+            const currentUser = userStr ? JSON.parse(userStr) : null;
+            
+            const navActions = document.querySelector('.navbar__actions');
+            const mobileNavActions = document.getElementById('mobileNavActions');
+            const navMessagesLink = document.getElementById('navMessagesLink');
+            const mobileNavMessages = document.getElementById('mobileNavMessages');
+            
+            // Set active class based on window pathname
+            const currentPath = window.location.pathname;
+            
+            // 1. Manage Messages link and dynamic badge
+            if (currentUser) {
+                if (navMessagesLink) {
+                    navMessagesLink.style.display = 'inline-flex';
+                    navMessagesLink.classList.add('nav-badge-container');
+                    
+                    const existingBadge = navMessagesLink.querySelector('.nav-badge');
+                    if (existingBadge) existingBadge.remove();
+                    
+                    const messages = JSON.parse(localStorage.getItem('stuserve_messages') || '[]');
+                    const unreadCount = messages.filter(m => m.receiver === currentUser.email && !m.read).length;
+                    if (unreadCount > 0) {
+                        const badge = document.createElement('span');
+                        badge.className = 'nav-badge';
+                        badge.textContent = unreadCount;
+                        navMessagesLink.appendChild(badge);
+                    }
+                }
+                
+                if (mobileNavMessages) {
+                    mobileNavMessages.style.display = 'block';
+                    const messages = JSON.parse(localStorage.getItem('stuserve_messages') || '[]');
+                    const unreadCount = messages.filter(m => m.receiver === currentUser.email && !m.read).length;
+                    if (unreadCount > 0) {
+                        mobileNavMessages.innerHTML = `Messages <span style="background:var(--accent); color:var(--white); border-radius:50%; padding:2px 8px; font-size:0.75rem; font-weight:700; margin-left:6px;">${unreadCount}</span>`;
+                    } else {
+                        mobileNavMessages.textContent = 'Messages';
+                    }
+                }
+            } else {
+                if (navMessagesLink) navMessagesLink.style.display = 'none';
+                if (mobileNavMessages) mobileNavMessages.style.display = 'none';
+            }
 
-        function closeMobileMenu() {
-            document.getElementById('mobileMenu').classList.remove('open');
-            document.getElementById('hamburger').classList.remove('open');
+            // 2. Manage Dashboard link visibility
+            const navbarLinksList = document.querySelector('.navbar__links');
+            if (navbarLinksList) {
+                let navDashboardLink = document.getElementById('navDashboardLink');
+                if (currentUser) {
+                    if (!navDashboardLink) {
+                        const li = document.createElement('li');
+                        const isActive = currentPath.endsWith('Dashboard.html');
+                        li.innerHTML = `<a href="Dashboard.html" id="navDashboardLink" class="${isActive ? 'active' : ''}">Dashboard</a>`;
+                        const messagesLi = Array.from(navbarLinksList.children).find(child => child.querySelector('#navMessagesLink'));
+                        if (messagesLi) {
+                            navbarLinksList.insertBefore(li, messagesLi.nextSibling);
+                        } else {
+                            navbarLinksList.appendChild(li);
+                        }
+                    }
+                } else {
+                    if (navDashboardLink) navDashboardLink.parentElement.remove();
+                }
+            }
+
+            const mobileMenuElement = document.getElementById('mobileMenu');
+            if (mobileMenuElement) {
+                let mobileDashboardLink = document.getElementById('mobileDashboardLink');
+                if (currentUser) {
+                    if (!mobileDashboardLink) {
+                        const a = document.createElement('a');
+                        a.href = 'Dashboard.html';
+                        a.id = 'mobileDashboardLink';
+                        const isActive = currentPath.endsWith('Dashboard.html');
+                        if (isActive) a.className = 'active';
+                        a.textContent = 'Dashboard';
+                        const divider = mobileMenuElement.querySelector('.mobile-menu__divider');
+                        if (divider) {
+                            mobileMenuElement.insertBefore(a, divider);
+                        } else {
+                            mobileMenuElement.appendChild(a);
+                        }
+                    }
+                } else {
+                    if (mobileDashboardLink) mobileDashboardLink.remove();
+                }
+            }
+
+            // Highlight other active page links dynamically
+            const allLinks = document.querySelectorAll('.navbar__links a, .mobile-menu a');
+            allLinks.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href && currentPath.endsWith(href)) {
+                    link.classList.add('active');
+                } else if (href && !currentPath.endsWith(href) && href !== 'Dashboard.html') {
+                    link.classList.remove('active');
+                }
+            });
+
+            // 3. Render Actions (both Desktop & Mobile)
+            if (currentUser) {
+                const shortName = currentUser.name ? currentUser.name.split(' ')[0] : 'User';
+                const actionsHTML = `
+                    <div style="display:flex; align-items:center; gap:16px;">
+                        <span style="font-family:var(--font-body); font-size:.9rem; font-weight:600; color:var(--text-dark); white-space:nowrap;">
+                            Hello, <span style="color:var(--accent);">${shortName}</span>!
+                        </span>
+                        ${currentUser.role === 'student' ? `
+                            <a href="Profile.html" class="btn btn-outline btn-sm" style="text-decoration:none; padding:8px 16px; font-size:0.8rem; display:inline-flex; align-items:center; white-space:nowrap;">
+                                My Profile
+                            </a>
+                        ` : ''}
+                        <button class="btn btn-ghost btn-sm" style="padding:8px 16px; font-size:0.8rem; white-space:nowrap;" onclick="handleLogout()">
+                            Log Out
+                        </button>
+                    </div>
+                `;
+                
+                if (navActions) navActions.innerHTML = actionsHTML;
+                
+                if (mobileNavActions) {
+                    mobileNavActions.innerHTML = `
+                        ${currentUser.role === 'student' ? `<a href="Profile.html" class="btn btn-outline" style="text-decoration:none; text-align:center; padding:10px; font-size:0.85rem; justify-content:center;">My Profile</a>` : ''}
+                        <button class="btn btn-primary" style="padding:10px; font-size:0.85rem; justify-content:center;" onclick="handleLogout(); closeMobileMenu();">Log Out</button>
+                    `;
+                }
+            } else {
+                const isIndexPage = currentPath.endsWith('index.html') || currentPath === '/' || currentPath.endsWith('StuServe') || currentPath.endsWith('StuServe/');
+                
+                const loginAction = isIndexPage ? "openModal('login')" : "window.location.href='index.html?action=login'";
+                const signupAction = isIndexPage ? "openModal('signup')" : "window.location.href='index.html?action=signup'";
+                
+                if (navActions) {
+                    navActions.innerHTML = `
+                        <button class="btn btn-outline btn-sm" style="padding:8px 16px; font-size:0.8rem;" onclick="${loginAction}">Log In</button>
+                        <button class="btn btn-primary btn-sm" style="padding:8px 16px; font-size:0.8rem;" onclick="${signupAction}">Sign Up</button>
+                    `;
+                }
+                
+                if (mobileNavActions) {
+                    mobileNavActions.innerHTML = `
+                        <button class="btn btn-outline" style="padding:10px; font-size:0.85rem; justify-content:center;" onclick="${loginAction}; closeMobileMenu();">Log In</button>
+                        <button class="btn btn-primary" style="padding:10px; font-size:0.85rem; justify-content:center;" onclick="${signupAction}; closeMobileMenu();">Sign Up</button>
+                    `;
+                }
+            }
         }
 
         // Close mobile menu when clicking outside
