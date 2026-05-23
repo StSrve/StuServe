@@ -2226,6 +2226,9 @@
             const navMessagesLink = document.getElementById('navMessagesLink');
             const mobileNavMessages = document.getElementById('mobileNavMessages');
             
+            // Set active class based on window pathname
+            const currentPath = window.location.pathname;
+            
             // 1. Manage Messages link and dynamic badge
             if (currentUser) {
                 if (navMessagesLink) {
@@ -2267,7 +2270,8 @@
                 if (currentUser) {
                     if (!navDashboardLink) {
                         const li = document.createElement('li');
-                        li.innerHTML = '<a href="Dashboard.html" id="navDashboardLink">Dashboard</a>';
+                        const isActive = currentPath.endsWith('Dashboard.html');
+                        li.innerHTML = `<a href="Dashboard.html" id="navDashboardLink" class="${isActive ? 'active' : ''}">Dashboard</a>`;
                         const messagesLi = Array.from(navbarLinksList.children).find(child => child.querySelector('#navMessagesLink'));
                         if (messagesLi) {
                             navbarLinksList.insertBefore(li, messagesLi.nextSibling);
@@ -2288,6 +2292,8 @@
                         const a = document.createElement('a');
                         a.href = 'Dashboard.html';
                         a.id = 'mobileDashboardLink';
+                        const isActive = currentPath.endsWith('Dashboard.html');
+                        if (isActive) a.className = 'active';
                         a.textContent = 'Dashboard';
                         const divider = mobileMenuElement.querySelector('.mobile-menu__divider');
                         if (divider) {
@@ -2301,7 +2307,6 @@
                 }
             }
             // Highlight other active page links dynamically
-            const currentPath = window.location.pathname;
             const allLinks = document.querySelectorAll('.navbar__links a, .mobile-menu a');
             allLinks.forEach(link => {
                 const href = link.getAttribute('href');
@@ -2340,7 +2345,7 @@
                     `;
                 }
             } else {
-                const isIndexPage = window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('StuServe') || window.location.pathname.endsWith('StuServe/');
+                const isIndexPage = currentPath.endsWith('index.html') || currentPath === '/' || currentPath.endsWith('StuServe') || currentPath.endsWith('StuServe/');
                 
                 const loginAction = isIndexPage ? "openModal('login')" : "window.location.href='index.html?action=login'";
                 const signupAction = isIndexPage ? "openModal('signup')" : "window.location.href='index.html?action=signup'";
