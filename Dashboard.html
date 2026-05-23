@@ -889,6 +889,15 @@
 
             </div>
 
+            <!-- Student Danger Zone -->
+            <div class="dash-card" style="border: 1.5px dashed rgba(196, 66, 105, 0.3); background: rgba(196, 66, 105, 0.02); margin-top: 32px;">
+                <div class="dash-card__title" style="color: #c44269; font-size: 1.25rem; margin-bottom: 8px; font-family: var(--font-display); font-weight: 600;">🔴 Danger Zone</div>
+                <p style="font-size: 0.85rem; color: var(--text-mid); margin-bottom: 16px; line-height: 1.5;">
+                    Permanently delete your student profile, portfolio samples, reviews, and account credentials from the StuServe platform. This action is irreversible.
+                </p>
+                <button type="button" class="btn" style="background: #c44269; color: #ffffff; border: none; border-radius: 50px; padding: 10px 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer;" onclick="openDeleteAccountModal()">🗑️ Delete Account & Profile</button>
+            </div>
+
         </div>
 
         <!-- ── CLIENT DASHBOARD MODULE ── -->
@@ -963,6 +972,15 @@
                     </div>
                 </div>
 
+            </div>
+
+            <!-- Client Danger Zone -->
+            <div class="dash-card" style="border: 1.5px dashed rgba(196, 66, 105, 0.3); background: rgba(196, 66, 105, 0.02); margin-top: 32px;">
+                <div class="dash-card__title" style="color: #c44269; font-size: 1.25rem; margin-bottom: 8px; font-family: var(--font-display); font-weight: 600;">🔴 Danger Zone</div>
+                <p style="font-size: 0.85rem; color: var(--text-mid); margin-bottom: 16px; line-height: 1.5;">
+                    Permanently delete your client account, placed order records, and settings from the StuServe platform. This action is irreversible.
+                </p>
+                <button type="button" class="btn" style="background: #c44269; color: #ffffff; border: none; border-radius: 50px; padding: 10px 20px; font-size: 0.85rem; font-weight: 600; cursor: pointer;" onclick="openDeleteAccountModal()">🗑️ Delete Account & Data</button>
             </div>
 
         </div>
@@ -1087,10 +1105,36 @@
 
     </div>
 
+    <!-- ── DELETE ACCOUNT CONFIRMATION MODAL ── -->
+    <div id="deleteAccountModal" class="modal-overlay" onclick="handleOverlayClick(event)">
+        <div class="modal" style="max-width: 480px; padding: 32px; border-top: 4px solid #c44269; border-radius: var(--radius-lg);">
+            <button class="modal-close" onclick="closeDeleteAccountModal()">✕</button>
+            <div style="text-align: center; margin-bottom: 24px;">
+                <div style="font-size: 3rem; margin-bottom: 12px;">⚠️</div>
+                <h3 style="font-size: 1.5rem; font-weight: 700; color: var(--navy); margin-bottom: 8px; font-family: var(--font-display);">Delete Account Permanently?</h3>
+                <p style="font-size: 0.9rem; color: var(--text-mid); line-height: 1.6;">
+                    You are about to permanently delete your StuServe account. This action is <strong>irreversible</strong> and will completely wipe all of your personal details, project history, and platform listings.
+                </p>
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label class="form-label" style="font-weight: 600; font-size: 0.85rem; color: var(--navy); margin-bottom: 8px;">
+                    Please type <strong style="color: #c44269;">DELETE</strong> in the box below to confirm:
+                </label>
+                <input type="text" id="deleteConfirmInput" class="form-control" placeholder="Type DELETE to confirm" style="text-align: center; text-transform: uppercase;">
+            </div>
+
+            <div style="display: flex; gap: 12px; justify-content: stretch; width: 100%;">
+                <button class="btn btn-outline" style="flex: 1; justify-content: center; padding: 10px;" onclick="closeDeleteAccountModal()">Cancel</button>
+                <button class="btn" style="flex: 1; justify-content: center; background: #c44269; color: #ffffff; border: none; font-weight: 600; padding: 10px;" onclick="executeDeleteAccount()">Permanently Delete</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Supabase loader: imports DB helpers and exposes them to window._sb -->
     <script type="module">
-        import { loadOrdersFromCloud, saveOrdersToCloud, loadAccountsFromCloud, saveMessagesToCloud, showSyncStatus } from './supabase-config.js';
-        window._sb = { loadOrdersFromCloud, saveOrdersToCloud, loadAccountsFromCloud, saveMessagesToCloud, showSyncStatus };
+        import { loadOrdersFromCloud, saveOrdersToCloud, loadAccountsFromCloud, saveMessagesToCloud, showSyncStatus, deleteProfileFromCloud, saveAccountsToCloud } from './supabase-config.js';
+        window._sb = { loadOrdersFromCloud, saveOrdersToCloud, loadAccountsFromCloud, saveMessagesToCloud, showSyncStatus, deleteProfileFromCloud, saveAccountsToCloud };
         window._fb = window._sb; // Legacy alias for backward compatibility
         window.dispatchEvent(new Event('supabaseReady'));
         window.dispatchEvent(new Event('firebaseReady')); // Legacy event for backward compatibility
@@ -1934,7 +1978,7 @@
         }
 
         // Moderate Actions
-        function deleteUserAccount(email) {
+        async function deleteUserAccount(email) {
             if (confirm(`Are you absolutely sure you want to moderate and delete the account registry for email: ${email}? This will clean up their profile and authentication credentials.`)) {
 
                 // 1. Delete from stuserve_accounts
@@ -1942,8 +1986,24 @@
                 delete accountsRegistry[email];
                 localStorage.setItem('stuserve_accounts', JSON.stringify(accountsRegistry));
 
+                // Sync account registry deletion to Supabase
+                if (window._sb && window._sb.saveAccountsToCloud) {
+                    try {
+                        await window._sb.saveAccountsToCloud(accountsRegistry);
+                    } catch (e) {
+                        console.error("[Supabase] Error syncing accounts registry after moderation:", e);
+                    }
+                }
+
                 // 2. Delete from profile
                 localStorage.removeItem('profile_' + email);
+                if (window._sb && window._sb.deleteProfileFromCloud) {
+                    try {
+                        await window._sb.deleteProfileFromCloud(email);
+                    } catch (e) {
+                        console.error("[Supabase] Error deleting moderated profile from cloud:", e);
+                    }
+                }
 
                 // 3. Rebuild custom services snapshot in case they had skills
                 syncCustomServicesSnapshot();
@@ -2018,6 +2078,92 @@
             });
             localStorage.setItem('stuserve_custom_services', JSON.stringify(list));
         }
+
+        // ── DELETE ACCOUNT HANDLERS ──
+        function openDeleteAccountModal() {
+            document.getElementById('deleteConfirmInput').value = '';
+            document.getElementById('deleteAccountModal').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDeleteAccountModal() {
+            document.getElementById('deleteAccountModal').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        async function executeDeleteAccount() {
+            const confirmInput = document.getElementById('deleteConfirmInput').value.trim();
+            if (confirmInput.toUpperCase() !== 'DELETE') {
+                alert('Please type DELETE in all capitals to confirm deletion.');
+                return;
+            }
+
+            const email = loggedInUser.email;
+
+            // 1. Delete profile from Supabase store if available
+            if (window._sb && window._sb.deleteProfileFromCloud) {
+                try {
+                    await window._sb.deleteProfileFromCloud(email);
+                } catch (err) {
+                    console.error("[Supabase] Error deleting profile row from cloud:", err);
+                }
+            }
+
+            // 2. Remove from global accounts registry in localstorage and Supabase
+            let accountsRegistry = {};
+            if (window._sb && window._sb.loadAccountsFromCloud) {
+                try {
+                    accountsRegistry = await window._sb.loadAccountsFromCloud();
+                } catch (e) {
+                    accountsRegistry = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
+                }
+            } else {
+                accountsRegistry = JSON.parse(localStorage.getItem('stuserve_accounts') || '{}');
+            }
+
+            if (accountsRegistry[email]) {
+                delete accountsRegistry[email];
+                localStorage.setItem('stuserve_accounts', JSON.stringify(accountsRegistry));
+                if (window._sb && window._sb.saveAccountsToCloud) {
+                    try {
+                        await window._sb.saveAccountsToCloud(accountsRegistry);
+                    } catch (e) {
+                        console.error("[Supabase] Error saving accounts registry after account deletion:", e);
+                    }
+                }
+            }
+
+            // 3. Clear local storage profile cache
+            localStorage.removeItem('profile_' + email);
+
+            // 4. Rebuild the custom services snapshot dynamically
+            syncCustomServicesSnapshot();
+
+            // 5. Remove loggedInUser session
+            localStorage.removeItem('loggedInUser');
+
+            // Close modal & redirect
+            closeDeleteAccountModal();
+            alert('Your account has been permanently deleted. We are sorry to see you go!');
+            window.location.href = 'index.html';
+        }
+
+        window.openDeleteAccountModal = openDeleteAccountModal;
+        window.closeDeleteAccountModal = closeDeleteAccountModal;
+        window.executeDeleteAccount = executeDeleteAccount;
+
+        function handleOverlayClick(e) {
+            if (e.target.classList.contains('modal-overlay')) {
+                closeDeleteAccountModal();
+            }
+        }
+
+        // Close on Escape key
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                closeDeleteAccountModal();
+            }
+        });
     </script>
 </body>
 

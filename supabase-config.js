@@ -224,3 +224,18 @@ export function subscribeToProfilesFromCloud(callback) {
         return () => { };
     }
 }
+
+export async function deleteProfileFromCloud(email) {
+    if (!email) return;
+    try {
+        const { error } = await supabase
+            .from('stuserve_store')
+            .delete()
+            .eq('key', `profile:${email}`);
+        if (error) throw error;
+        console.log(`[Supabase] Profile deleted for ${email}`);
+    } catch (error) {
+        console.error("[Supabase] Error deleting profile from cloud:", error);
+    }
+}
+
