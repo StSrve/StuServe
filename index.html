@@ -2046,6 +2046,42 @@
                             console.error("[Supabase] Error saving new profile:", e);
                         }
                     }
+                } else if (currentRole === 'client') {
+                    // Set up an initial empty Client profile in localStorage and Supabase
+                    let existingProfile = localStorage.getItem('profile_' + email);
+                    let newProfile = null;
+
+                    if (window._sb && window._sb.loadProfileFromCloud) {
+                        try {
+                            const cloudProfile = await window._sb.loadProfileFromCloud(email);
+                            if (cloudProfile) {
+                                newProfile = cloudProfile;
+                            }
+                        } catch (e) {
+                            console.error("[Supabase] Error checking cloud profiles:", e);
+                        }
+                    }
+
+                    if (!newProfile) {
+                        newProfile = existingProfile ? JSON.parse(existingProfile) : {
+                            email: email,
+                            name: name,
+                            role: 'client',
+                            headline: 'Business Client',
+                            bio: 'Hello! I am a client on StuServe looking to connect with top Bahraini student talent for my projects.',
+                            postedJobs: []
+                        };
+                    }
+
+                    localStorage.setItem('profile_' + email, JSON.stringify(newProfile));
+
+                    if (window._sb && window._sb.saveProfileToCloud) {
+                        try {
+                            await window._sb.saveProfileToCloud(newProfile);
+                        } catch (e) {
+                            console.error("[Supabase] Error saving new client profile:", e);
+                        }
+                    }
                 }
 
                 document.getElementById('signupForm').style.display = 'none';
@@ -2138,7 +2174,7 @@
                 localStorage.setItem('loggedInUser', JSON.stringify(user));
 
                 // UPDATED FOR SUPABASE: Pull down the user's specific profile when logging in on an alternate device
-                if (role === 'student') {
+                if (role === 'student' || role === 'client') {
                     if (window._sb && window._sb.loadProfileFromCloud) {
                         try {
                             const cloudProfile = await window._sb.loadProfileFromCloud(email);
