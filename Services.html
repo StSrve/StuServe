@@ -1890,6 +1890,7 @@
                 if (key && key.startsWith('profile_')) {
                     try {
                         const profile = JSON.parse(localStorage.getItem(key));
+                        if (profile && profile.role === 'client') continue; // Skip clients!
                         if (profile && typeof profile.skills === 'string') {
                             const skillArr = profile.skills.split(',').map(s => s.trim()).filter(Boolean);
                             

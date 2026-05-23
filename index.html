@@ -2382,6 +2382,7 @@
             keys.forEach(key => {
                 if (key.startsWith('profile_')) {
                     const prof = JSON.parse(localStorage.getItem(key));
+                    if (prof && prof.role === 'client') return; // Skip clients!
                     featuredStudents.push(prof);
                 }
             });
