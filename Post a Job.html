@@ -5,10 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Post a Job — StuServe</title>
-    <meta name="description" content="Post short-term projects or part-time tasks and connect with talented Bahraini students, or browse active student gig opportunities.">
+    <meta name="description"
+        content="Post short-term projects or part-time tasks and connect with talented Bahraini students, or browse active student gig opportunities.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --navy: #0f1c2e;
@@ -340,9 +343,12 @@
 
         /* Mobile responsive breakpoints trigger */
         @media (max-width: 900px) {
-            .navbar__links, .navbar__actions {
+
+            .navbar__links,
+            .navbar__actions {
                 display: none !important;
             }
+
             .navbar__hamburger {
                 display: flex !important;
             }
@@ -933,6 +939,177 @@
             font-size: .9rem;
             color: var(--text-light);
         }
+
+        /* ── CLIENT DASHBOARD & JOB MODAL OVERLAY ── */
+        .client-dashboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 32px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: var(--radius-lg);
+            padding: 24px 32px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        @media (max-width: 768px) {
+            .client-dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+                padding: 20px 24px;
+            }
+        }
+
+        .client-stats {
+            display: flex;
+            gap: 24px;
+        }
+
+        .stat-badge {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-badge__val {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.2;
+        }
+
+        .stat-badge__label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+        }
+
+        .btn-post-job-glow {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--steel) 100%);
+            color: var(--white);
+            box-shadow: 0 4px 14px rgba(15, 28, 46, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            padding: 14px 32px;
+            font-size: 0.95rem;
+            border-radius: 50px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-post-job-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-post-job-glow:hover::before {
+            left: 100%;
+        }
+
+        .btn-post-job-glow:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(15, 28, 46, 0.35);
+            background: linear-gradient(135deg, var(--accent) 0%, #a8364f 100%);
+        }
+
+        .btn-post-job-glow:active {
+            transform: translateY(-1px);
+        }
+
+        .modal-overlay.job-overlay {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), backdrop-filter 0.3s ease;
+            backdrop-filter: blur(0px);
+            -webkit-backdrop-filter: blur(0px);
+        }
+
+        .modal-overlay.job-overlay.open {
+            display: flex;
+            opacity: 1;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .modal.modal--job {
+            max-width: 600px;
+            width: 100%;
+            transform: scale(0.95) translateY(20px);
+            opacity: 0;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+        }
+
+        .modal-overlay.job-overlay.open .modal.modal--job {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        /* Success tick animation in modal */
+        .success-checkmark {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            display: block;
+        }
+
+        .success-checkmark .check-icon {
+            width: 80px;
+            height: 80px;
+            position: relative;
+            border-radius: 50%;
+            box-sizing: content-box;
+            border: 4px solid var(--accent);
+        }
+
+        .success-checkmark .check-icon::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 14px;
+            width: 44px;
+            height: 22px;
+            border-bottom: 4px solid var(--accent);
+            border-left: 4px solid var(--accent);
+            transform: rotate(-45deg);
+            transform-origin: left top;
+            animation: checkmark-draw 0.4s ease-in-out forwards;
+        }
+
+        @keyframes checkmark-draw {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0;
+            }
+
+            50% {
+                width: 0;
+                height: 22px;
+                opacity: 1;
+            }
+
+            100% {
+                width: 44px;
+                height: 22px;
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 
@@ -970,7 +1147,8 @@
         <a href="Messages.html" id="mobileNavMessages" style="display: none;">Messages</a>
         <a href="index.html#about">About</a>
         <a href="index.html">Contact</a>
-        <div class="mobile-menu__divider" style="height: 1px; background: rgba(15, 28, 46, 0.06); margin: 12px 0;"></div>
+        <div class="mobile-menu__divider" style="height: 1px; background: rgba(15, 28, 46, 0.06); margin: 12px 0;">
+        </div>
         <div id="mobileNavActions" style="display: flex; flex-direction: column; gap: 8px;">
             <!-- Dynamically Populated -->
         </div>
@@ -980,7 +1158,8 @@
     <div class="container" style="margin-top: 30px;">
         <div class="job-hero">
             <h1 class="job-hero__title">Connect Through Gigs</h1>
-            <p class="job-hero__sub">Post short-term projects or tutoring tasks to hire students, or browse and apply as a student freelancer.</p>
+            <p class="job-hero__sub">Post short-term projects or tutoring tasks to hire students, or browse and apply as
+                a student freelancer.</p>
         </div>
 
         <div id="dynamicPageContent">
@@ -1013,8 +1192,10 @@
                     <label class="form-label">Password</label>
                     <input type="password" id="loginPassword" class="form-control" placeholder="••••••••">
                 </div>
-                <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;" onclick="handleSubmit('login')">Log In →</button>
-                <div class="modal__footer">Don't have an account? <a onclick="switchMode('signup')">Sign up free</a></div>
+                <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;"
+                    onclick="handleSubmit('login')">Log In →</button>
+                <div class="modal__footer">Don't have an account? <a onclick="switchMode('signup')">Sign up free</a>
+                </div>
             </div>
 
             <!-- Signup form -->
@@ -1047,7 +1228,8 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Password</label>
-                    <input type="password" id="signupPassword" class="form-control" placeholder="Create a strong password">
+                    <input type="password" id="signupPassword" class="form-control"
+                        placeholder="Create a strong password">
                 </div>
                 <div class="form-group" id="signupUnivGroup">
                     <label class="form-label">University</label>
@@ -1062,10 +1244,12 @@
                         <option value="Royal University for Women (RUW)">Royal University for Women (RUW)</option>
                         <option value="RCSI Bahrain">RCSI Bahrain</option>
                         <option value="Kingdom University">Kingdom University</option>
-                        <option value="University of Technology Bahrain (UTB)">University of Technology Bahrain (UTB)</option>
+                        <option value="University of Technology Bahrain (UTB)">University of Technology Bahrain (UTB)
+                        </option>
                     </select>
                 </div>
-                <button class="btn btn-accent" style="width:100%;justify-content:center;padding:14px;" onclick="handleSubmit('signup')">Create Account →</button>
+                <button class="btn btn-accent" style="width:100%;justify-content:center;padding:14px;"
+                    onclick="handleSubmit('signup')">Create Account →</button>
                 <div class="modal__footer">Already have an account? <a onclick="switchMode('login')">Log in</a></div>
             </div>
 
@@ -1074,7 +1258,114 @@
                 <div class="modal-success__icon">🎉</div>
                 <div class="modal-success__title">You're in!</div>
                 <div class="modal-success__msg">Welcome to StuServe. Your account is being set up.</div>
-                <button class="btn btn-primary" style="margin-top:28px;" id="successCloseBtn" onclick="closeModal()">Continue</button>
+                <button class="btn btn-primary" style="margin-top:28px;" id="successCloseBtn"
+                    onclick="closeModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── JOB POST MODAL ── -->
+    <div class="modal-overlay job-overlay" id="jobPostModal" onclick="handleJobOverlayClick(event)">
+        <div class="modal modal--job" id="jobModalBox">
+            <button class="modal__close" onclick="closeJobModal()">✕</button>
+
+            <!-- Creation Form -->
+            <div id="jobModalForm">
+                <div class="modal__logo">
+                    <span class="role-icon"
+                        style="font-size: 1.8rem; display: block; filter: drop-shadow(0 2px 4px rgba(196, 66, 105, 0.2));">⚡</span>
+                    <span
+                        style="font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--navy);">Post
+                        a New Project</span>
+                </div>
+                <div class="modal__sub"
+                    style="margin-top: -12px; margin-bottom: 24px; color: var(--text-light); font-size: 0.88rem;">Fill
+                    in the project requirements to connect with talented Bahraini students.</div>
+
+                <form id="jobForm" onsubmit="handlePostJob(event)">
+                    <div class="form-group">
+                        <label class="form-label" for="jobTitle">Project Title</label>
+                        <input type="text" id="jobTitle" class="form-control"
+                            placeholder="e.g. Graphic Logo design for a modern bakery" required>
+                    </div>
+
+                    <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                        <div>
+                            <label class="form-label" for="jobCategory">Category</label>
+                            <select id="jobCategory" class="form-control" required>
+                                <option value="" disabled selected>Select category</option>
+                                <option value="design">Graphic Design</option>
+                                <option value="tutor">Tutoring</option>
+                                <option value="photography">Photography</option>
+                                <option value="video">Video Editing</option>
+                                <option value="writing">Writing & Content</option>
+                                <option value="social">Social Media</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label" for="jobDuration">Est. Duration</label>
+                            <select id="jobDuration" class="form-control" required>
+                                <option value="Less than 1 week">Less than 1 week</option>
+                                <option value="1-2 weeks">1-2 weeks</option>
+                                <option value="1 month">1 month</option>
+                                <option value="Ongoing / Part-time">Ongoing / Part-time</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                        <div>
+                            <label class="form-label" for="jobBudget">Budget (BD)</label>
+                            <div style="position:relative;">
+                                <span
+                                    style="position:absolute; left:14px; top:50%; transform:translateY(-50%); font-weight:700; color:var(--text-mid); font-size:0.9rem; pointer-events:none;">BD</span>
+                                <input type="text" id="jobBudget" class="form-control" style="padding-left:38px;"
+                                    placeholder="e.g. 20" required>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="form-label" for="jobDeadline">Deadline</label>
+                            <input type="date" id="jobDeadline" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="jobContact">Contact Information</label>
+                        <input type="text" id="jobContact" class="form-control"
+                            placeholder="Email, phone or contact preference" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="jobAssignee">Assign Student (Optional)</label>
+                        <select id="jobAssignee" class="form-control">
+                            <option value="" selected>Public (Open to all students)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="jobDescription">Scope & Details</label>
+                        <textarea id="jobDescription" class="form-control"
+                            placeholder="Describe the task, specific student requirements, milestones, etc."
+                            required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-accent"
+                        style="width:100%; justify-content:center; padding:14px; font-weight:700; margin-top:8px;">
+                        Post Job & Sync Cloud ⚡
+                    </button>
+                </form>
+            </div>
+
+            <!-- Custom Success state -->
+            <div id="jobSuccessState" style="display:none; text-align:center; padding:30px 10px;">
+                <div class="success-checkmark">
+                    <div class="check-icon"></div>
+                </div>
+                <h3
+                    style="font-family:var(--font-display); font-size:1.8rem; font-weight:600; color:var(--navy); margin-bottom:8px;">
+                    Project Posted!</h3>
+                <p style="font-size:0.95rem; color:var(--text-light);">Your job is live and synchronizing across
+                    devices.</p>
             </div>
         </div>
     </div>
@@ -1112,7 +1403,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             initializeUserSession();
-            
+
             // Listen to supabaseReady to sync cloud jobs once ready
             window.addEventListener('supabaseReady', async () => {
                 await loadJobsData();
@@ -1156,24 +1447,24 @@
         function updateNavbar() {
             const userStr = localStorage.getItem('loggedInUser');
             const currentUser = userStr ? JSON.parse(userStr) : null;
-            
+
             const navActions = document.querySelector('.navbar__actions');
             const mobileNavActions = document.getElementById('mobileNavActions');
             const navMessagesLink = document.getElementById('navMessagesLink');
             const mobileNavMessages = document.getElementById('mobileNavMessages');
-            
+
             // Set active class based on window pathname
             const currentPath = window.location.pathname;
-            
+
             // 1. Manage Messages link and dynamic badge
             if (currentUser) {
                 if (navMessagesLink) {
                     navMessagesLink.style.display = 'inline-flex';
                     navMessagesLink.classList.add('nav-badge-container');
-                    
+
                     const existingBadge = navMessagesLink.querySelector('.nav-badge');
                     if (existingBadge) existingBadge.remove();
-                    
+
                     const messages = JSON.parse(localStorage.getItem('stuserve_messages') || '[]');
                     const unreadCount = messages.filter(m => m.receiver === currentUser.email && !m.read).length;
                     if (unreadCount > 0) {
@@ -1183,7 +1474,7 @@
                         navMessagesLink.appendChild(badge);
                     }
                 }
-                
+
                 if (mobileNavMessages) {
                     mobileNavMessages.style.display = 'block';
                     const messages = JSON.parse(localStorage.getItem('stuserve_messages') || '[]');
@@ -1272,9 +1563,9 @@
                         </button>
                     </div>
                 `;
-                
+
                 if (navActions) navActions.innerHTML = actionsHTML;
-                
+
                 if (mobileNavActions) {
                     mobileNavActions.innerHTML = `
                         ${currentUser.role === 'student' ? `<a href="Profile.html" class="btn btn-outline" style="text-decoration:none; text-align:center; padding:10px; font-size:0.85rem; justify-content:center;">My Profile</a>` : ''}
@@ -1283,17 +1574,17 @@
                 }
             } else {
                 const isIndexPage = currentPath.endsWith('index.html') || currentPath === '/' || currentPath.endsWith('StuServe') || currentPath.endsWith('StuServe/');
-                
+
                 const loginAction = isIndexPage ? "openModal('login')" : "window.location.href='index.html?action=login'";
                 const signupAction = isIndexPage ? "openModal('signup')" : "window.location.href='index.html?action=signup'";
-                
+
                 if (navActions) {
                     navActions.innerHTML = `
                         <button class="btn btn-outline btn-sm" style="padding:8px 16px; font-size:0.8rem;" onclick="${loginAction}">Log In</button>
                         <button class="btn btn-primary btn-sm" style="padding:8px 16px; font-size:0.8rem;" onclick="${signupAction}">Sign Up</button>
                     `;
                 }
-                
+
                 if (mobileNavActions) {
                     mobileNavActions.innerHTML = `
                         <button class="btn btn-outline" style="padding:10px; font-size:0.85rem; justify-content:center;" onclick="${loginAction}; closeMobileMenu();">Log In</button>
@@ -1338,7 +1629,7 @@
         }
 
         // Expose verification hook
-        window._verifyJobBoardState = function() {
+        window._verifyJobBoardState = function () {
             return allJobs;
         };
 
@@ -1349,82 +1640,40 @@
 
             // Mode 1: Client View
             if (currentUser && currentUser.role === 'client') {
+                const myJobs = allJobs.filter(job => job.clientEmail === currentUser.email);
+                const activeJobCount = myJobs.length;
+
                 wrapper.innerHTML = `
-                    <div class="split-layout">
-                        <!-- Left Panel: Job Creation Form -->
-                        <div class="glass-panel">
-                            <h2 class="panel-title"><span>⚡</span>Post a New Project</h2>
-                            <form id="jobForm" onsubmit="handlePostJob(event)">
-                                <div class="form-group">
-                                    <label class="form-label" for="jobTitle">Project Title</label>
-                                    <input type="text" id="jobTitle" class="form-control" placeholder="e.g. Graphic Logo design for a modern bakery" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="form-label" for="jobCategory">Category</label>
-                                    <select id="jobCategory" class="form-control" required>
-                                        <option value="" disabled selected>Select category</option>
-                                        <option value="design">Graphic Design</option>
-                                        <option value="tutor">Tutoring</option>
-                                        <option value="photography">Photography</option>
-                                        <option value="video">Video Editing</option>
-                                        <option value="writing">Writing & Content</option>
-                                        <option value="social">Social Media</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
-                                    <div>
-                                        <label class="form-label" for="jobBudget">Budget (BD)</label>
-                                        <input type="text" id="jobBudget" class="form-control" placeholder="e.g. BD 20 or BD 5/hr" required>
-                                    </div>
-                                    <div>
-                                        <label class="form-label" for="jobDuration">Est. Duration</label>
-                                        <select id="jobDuration" class="form-control" required>
-                                            <option value="Less than 1 week">Less than 1 week</option>
-                                            <option value="1-2 weeks">1-2 weeks</option>
-                                            <option value="1 month">1 month</option>
-                                            <option value="Ongoing / Part-time">Ongoing / Part-time</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="form-label" for="jobAssignee">Assign Student (Optional)</label>
-                                    <select id="jobAssignee" class="form-control">
-                                        <option value="" selected>Public (Open to all students)</option>
-                                        <!-- Populated dynamically with students -->
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="form-label" for="jobDescription">Scope & Details</label>
-                                    <textarea id="jobDescription" class="form-control" placeholder="Describe the task, specific student requirements, milestones, etc." required></textarea>
-                                </div>
-
-                                <button type="submit" class="btn btn-accent" style="width:100%; justify-content:center; padding:14px;">
-                                    Post Job & Sync Cloud ⚡
-                                </button>
-                            </form>
-                        </div>
-
-                        <!-- Right Panel: Previously Posted Jobs -->
+                    <div class="client-dashboard-header">
                         <div>
-                            <div class="glass-panel" style="padding: 28px;">
-                                <h2 class="panel-title" style="font-size: 1.55rem; margin-bottom: 20px;"><span>📋</span>Your Posted Jobs</h2>
-                                <div id="myJobsList" class="jobs-list">
-                                    <!-- Rendered dynamically -->
+                            <h2 style="font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--navy); margin-bottom: 4px;">Client Workspace</h2>
+                            <p style="font-size: 0.9rem; color: var(--text-light);">Manage your projects and connect with talented Bahraini students.</p>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:28px; flex-wrap:wrap;">
+                            <div class="client-stats">
+                                <div class="stat-badge">
+                                    <span class="stat-badge__val">${activeJobCount}</span>
+                                    <span class="stat-badge__label">Posted Gigs</span>
                                 </div>
                             </div>
+                            <button class="btn-post-job-glow" onclick="openJobModal()">
+                                <span>➕</span> Post a New Job
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel" style="padding: 32px;">
+                        <h2 class="panel-title" style="font-size: 1.6rem; margin-bottom: 24px; border-bottom:1px solid rgba(15,28,46,0.06); padding-bottom:12px;">
+                            <span>📋</span> Your Posted Gigs & Projects
+                        </h2>
+                        <div id="myJobsList" class="jobs-list">
+                            <!-- Rendered dynamically -->
                         </div>
                     </div>
                 `;
                 populateStudentDropdown();
                 renderMyJobs();
-            }
-            // Mode 2: Student & Visitor View
-            else {
-                // If visitor, show a clean, high-impact CTA banner
+            } else {
                 let guestHeaderHtml = '';
                 if (!currentUser) {
                     guestHeaderHtml = `
@@ -1499,9 +1748,11 @@
             const budget = document.getElementById('jobBudget').value.trim();
             const duration = document.getElementById('jobDuration').value;
             const assigned = document.getElementById('jobAssignee').value;
+            const deadline = document.getElementById('jobDeadline').value;
+            const contact = document.getElementById('jobContact').value.trim();
             const description = document.getElementById('jobDescription').value.trim();
 
-            if (!title || !category || !budget || !duration || !description) {
+            if (!title || !category || !budget || !duration || !deadline || !contact || !description) {
                 alert('Please fill out all fields.');
                 return;
             }
@@ -1513,6 +1764,8 @@
                 budget: budget,
                 duration: duration,
                 assignedStudent: assigned || null,
+                deadline: deadline,
+                contactInfo: contact,
                 description: description,
                 clientEmail: currentUser.email,
                 clientName: currentUser.name,
@@ -1523,10 +1776,17 @@
             allJobs.unshift(newJob);
             await saveJobsData();
 
-            // Clear inputs
-            document.getElementById('jobForm').reset();
-            alert('Your job has been successfully posted and synchronized across devices!');
-            renderDynamicInterface();
+            // Smooth transition to Success State inside modal
+            document.getElementById('jobModalForm').style.display = 'none';
+            document.getElementById('jobSuccessState').style.display = 'block';
+
+            // Wait 1.5 seconds, then close modal and refresh workspace
+            setTimeout(() => {
+                closeJobModal();
+                // Clear inputs
+                document.getElementById('jobForm').reset();
+                renderDynamicInterface();
+            }, 1500);
         }
 
         // ── RENDER CLIENT POSTINGS ──
@@ -1542,7 +1802,7 @@
                     <div class="empty-state">
                         <div class="empty-state__icon">📝</div>
                         <h3>You haven't posted any jobs yet.</h3>
-                        <p style="font-size:0.88rem; margin-top:8px;">Post your first gig on the left to start receiving applications from Bahraini students.</p>
+                        <p style="font-size:0.88rem; margin-top:8px;">Post your first gig using the button above to start receiving applications from Bahraini students.</p>
                     </div>
                 `;
                 return;
@@ -1562,6 +1822,13 @@
                     assignedMsg = `<span class="assigned-badge">👤 Assigned to ${studentName}</span>`;
                 }
 
+                // Formatted Deadline
+                let deadlineStr = 'No deadline';
+                if (job.deadline) {
+                    const dl = new Date(job.deadline);
+                    deadlineStr = dl.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                }
+
                 card.innerHTML = `
                     <div class="job-card__header" style="margin-bottom: 8px;">
                         <h4 class="job-card__title" style="font-size: 1.2rem;">${job.title}</h4>
@@ -1570,14 +1837,18 @@
                     <div class="job-card__meta" style="margin-bottom: 12px; font-size: 0.72rem;">
                         <span class="meta-tag meta-tag--category">${categoryLabels[job.category] || job.category}</span>
                         <span class="meta-tag meta-tag--budget">BD ${job.budget}</span>
-                        <span class="meta-tag">${job.duration}</span>
+                        <span class="meta-tag">⌛ ${job.duration}</span>
+                        <span class="meta-tag meta-tag--duration" style="background:#fceeed; color:#d32f2f;">📅 Deadline: ${deadlineStr}</span>
                     </div>
                     <p class="job-card__description" style="font-size:0.88rem; margin-bottom:16px; display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${job.description}</p>
-                    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;">
                         ${assignedMsg}
-                        <button class="btn btn-outline btn-sm" style="color:var(--accent); border-color: rgba(196,66,105,0.15);" onclick="handleDeleteJob('${job.id}')">
-                            🗑️ Delete
-                        </button>
+                        <div style="display:flex; align-items:center; gap:16px; margin-left:auto; flex-wrap:wrap;">
+                            <span style="font-size:0.75rem; color:var(--text-light); font-weight:600;">📞 Contact: ${job.contactInfo || job.clientEmail}</span>
+                            <button class="btn btn-outline btn-sm" style="color:var(--accent); border-color: rgba(196,66,105,0.15);" onclick="handleDeleteJob('${job.id}')">
+                                🗑️ Delete
+                            </button>
+                        </div>
                     </div>
                 `;
                 container.appendChild(card);
@@ -1699,6 +1970,13 @@
                     assignedLabel = `<span class="assigned-badge">${isMe ? '🎯 Direct Invite for You' : '👤 Assigned'}</span>`;
                 }
 
+                // Formatted Deadline
+                let deadlineStr = 'No deadline';
+                if (job.deadline) {
+                    const dl = new Date(job.deadline);
+                    deadlineStr = dl.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                }
+
                 card.innerHTML = `
                     <div class="job-card__header">
                         <h3 class="job-card__title">${job.title}</h3>
@@ -1708,15 +1986,19 @@
                         <span class="meta-tag meta-tag--category">${categoryLabels[job.category] || job.category}</span>
                         <span class="meta-tag meta-tag--budget">BD ${job.budget}</span>
                         <span class="meta-tag meta-tag--duration">⌛ ${job.duration}</span>
+                        <span class="meta-tag meta-tag--duration" style="background:#fceeed; color:#d32f2f;">📅 Deadline: ${deadlineStr}</span>
                     </div>
                     <p class="job-card__description">${job.description}</p>
                     <div class="job-card__footer">
-                        <div class="client-profile">
-                            <div class="client-avatar">👤</div>
-                            <div>
-                                <div class="client-name">${job.clientName}</div>
-                                <div class="post-time">Posted on ${timeStr}</div>
+                        <div style="display:flex; flex-direction:column; gap:6px;">
+                            <div class="client-profile">
+                                <div class="client-avatar">👤</div>
+                                <div>
+                                    <div class="client-name">${job.clientName}</div>
+                                    <div class="post-time">Posted on ${timeStr}</div>
+                                </div>
                             </div>
+                            <span style="font-size:0.75rem; color:var(--text-light); font-weight:600; margin-left:2px;">📞 Contact: ${job.contactInfo || job.clientEmail}</span>
                         </div>
                         <div>
                             ${actionBtnHtml}
@@ -1739,13 +2021,13 @@
 
             // Generate an automatic message under stuserve_messages
             const messages = JSON.parse(localStorage.getItem('stuserve_messages') || '[]');
-            
+
             // Check if student already messaged client about this specific job
             const alreadyApplied = messages.some(m => m.sender === currentUser.email && m.receiver === job.clientEmail && m.text.includes(job.title));
 
             if (!alreadyApplied) {
                 const isDirectInvite = job.assignedStudent === currentUser.email;
-                const introText = isDirectInvite 
+                const introText = isDirectInvite
                     ? `🎯 Hi ${job.clientName}! I received your direct project invitation for "${job.title}" (Budget: BD ${job.budget}, Est. Duration: ${job.duration}). I would love to accept and discuss the scope further!`
                     : `👋 Hi ${job.clientName}! I saw your job post for "${job.title}" (Budget: BD ${job.budget}, Est. Duration: ${job.duration}) on StuServe and would love to work with you on it. Let's discuss the project details!`;
 
@@ -1784,6 +2066,47 @@
             window.location.href = `Messages.html?chat=${job.clientEmail}`;
         }
 
+        // ── JOB MODAL JS SYSTEM ──
+        function openJobModal() {
+            const modal = document.getElementById('jobPostModal');
+            if (!modal) return;
+
+            // Clean/Reset previous states
+            document.getElementById('jobModalForm').style.display = 'block';
+            document.getElementById('jobSuccessState').style.display = 'none';
+            document.getElementById('jobForm').reset();
+
+            // Pre-fill contact email
+            if (currentUser) {
+                document.getElementById('jobContact').value = currentUser.email;
+            }
+
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            // Allow display change to propagate so CSS transition runs
+            setTimeout(() => {
+                modal.classList.add('open');
+            }, 10);
+        }
+
+        function closeJobModal() {
+            const modal = document.getElementById('jobPostModal');
+            if (!modal) return;
+
+            modal.classList.remove('open');
+            document.body.style.overflow = '';
+
+            // Hide element from layout after CSS transition finishes (300ms)
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        function handleJobOverlayClick(e) {
+            if (e.target === document.getElementById('jobPostModal')) closeJobModal();
+        }
+
         // ── AUTH MODAL JS SYSTEM ──
         function openModal(mode, role) {
             document.getElementById('authModal').classList.add('open');
@@ -1816,7 +2139,7 @@
             currentRole = role;
             document.getElementById('pillStudent').classList.toggle('selected', role === 'student');
             document.getElementById('pillClient').classList.toggle('selected', role === 'client');
-            
+
             const univGroup = document.getElementById('signupUnivGroup');
             if (univGroup) {
                 univGroup.style.display = role === 'student' ? 'block' : 'none';
@@ -1920,7 +2243,7 @@
                 }
 
                 document.getElementById('signupForm').style.display = 'none';
-                
+
                 const successTitle = document.querySelector('#successState .modal-success__title');
                 const successMsg = document.querySelector('#successState .modal-success__msg');
                 const successBtn = document.getElementById('successCloseBtn');
@@ -1941,7 +2264,7 @@
                         window.location.reload();
                     };
                 }
-                
+
                 document.getElementById('successState').style.display = 'block';
                 initializeUserSession();
 
@@ -2024,7 +2347,12 @@
         }
 
         // Escape closes modals
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                closeModal();
+                closeJobModal();
+            }
+        });
     </script>
 </body>
 
