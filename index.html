@@ -931,6 +931,121 @@
             margin-bottom: 16px;
         }
 
+        /* ── About Us ── */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 64px;
+            align-items: flex-start;
+        }
+
+        .about__left {
+            position: sticky;
+            top: 100px;
+        }
+
+        .about__card {
+            background: linear-gradient(135deg, var(--white) 0%, var(--pink-light) 100%);
+            border: 1px solid rgba(200, 164, 165, .3);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 32px;
+            transition: var(--transition);
+        }
+
+        .about__card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--blush);
+        }
+
+        .about__card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: rgba(196, 66, 105, 0.05);
+            pointer-events: none;
+        }
+
+        .about__card-text {
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        .about__sub-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .about__info-box {
+            background: var(--white);
+            border: 1px solid rgba(15, 28, 46, .06);
+            border-radius: var(--radius-lg);
+            padding: 32px 24px;
+            transition: var(--transition);
+        }
+
+        .about__info-box:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: rgba(196, 66, 105, .2);
+        }
+
+        .about__info-box h3 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .about__info-box p {
+            font-size: .9rem;
+            color: var(--text-mid);
+            line-height: 1.7;
+        }
+
+        .about__highlight-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(196, 66, 105, 0.1);
+            color: var(--accent);
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 900px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            .about__left {
+                position: static;
+            }
+            .about__sub-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
         /* ── CTA Band ── */
         .cta-band {
             background: linear-gradient(135deg, var(--navy) 0%, var(--steel) 100%);
@@ -1445,7 +1560,7 @@
                 <li><a href="Find Students.html">Find Students</a></li>
                 <li><a href="Post a Job.html">Post a Job</a></li>
                 <li><a href="Messages.html" id="navMessagesLink" style="display: none;">Messages</a></li>
-                <li><a href="index.html">About</a></li>
+                <li><a href="#about">About</a></li>
                 <li><a href="index.html">Contact</a></li>
             </ul>
             <div class="navbar__actions">
@@ -1463,7 +1578,7 @@
         <a href="Find Students.html">Find Students</a>
         <a href="Post a Job.html">Post a Job</a>
         <a href="Messages.html" id="mobileNavMessages" style="display: none;">Messages</a>
-        <a href="index.html">About</a>
+        <a href="#about">About</a>
         <a href="index.html">Contact</a>
         <div class="mobile-menu__divider" style="height: 1px; background: rgba(15, 28, 46, 0.06); margin: 12px 0;"></div>
         <div id="mobileNavActions" style="display: flex; flex-direction: column; gap: 8px;">
@@ -1576,7 +1691,7 @@
                 </div>
             </div>
             <div style="text-align:center;margin-top:48px;">
-                <button class="btn btn-outline">View All Services →</button>
+                <a href="Services.html" class="btn btn-outline">View All Services →</a>
             </div>
         </div>
     </section>
@@ -1660,7 +1775,7 @@
                 <!-- Dynamically populated from localStorage -->
             </div>
             <div style="text-align:center;margin-top:40px;">
-                <button href="Find Students.html" class="btn btn-outline">Browse All Students →</button>
+                <a href="Find Students.html" class="btn btn-outline">Browse All Students →</a>
             </div>
         </div>
     </section>
@@ -1715,6 +1830,38 @@
     </section>
 
     <!-- ════════════════════════════════════════
+     ABOUT US
+════════════════════════════════════════ -->
+    <section class="section section--alt" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about__left">
+                    <span class="about__highlight-pill">✦ Our Story</span>
+                    <h2 class="section-title">About Us</h2>
+                    <p class="section-sub" style="margin-bottom: 0;">Empowering Bahraini student creators, tutors, and freelancers by connecting them with opportunities to thrive.</p>
+                </div>
+                <div class="about__right">
+                    <div class="about__card">
+                        <p class="about__card-text">
+                            <strong>StuServe</strong> is a digital platform created to connect talented Bahraini students with clients and businesses looking for affordable and creative services. Our goal is to help students gain experience, build their portfolios, and earn income by offering their skills in areas such as graphic design, tutoring, photography, writing, video editing, and social media management.
+                        </p>
+                    </div>
+                    <div class="about__sub-grid">
+                        <div class="about__info-box">
+                            <h3>🤝 Our Belief</h3>
+                            <p>We believe that many students have valuable talents that deserve recognition and opportunities. StuServe provides a safe, simple, and user-friendly environment where students and clients can connect, communicate, and work together efficiently.</p>
+                        </div>
+                        <div class="about__info-box">
+                            <h3>🚀 Our Mission</h3>
+                            <p>Our mission is to empower students, support local talent, and make freelance opportunities more accessible within Bahrain.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
      CTA BAND
 ════════════════════════════════════════ -->
     <div class="cta-band">
@@ -1746,7 +1893,7 @@
             </div>
             <div class="footer__col">
                 <div class="footer__col-title">Company</div>
-                <a href="#">About Us</a>
+                <a href="#about">About Us</a>
                 <a href="#">Contact</a>
                 <a href="#">FAQ</a>
             </div>
